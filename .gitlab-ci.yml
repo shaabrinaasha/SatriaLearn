@@ -20,12 +20,12 @@ test:
       alias: mysql
   variables:
     # Configure your database connection properties here
-    SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/your_database_name
+    SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/properly
     SPRING_DATASOURCE_USERNAME: root
     SPRING_DATASOURCE_PASSWORD: root_password
   before_script:
     # Perform any database initialization/setup steps here, such as creating the database schema
-    - mysql -h mysql -uroot -proot_password -e 'CREATE DATABASE your_database_name;'
+    - mysql -h mysql -uroot -proot_password -e 'CREATE DATABASE properly;'
   script:
     - gradle test
 
