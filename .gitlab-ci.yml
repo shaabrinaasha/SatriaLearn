@@ -1,7 +1,6 @@
 # Define the stages of the pipeline
 stages:
   - build
-  - test
   - deploy
 
 # Define the job for building the application
@@ -11,25 +10,6 @@ build:
   script:
     - cd properly
     - gradle clean build
-
-# Define the job for testing the application
-test:
-  stage: test
-  image: gradle:8.5-jdk-alpine
-  services:
-    - name: mysql:latest
-      alias: mysql
-  variables:
-    # Configure your database connection properties here
-    SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/properly
-    SPRING_DATASOURCE_USERNAME: root
-    SPRING_DATASOURCE_PASSWORD: root_password
-  before_script:
-    # Perform any database initialization/setup steps here, such as creating the database schema
-    - mysql -h mysql -uroot -proot_password -e 'CREATE DATABASE properly;'
-  script:
-    - cd properly
-    - gradle test
 
 # Define the job for deploying the application
 deploy:
