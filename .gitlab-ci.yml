@@ -9,6 +9,7 @@ build:
   stage: build
   image: gradle:8.5-jdk-alpine
   script:
+    - cd properly
     - gradle clean build
 
 # Define the job for testing the application
@@ -27,6 +28,7 @@ test:
     # Perform any database initialization/setup steps here, such as creating the database schema
     - mysql -h mysql -uroot -proot_password -e 'CREATE DATABASE properly;'
   script:
+    - cd properly
     - gradle test
 
 # Define the job for deploying the application
