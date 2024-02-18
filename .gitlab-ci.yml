@@ -8,7 +8,6 @@ build:
   stage: build
   image: gradle:8.5-jdk-alpine
   script:
-    - cd properly
     - gradle clean build
 
 # Define the job for deploying the application
