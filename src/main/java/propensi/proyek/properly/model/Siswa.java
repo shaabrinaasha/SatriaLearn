@@ -1,12 +1,16 @@
 package propensi.proyek.properly.model;
 
-import java.io.Serializable;
+
+import java.util.Set;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +21,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="siswa")
-public class Siswa implements Serializable {
-    @Id
-    @Column(name = "id")
-    private String id;
+@DiscriminatorValue("siswa")
+public class Siswa extends User {
+    @NotNull
+    @Column(length = 9, nullable = false)
+    @Size(min = 9, max = 9)
+    private String nipd;
 
     @NotNull
-    @Column(name = "nama", nullable = false)
-    private String nama;
+    @Column(length = 10, nullable = false)
+    @Size(min = 10, max = 10)
+    private String nisn;
+
+    @ManyToOne
+    @JoinColumn(name = "ortu_id", nullable = true)
+    private OrangTua orangTua;
+
+    @ManyToMany(mappedBy = "siswas")
+    private Set<Kelas> classes;
 }
