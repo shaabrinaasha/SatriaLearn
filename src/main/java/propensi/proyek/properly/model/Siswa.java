@@ -24,12 +24,12 @@ import lombok.Setter;
 @DiscriminatorValue("siswa")
 public class Siswa extends User {
     @NotNull
-    @Column(length = 9, nullable = false)
+    @Column(length = 9)
     @Size(min = 9, max = 9)
     private String nipd;
 
     @NotNull
-    @Column(length = 10, nullable = false)
+    @Column(length = 10)
     @Size(min = 10, max = 10)
     private String nisn;
 
