@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Guru extends Siswa {
 
     
-    @Column(nullable = false, length = 16)
+    @Column(length = 16)
     @NotNull
     @Size(min = 16, max = 16)
     private String nuptk;
