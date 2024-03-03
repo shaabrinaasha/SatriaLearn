@@ -3,6 +3,7 @@ package propensi.proyek.properly;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import propensi.proyek.properly.model.Admin;
@@ -35,7 +36,8 @@ public class ProperlyApplication {
 		SpringApplication.run(ProperlyApplication.class, args);
 	}
 
-	
+
+	@Bean
 	@Transactional
 	CommandLineRunner run(
 			SiswaService siswaService,
@@ -58,23 +60,24 @@ public class ProperlyApplication {
 
 			// Add Orang Tua
 			for (int i = 0; i < 10; i++) {
+				var password = faker.internet().password();
 				OrangTua orangTua = new OrangTua();
 				orangTua.setNama(faker.name().fullName());
-				orangTua.setPassword(faker.internet().password());
+				orangTua.setPassword(encoder.encode(password));
 				orangTua.setUsername(faker.name().username());
-				orangTua.setPasswordAwal(faker.internet().password());
+				orangTua.setPasswordAwal(password);
 				orangTuaList.add(orangTua);
 				orangTuaService.addOrangTua(orangTua);
 			}
 
 			// Add Siswa
 			for (int i = 0; i < 30; i++) {
-
+				var password = faker.internet().password();
 				Siswa siswa = new Siswa();
 				siswa.setNama(faker.name().fullName());
 				siswa.setUsername(faker.name().username());
-				siswa.setPassword(faker.internet().password());
-				siswa.setPasswordAwal(faker.internet().password());
+				siswa.setPassword(encoder.encode(password));
+				siswa.setPasswordAwal(password);
 
 				siswa.setNisn(faker.number().digits(10));
 				siswa.setNipd(faker.number().digits(9));
@@ -85,11 +88,13 @@ public class ProperlyApplication {
 
 			// Add Guru
 			for (int i = 0; i < 20; i++) {
+				var password = faker.internet().password();
+			
 				Guru guru = new Guru();
 				guru.setNama(faker.name().fullName());
 				guru.setUsername(faker.name().username());
-				guru.setPassword(faker.internet().password());
-				guru.setPasswordAwal(faker.internet().password());
+				guru.setPassword(encoder.encode(password));
+				guru.setPasswordAwal(password);
 				guru.setNuptk(faker.number().digits(16));
 				guruList.add(guru);
 				guruService.addGuru(guru);
