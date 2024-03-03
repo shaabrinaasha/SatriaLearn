@@ -2,6 +2,9 @@ package propensi.proyek.properly.service;
 
 import propensi.proyek.properly.model.Admin;
 import propensi.proyek.properly.repository.AdminDb;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void addAdmin(Admin admin) {
         adminDb.save(admin);
+    }
+
+    @Override
+    public List<Admin> getAllAdmin() {
+        return adminDb.findAll();
     }
     
 }
