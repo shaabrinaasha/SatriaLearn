@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import propensi.proyek.properly.repository.SiswaDb;
-import propensi.proyek.properly.service.siswaService;
+import propensi.proyek.properly.service.SiswaService;
 
 import org.springframework.ui.Model;
 
@@ -15,7 +15,7 @@ import org.springframework.ui.Model;
 public class PageController {
 
     @Autowired
-    siswaService siswaService;
+    SiswaService siswaService;
     @RequestMapping("/")
     public String home(Model model) {
         model.addAttribute("siswa", siswaService.getAllSiswa());
