@@ -5,12 +5,14 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +34,7 @@ public class User implements Serializable {
     private UUID id;
     
     @NotNull
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = false, unique = true)
     private String username;
 
     @NotNull
@@ -50,4 +52,9 @@ public class User implements Serializable {
     @NotNull
     @Column(name = "password_awal", nullable = false)
     private String passwordAwal;
+
+    @Transient
+    public String getDecriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
 }

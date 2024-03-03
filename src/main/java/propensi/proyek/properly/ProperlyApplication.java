@@ -1,12 +1,15 @@
 package propensi.proyek.properly;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import propensi.proyek.properly.model.Admin;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.github.javafaker.Faker;
 
 import propensi.proyek.properly.service.SiswaService;
@@ -19,15 +22,11 @@ import propensi.proyek.properly.service.MataPelajaranService;
 import jakarta.transaction.Transactional;
 import propensi.proyek.properly.model.Siswa;
 import propensi.proyek.properly.model.OrangTua;
-import propensi.proyek.properly.model.Admin;
 import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.Semester;
 import propensi.proyek.properly.model.MataPelajaran;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class ProperlyApplication {
@@ -36,7 +35,7 @@ public class ProperlyApplication {
 		SpringApplication.run(ProperlyApplication.class, args);
 	}
 
-	@Bean
+	
 	@Transactional
 	CommandLineRunner run(
 			SiswaService siswaService,
@@ -45,7 +44,8 @@ public class ProperlyApplication {
 			GuruService guruService,
 			KelasService kelasService,
 			SemesterService semesterService,
-			MataPelajaranService mataPelajaranService) {
+			MataPelajaranService mataPelajaranService,
+			BCryptPasswordEncoder encoder) {
 		return args -> {
 			var faker = new Faker();
 			List<OrangTua> orangTuaList = new ArrayList<>();
@@ -54,12 +54,7 @@ public class ProperlyApplication {
 			List<Siswa> siswaList = new ArrayList<>();
 
 			// Add admin
-			Admin admin = new Admin();
-			admin.setNama("admin");
-			admin.setUsername("admin");
-			admin.setPassword("admin");
-			admin.setPasswordAwal("admin");
-			adminService.addAdmin(admin);
+			addAdminIfEmpty(adminService, encoder);
 
 			// Add Orang Tua
 			for (int i = 0; i < 10; i++) {
@@ -145,7 +140,21 @@ public class ProperlyApplication {
 				mataPelajaran.setKelas(kelasList.get(i));
 				mataPelajaranService.addMataPelajaran(mataPelajaran);
 			}
-
 		};
 	}
+
+	private void addAdminIfEmpty(AdminService adminService, BCryptPasswordEncoder encoder) {
+		var admins = adminService.getAllAdmin();
+
+		if (admins.size() != 0) return;
+
+		var admin = new Admin();
+		admin.setNama("admin");
+		admin.setUsername("admin");
+		admin.setPasswordAwal("password.");
+		admin.setPassword(encoder.encode(admin.getPasswordAwal()));
+
+		adminService.addAdmin(admin);
+	}
+
 }
