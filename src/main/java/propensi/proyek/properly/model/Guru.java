@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @DiscriminatorValue("guru")
-public class Guru extends Siswa {
+public class Guru extends User {
 
     
     @Column(length = 16)
