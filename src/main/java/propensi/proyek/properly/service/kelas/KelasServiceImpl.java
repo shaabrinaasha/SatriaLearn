@@ -1,7 +1,8 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.kelas;
 
 import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.repository.KelasDb;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,5 @@ public class KelasServiceImpl implements KelasService {
     public void addKelas(Kelas kelas) {
         kelasDb.save(kelas);
     }
-    
+
 }

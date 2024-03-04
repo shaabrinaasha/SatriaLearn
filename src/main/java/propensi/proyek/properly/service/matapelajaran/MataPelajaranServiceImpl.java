@@ -1,7 +1,8 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.matapelajaran;
 
 import propensi.proyek.properly.model.MataPelajaran;
 import propensi.proyek.properly.repository.MataPelajaranDb;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,5 @@ public class MataPelajaranServiceImpl implements MataPelajaranService {
     public void addMataPelajaran(MataPelajaran mataPelajaran) {
         mataPelajaranDb.save(mataPelajaran);
     }
-    
+
 }

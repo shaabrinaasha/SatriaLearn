@@ -1,7 +1,8 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.guru;
 
 import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.repository.GuruDb;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,5 @@ public class GuruServiceImpl implements GuruService {
     public void addGuru(Guru guru) {
         guruDb.save(guru);
     }
-    
+
 }

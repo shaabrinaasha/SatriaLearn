@@ -1,4 +1,4 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.admin;
 
 import propensi.proyek.properly.model.Admin;
 import propensi.proyek.properly.repository.AdminDb;
@@ -27,5 +27,5 @@ public class AdminServiceImpl implements AdminService {
     public List<Admin> getAllAdmin() {
         return adminDb.findAll();
     }
-    
+
 }

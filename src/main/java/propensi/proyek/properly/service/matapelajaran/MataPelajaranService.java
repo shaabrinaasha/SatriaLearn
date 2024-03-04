@@ -1,4 +1,4 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.matapelajaran;
 
 import propensi.proyek.properly.model.MataPelajaran;
 

@@ -32,6 +32,8 @@ dependencies {
 	}
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.26'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.mapstruct:mapstruct:1.5.0.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.0.Final'
 }
 
 tasks.named('test') {

@@ -13,13 +13,13 @@ import java.util.List;
 
 import com.github.javafaker.Faker;
 
-import propensi.proyek.properly.service.SiswaService;
-import propensi.proyek.properly.service.AdminService;
-import propensi.proyek.properly.service.GuruService;
-import propensi.proyek.properly.service.KelasService;
-import propensi.proyek.properly.service.OrangTuaService;
-import propensi.proyek.properly.service.SemesterService;
-import propensi.proyek.properly.service.MataPelajaranService;
+import propensi.proyek.properly.service.admin.AdminService;
+import propensi.proyek.properly.service.guru.GuruService;
+import propensi.proyek.properly.service.kelas.KelasService;
+import propensi.proyek.properly.service.matapelajaran.MataPelajaranService;
+import propensi.proyek.properly.service.orangtua.OrangTuaService;
+import propensi.proyek.properly.service.semester.SemesterService;
+import propensi.proyek.properly.service.siswa.SiswaService;
 import jakarta.transaction.Transactional;
 import propensi.proyek.properly.model.Siswa;
 import propensi.proyek.properly.model.OrangTua;
@@ -28,14 +28,12 @@ import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.Semester;
 import propensi.proyek.properly.model.MataPelajaran;
 
-
 @SpringBootApplication
 public class ProperlyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProperlyApplication.class, args);
 	}
-
 
 	@Bean
 	@Transactional
@@ -89,7 +87,7 @@ public class ProperlyApplication {
 			// Add Guru
 			for (int i = 0; i < 20; i++) {
 				var password = faker.internet().password();
-			
+
 				Guru guru = new Guru();
 				guru.setNama(faker.name().fullName());
 				guru.setUsername(faker.name().username());
@@ -107,7 +105,7 @@ public class ProperlyApplication {
 				// for i = 4 to 7, kelas 11A, 11B, 11C, 11D
 				// for i = 8 to 11, kelas 12A, 12B, 12C, 12D
 				kelas.setNama((i / 4 + 10) + "" + (char) ('A' + i % 4));
-				
+
 				kelas.setWali(guruList.get(i));
 
 				kelasList.add(kelas);
@@ -134,7 +132,7 @@ public class ProperlyApplication {
 				semester.setTanggalAkhir(
 						faker.date().birthday().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
 				semester.setClasses(new HashSet<>(kelasList));
-				semesterService.addSemester(semester);
+				semesterService.save(semester);
 			}
 
 			// Add Mata Pelajaran
@@ -151,7 +149,8 @@ public class ProperlyApplication {
 	private void addAdminIfEmpty(AdminService adminService, BCryptPasswordEncoder encoder) {
 		var admins = adminService.getAllAdmin();
 
-		if (admins.size() != 0) return;
+		if (admins.size() != 0)
+			return;
 
 		var admin = new Admin();
 		admin.setNama("admin");
