@@ -11,7 +11,7 @@ import propensi.proyek.properly.repository.MataPelajaranDb;
 
 @Service
 @Transactional
-public class mataPelajaranServiceImpl implements mataPelajaranService{
+public class MataPelajaranServiceImpl implements MataPelajaranService{
 
     @Autowired
     private MataPelajaranDb mataPelajaranDb;

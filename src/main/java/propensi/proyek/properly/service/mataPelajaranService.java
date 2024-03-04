@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import propensi.proyek.properly.model.*;
 
-public interface mataPelajaranService {
+public interface MataPelajaranService {
     List<MataPelajaran> getListMatpel();
     List<String> getAllMatpelName();
     MataPelajaran getMatpelById(UUID id);

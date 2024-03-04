@@ -143,7 +143,7 @@ public class ProperlyApplication {
 				mataPelajaran.setNama(faker.educator().course());
 				mataPelajaran.setGuru(guruList.get(i));
 				mataPelajaran.setKelas(kelasList.get(i));
-				mataPelajaranService.addMataPelajaran(mataPelajaran);
+				mataPelajaranService.addMatpel(mataPelajaran);
 			}
 
 		};

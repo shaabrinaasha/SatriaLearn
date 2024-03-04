@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mata Pelajaran-Siswa</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+
+    <!-- <head th:fragment="css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+        <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/style.css}"/>
+    </head>
+    <head th:fragment="js">
+        <script src="https://code.jquery.com/jquery-3.4.1.win.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFIBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script th:src="@{/bootstrap.min.js}"></script>
+    </head>
+
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
+</head>
+
+<style>
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #fbfbfb;
+    }
+
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2.5rem;
+        margin: 10vh auto;
+    }
+
+    .card {
+        border-radius: 6px;
+        width: 250px;
+        height: 160px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    }
+
+    .container {
+        position: absolute;
+        left: 300px;
+        top: 70px;
+        width: 70%;
+        padding: 20px;
+    }
+
+    .card .top {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        height: 50%;
+        width: 100%;
+        background-color: #DDEDFF;
+        background-position: center center;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        overflow: hidden;
+        /* position: relative; */
+    }
+
+    .card .top p {
+        font-size: 14px;
+        color: #106EE8;
+        font-weight: bold;
+        margin-left: 20px;
+    }
+
+    .card .bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50%;
+        background-color: #FFFFFF;
+        border-radius: 6px;
+        padding: 20px;
+    }
+
+    .detail1 {
+        display: flex;
+        /* align-items: center; */
+    }
+
+    .detail2 {
+        display: flex;
+        /* align-items: center; */
+    }
+
+    .detail1 img {
+        margin-right: 20px;
+        height: 20px;
+        width: 20px;
+        background-image:url(https://cdn.iconscout.com/icon/premium/png-512-thumb/classroom-2887087-2396456.png?f=webp&w=512)
+    }
+
+    .detail2 img {
+        margin-right: 20px;
+        height: 20px;
+        width: 20px;
+        background-image:url(https://cdn.iconscout.com/icon/premium/png-512-thumb/classroom-2887087-2396456.png?f=webp&w=512)
+    }
+
+    .detail1 .kelasText {
+        content: "Kelas 10 Bisnis Digital A";
+        font-size: 10px;
+        margin-left: 10 px;
+    }
+
+    .detail2 .guruText {
+        content: "Budi Wani";
+        font-size: 10px;
+        margin-left: 10 px;
+    }
+
+
+    
+</style>
+
+<body>
+    <div class="alert alert-danger alert-dismissible" role="alert" style="display: none;" th:if="${error}" th:text="${error}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" style="display: none;" th:if="${success}" th:text="${success}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="container">
+        <div>
+            <div style="margin-top: 3rem; margin-bottom: 2rem; text-align: center;">
+                <h2 style="font-weight: bold; margin-bottom: 0.75rem; font-family: 'Poppins', sans-serif; font-size: 18px; color: #106EE8;" >Manajemen Mata Pelajaran</h2>
+                <!-- <a class="btn" href="/mapel/add" style="background-color: #31318B;  color: white;">Tambah Mata Pelajaran</a> -->
+                <br>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="top">
+                        <p>Matematika</p>
+                    </div>
+                    <div class="bottom">
+                        <div>
+                           <div class="detail1">
+                                <div class="img"></div>
+                                <div class="kelasText"></div>
+                            </div>
+                            <div class="detail2">
+                                <div class="img"></div>
+                                <div class="guruText"></div>
+                            </div> 
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- <div class="card">
+                    <div class="top">
+                        <p>Matematika</p>
+                    </div>
+                    <div class="bottom">
+                        <div class="detail1">
+                            <p>Kelas 10 Bisnis Digital A</p>
+                        </div>
+                        <div class="detail2">
+                            <p>Budi Wani</p>
+                        </div>
+                    </div>
+                </div> -->
+            </div>  
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+</body>
+</html>
