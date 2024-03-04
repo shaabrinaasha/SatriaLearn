@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @DiscriminatorValue("admin")
-public class Admin extends Siswa {
+public class Admin extends User {
     
 }

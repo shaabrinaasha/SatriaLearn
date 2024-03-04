@@ -11,7 +11,7 @@ import propensi.proyek.properly.repository.SiswaDb;
 
 @Service
 @Transactional
-public class siswaServiceImpl implements siswaService {
+public class SiswaServiceImpl implements SiswaService {
 
     @Autowired
     SiswaDb siswaDb;
@@ -19,6 +19,12 @@ public class siswaServiceImpl implements siswaService {
     @Override
     public List<Siswa> getAllSiswa() {
         return siswaDb.findAll();
+    }
+    
+    @SuppressWarnings("null")
+    @Override
+    public void addSiswa(Siswa siswa) {
+        siswaDb.save(siswa);
     }
     
 }
