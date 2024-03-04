@@ -1,4 +1,4 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.kelas;
 
 import propensi.proyek.properly.model.Kelas;
 

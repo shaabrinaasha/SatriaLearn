@@ -1,4 +1,4 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.guru;
 
 import propensi.proyek.properly.model.Guru;
 

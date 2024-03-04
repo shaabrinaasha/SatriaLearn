@@ -1,4 +1,4 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.siswa;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ public class SiswaServiceImpl implements SiswaService {
     public List<Siswa> getAllSiswa() {
         return siswaDb.findAll();
     }
-    
+
     @SuppressWarnings("null")
     @Override
     public void addSiswa(Siswa siswa) {
         siswaDb.save(siswa);
     }
-    
+
 }
