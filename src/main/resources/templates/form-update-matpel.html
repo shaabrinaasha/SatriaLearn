@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Mata Pelajaran</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+</head>
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        background-color: #FBFBFB;
+    }
+
+    .container-form {
+        border-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        padding: 20px; 
+        background-color: #ffffff; 
+        margin-top: 50px;
+        width: 700px;
+    }
+
+    form {
+        width: 80%; 
+        margin: auto; 
+    }
+
+    .form-control {
+        font-size: 14px; 
+    }
+</style>
+<body>
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="container container-form">
+        <div style="margin-top: 2rem; margin-bottom: 1rem; text-align: center;">
+            <h2 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 24px; color: #106EE8;" >Ubah Mata Pelajaran</h2>
+            <br>
+        </div>
+
+        <div>
+            <form>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                  <label for="inputMataPelajaran">Mata Pelajaran</label>
+                  <input type="mataPelajaran" class="form-control" aria-describedby="matpelHelp" id="inputMataPelajaran"  placeholder="Matematika">
+                  <small id="matpelHelp" class="form-text text-muted">Mata Pelajaran dibuat untuk satu kelas.</small>
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="inputKelas">Kelas</label>
+                    <select id="inputState" class="form-control">
+                        <option selected>Kelas Bisnis Digital 10 A</option>
+                        <option>Kelas Bisnis Digital 10 B</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="inputGuru">Guru</label>
+                    <select id="inputState" class="form-control">
+                        <option selected>Nicholas Saputra</option>
+                        <option>Chico Jerico</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
+                    <a type="button" class="btn btn-outline-success">Simpan</a>
+                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel">Kembali</a>
+                </div>
+              </form>
+        </div>
+    </div>
+</body>
+</html>

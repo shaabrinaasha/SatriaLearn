@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Manajemen Mata Pelajaran - SatriaLearn</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+  
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#matpel-table').DataTable();
+        });
+    </script>
+
+</head>
+
+<style>
+    .container {
+        position: absolute;
+        left: 300px;
+        top: 70px;
+        width: 70%;
+        padding: 20px; 
+
+    }
+
+    table, th, tr, button {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+    }
+
+    .btn-sm {
+        font-size: 10px;
+    }
+</style>
+
+<body>
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="container">
+        <div>
+            <div style="margin-top: 3rem; margin-bottom: 2rem; text-align: center;">
+                <h2 style="font-weight: bold; margin-bottom: 0.75rem; font-family: 'Poppins', sans-serif; font-size: 18px; color: #106EE8;" >Manajemen Mata Pelajaran</h2>
+                <!-- <a class="btn" href="/mapel/add" style="background-color: #31318B;  color: white;">Tambah Mata Pelajaran</a> -->
+                <br>
+            </div>
+            <div style="float: right;">
+                <a class="btn btn-primary" type="submit" style="background-color: #106EE8;" href="/matpel/add">Tambah Mata Pelajaran</a>
+            </div>
+            <table id="matpel-table" style="width:100%;" class="table table-striped" >
+                <thead >
+                <tr>
+                    <th scope="col">Mata Pelajaran</th>
+                    <th scope="col">Kelas</th>
+                    <th scope="col">Guru</th>
+                    <th scope="col">Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- <tr th:each="mapel, iterationStatus : ${listMapel}">
+                    <td th:text="${iterationStatus.index + 1}"></td>
+                    <td th:text="${mapel.name}"></td>
+                    <td th:text="${mapel.abbr}"></td>
+                    <td class="align-content-center">
+                        <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/mapel/detail/} + ${mapel.id}">Detail</a>
+                    </td>
+                </tr> -->
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td class="align-content-left">
+                        <!-- <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/mapel/detail/} + ${mapel.id}">Ubah</a> -->
+                        <button class="btn btn-sm btn-outline-primary">Ubah</button>
+                        <button class="btn btn-sm btn-outline-danger">Hapus</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td class="align-content-left">
+                        <!-- <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/mapel/detail/} + ${mapel.id}">Ubah</a> -->
+                        <button class="btn btn-sm btn-outline-primary">Ubah</button>
+                        <button class="btn btn-sm btn-outline-danger">Hapus</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td class="align-content-left">
+                        <!-- <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/mapel/detail/} + ${mapel.id}">Ubah</a> -->
+                        <button class="btn btn-sm btn-outline-primary">Ubah</button>
+                        <button class="btn btn-sm btn-outline-danger">Hapus</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td class="align-content-left">
+                        <!-- <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/mapel/detail/} + ${mapel.id}">Ubah</a> -->
+                        <button class="btn btn-sm btn-outline-primary">Ubah</button>
+                        <button class="btn btn-sm btn-outline-danger">Hapus</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    <td>Edinburgh</td>
+                    <td class="align-content-left">
+                        <!-- <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/mapel/detail/} + ${mapel.id}">Ubah</a> -->
+                        <button class="btn btn-sm btn-outline-primary">Ubah</button>
+                        <button class="btn btn-sm btn-outline-danger">Hapus</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <br>
+        </div>
+    </div>
+</body>
+</html>
