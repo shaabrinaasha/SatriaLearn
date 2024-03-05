@@ -1,6 +1,7 @@
 package propensi.proyek.properly.controller;
 
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -92,47 +93,62 @@ public class MataPelajaranController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateMatpelForm(@PathVariable UUID id, Model model, Principal principal) {
+    public String updateMatpelFormPage(@PathVariable UUID id, Model model, Principal principal) {
         List<Guru> listGuru = guruService.getListGuruActive();
         List<Kelas> listKelas = kelasService.getAllKelas();
 
-        MataPelajaran matpelExist = mataPelajaranService.getMatpelById(id);
+        MataPelajaran oldMatpel = mataPelajaranService.getMatpelById(id);
+        var matpel = new MataPelajaran();
+        matpel.setId(oldMatpel.getId());
+        matpel.setNama(oldMatpel.getNama());
+        matpel.setGuru(oldMatpel.getGuru());
+        matpel.setKelas(oldMatpel.getKelas());
 
         model.addAttribute("listGuru", listGuru);
         model.addAttribute("listKelas", listKelas);
-        model.addAttribute("matpelExist", matpelExist);
+        model.addAttribute("matpel", matpel);
         return "matpel/form-update-matpel";
     }
 
     @PostMapping(value = "/update", params = {"save"})
-    public String updateMatpelSubmitPage(@ModelAttribute MataPelajaran matpelExist, String namaMatpel, UUID kelasMatpel, UUID guruMatpel, RedirectAttributes redirectAttrs) {
-        Guru newGuru = guruService.getGuruById(guruMatpel);
-        Kelas newKelas = kelasService.getKelasById(kelasMatpel);
+    public String updateMatpelSubmitPage(@ModelAttribute MataPelajaran matpel, RedirectAttributes redirectAttrs) {        
+        MataPelajaran oldMatpel = mataPelajaranService.getMatpelById(matpel.getId());
+        String oldNama = oldMatpel.getNama();
+        Guru oldGuru = oldMatpel.getGuru();
+        Kelas oldKelas = oldMatpel.getKelas();
 
-        if (!matpelExist.getNama().equals(namaMatpel)){
-            matpelExist.setNama(namaMatpel);
+        String newNama = matpel.getNama();
+        Guru newGuru = matpel.getGuru();
+        Kelas newKelas = matpel.getKelas();
+
+        if (!oldNama.equals(matpel.getNama())){
+            oldMatpel.setNama(newNama);
         }
-        if (matpelExist.getGuru().getId() != newGuru.getId()) {
-            for (MataPelajaran mataPelajaran: matpelExist.getGuru().getMataPelajarans()) {
-                if (mataPelajaran.getId() == matpelExist.getId()) {
-                    matpelExist.getGuru().getMataPelajarans().remove(mataPelajaran);
+        if (oldGuru.getId() != newGuru.getId()) {
+            Iterator<MataPelajaran> iterator = oldGuru.getMataPelajarans().iterator();
+                while (iterator.hasNext()) {
+                    MataPelajaran mataPelajaran = iterator.next();
+                    if (mataPelajaran.getId().equals(matpel.getId())) {
+                        iterator.remove(); // Menghapus elemen dari koleksi menggunakan iterator
+                    }
                 }
-            }
-            matpelExist.setGuru(newGuru);
-            newGuru.getMataPelajarans().add(matpelExist);
+            oldMatpel.setGuru(newGuru);
+            newGuru.getMataPelajarans().add(mataPelajaranService.getMatpelById(matpel.getId()));
         }
-        if (matpelExist.getKelas().getId() != newKelas.getId()) {
-            for (MataPelajaran mataPelajaran: matpelExist.getKelas().getMataPelajarans()) {
-                if (mataPelajaran.getId() == matpelExist.getId()) {
-                    matpelExist.getKelas().getMataPelajarans().remove(mataPelajaran);
+        if (oldKelas.getId() != newKelas.getId()) {
+            Iterator<MataPelajaran> iterator = oldKelas.getMataPelajarans().iterator();
+                while (iterator.hasNext()) {
+                    MataPelajaran mataPelajaran = iterator.next();
+                    if (mataPelajaran.getId().equals(matpel.getId())) {
+                        iterator.remove(); // Menghapus elemen dari koleksi menggunakan iterator
+                    }
                 }
-            }
-            matpelExist.setKelas(newKelas);
-            newKelas.getMataPelajarans().add(matpelExist);
+            oldMatpel.setKelas(newKelas);
+            newKelas.getMataPelajarans().add(mataPelajaranService.getMatpelById(matpel.getId()));
         }
       
         // save matpel
-        mataPelajaranService.addMataPelajaran(matpelExist);
+        mataPelajaranService.addMataPelajaran(oldMatpel);
         
         return "redirect:/matpel";
     }

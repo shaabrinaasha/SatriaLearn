@@ -26,7 +26,6 @@ public class MataPelajaranServiceImpl implements MataPelajaranService{
         return mataPelajaranDb.findAllName();
     }
 
-    @SuppressWarnings("null")
     @Override
     public MataPelajaran getMatpelById(UUID id) {
         return mataPelajaranDb.findById(id).orElse(null);
