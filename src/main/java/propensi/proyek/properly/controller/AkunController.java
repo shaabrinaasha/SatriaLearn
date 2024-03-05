@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import propensi.proyek.properly.Dto.akuns.NewUserRequestDto;
 import propensi.proyek.properly.Dto.akuns.UserDto;
 import propensi.proyek.properly.model.User;
-import propensi.proyek.properly.service.SiswaService;
+import propensi.proyek.properly.service.siswa.SiswaService;
 import propensi.proyek.properly.service.user.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
