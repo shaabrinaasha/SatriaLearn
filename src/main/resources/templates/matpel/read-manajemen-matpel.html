@@ -93,13 +93,13 @@
                 </thead>
                 <tbody>
                 <tr th:each="matpel, iterationStatus : ${listMatpel}">
-                    <td th:text="${iterationStatus.index + 1}"></td>
+                    <td th:text="${iterationStatus.index + 1}" class="align-content-left"></td>
                     <td th:text="${matpel.nama}"></td>
                     <td th:text="${matpel.kelas.nama}"></td>
                     <td th:text="${matpel.guru.nama}"></td>
                     <td class="align-content-left">
-                        <button class="btn btn-sm btn-outline-primary">Ubah</button>
-                        <button class="btn btn-sm btn-outline-danger">Hapus</button>
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{/matpel/update/} + ${matpel.id}">Ubah</a>
+                        <a class="btn btn-sm btn-outline-danger">Hapus</a>
                     </td>
                 </tr>
                

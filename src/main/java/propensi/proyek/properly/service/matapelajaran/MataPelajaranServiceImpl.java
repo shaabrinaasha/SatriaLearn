@@ -1,4 +1,4 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.matapelajaran;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +34,7 @@ public class MataPelajaranServiceImpl implements MataPelajaranService{
 
     @SuppressWarnings("null")
     @Override
-    public void addMatpel(MataPelajaran matpel) {
+    public void addMataPelajaran(MataPelajaran matpel) {
         mataPelajaranDb.save(matpel);
     }
 

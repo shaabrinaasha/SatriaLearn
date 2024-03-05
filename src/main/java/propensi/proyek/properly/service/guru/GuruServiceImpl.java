@@ -1,6 +1,7 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.guru;
 
 import propensi.proyek.properly.model.Guru;
+import propensi.proyek.properly.model.MataPelajaran;
 import propensi.proyek.properly.repository.GuruDb;
 
 import java.util.ArrayList;
@@ -27,15 +28,13 @@ public class GuruServiceImpl implements GuruService {
 
     @Override
     public List<Guru> getListGuruActive() {
-        // List<Guru> ListGuruActive = new ArrayList<>();
-        // for (Guru guru : GuruDb.findAll()) {
-        //     if (guru.getIsActive()) {
-        //         listPengajarActive.add(pengajar);
-        //     }
-        // }
-        // return listPengajarActive;
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getGuruMatpel'");
+        List<Guru> listGuruActive = new ArrayList<>();
+        for (Guru guru : guruDb.findAll()) {
+            if (guru.getIsActive()) {
+                listGuruActive.add(guru);
+            }
+        }
+        return listGuruActive;
     }
 
     @Override
@@ -46,8 +45,7 @@ public class GuruServiceImpl implements GuruService {
 
     @Override
     public Guru getGuruById(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getGuruById'");
+        return guruDb.findById(id).orElse(null);
     }
-    
+
 }

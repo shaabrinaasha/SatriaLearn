@@ -74,28 +74,29 @@
         </div>
 
         <div>
-            <form>
+            <form th:action="@{/matpel/add}" th:object="${matpel}" method="POST" >
                 <div class="form-group" style="margin-bottom: 1rem;">
                   <label for="inputMataPelajaran">Mata Pelajaran</label>
-                  <input type="mataPelajaran" class="form-control" aria-describedby="matpelHelp" id="inputMataPelajaran"  placeholder="Matematika">
+                  <input type="mataPelajaran" class="form-control" name="namaMatpel" aria-describedby="matpelHelp" id="inputMataPelajaran"  placeholder="Matematika">
                   <small id="matpelHelp" class="form-text text-muted">Mata Pelajaran dibuat untuk satu kelas.</small>
                 </div>
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label for="inputKelas">Kelas</label>
-                    <select id="inputState" class="form-control" th:each="kelas : ${listKelas}>
-                        <option th:value="${kelas}" th:text="${kelas.nama}"></option>
+                    <select id="inputKelas" class="form-control" name="kelasMatpel">
+                        <option th:each="kelas : ${listKelas}" th:value="${kelas.id}" th:text="${kelas.nama}"></option>
                     </select>
                 </div>
+                
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label for="inputGuru">Guru</label>
-                    <select id="inputState" class="form-control" th:each="guru : ${listGuru}>
-                        <option th:value="${guru}" th:text="${guru.nama}"></option>
+                    <select id="inputGuru" class="form-control" name="guruMatpel" required>
+                        <option th:each="guru : ${listGuru}" th:value="${guru.id}" th:text="${guru.nama}"></option>
                     </select>
                 </div>
                 
                 <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
-                    <a type="button" class="btn btn-outline-success">Simpan</a>
-                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel">Kembali</a>
+                    <button type="submit" class="btn btn-outline-success" name="save">Simpan</button>
+                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/">Kembali</a>
                 </div>
               </form>
         </div>

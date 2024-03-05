@@ -1,4 +1,4 @@
-package propensi.proyek.properly.service;
+package propensi.proyek.properly.service.matapelajaran;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,7 +8,8 @@ public interface MataPelajaranService {
     List<MataPelajaran> getListMatpel();
     List<String> getAllMatpelName();
     MataPelajaran getMatpelById(UUID id);
-    void addMatpel(MataPelajaran matpel);
+    void addMataPelajaran(MataPelajaran matpel);
     void deleteMatpel(MataPelajaran matpel);
+
 
 }
