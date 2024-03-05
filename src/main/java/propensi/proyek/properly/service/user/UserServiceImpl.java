@@ -1,11 +1,14 @@
 package propensi.proyek.properly.service.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 
+import propensi.proyek.properly.model.User;
 import propensi.proyek.properly.repository.UserDb;
 
 @Service
@@ -34,6 +37,11 @@ public class UserServiceImpl implements UserService{
         var user = users.get(0);
 
         return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    @Override
+    public List<User> getByUsername(String Username) {
+        return userDb.findByUsername(Username);
     }
     
 }

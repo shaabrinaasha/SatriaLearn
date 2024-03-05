@@ -32,6 +32,7 @@
     </nav>
 
     <h1 th:text="'HELLO '+ ${name}"></h1>
+    <h2 th:each="role: ${roles}" th:text="${role}"></h2>
     <form th:action="@{/logout}" method="post">
       <!-- <input
         type="hidden"
