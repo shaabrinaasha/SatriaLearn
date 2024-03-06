@@ -9,11 +9,15 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
 
-    
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script> -->
+
 
     <!-- <head th:fragment="css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -35,11 +39,11 @@
     <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
   
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         $(document).ready(function() {
             $('#matpel-table').DataTable();
         });
-    </script>
+    </script> -->
 
 </head>
 
@@ -64,10 +68,12 @@
 </style>
 
 <body>
-    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+        <div th:text="${error}"></div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+        <div th:text="${success}"></div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
@@ -75,7 +81,6 @@
         <div>
             <div style="margin-top: 3rem; margin-bottom: 2rem; text-align: center;">
                 <h2 style="font-weight: bold; margin-bottom: 0.75rem; font-family: 'Poppins', sans-serif; font-size: 18px; color: #106EE8;" >Manajemen Mata Pelajaran</h2>
-                <!-- <a class="btn" href="/mapel/add" style="background-color: #31318B;  color: white;">Tambah Mata Pelajaran</a> -->
                 <br>
             </div>
             <div style="float: right;">
@@ -99,7 +104,28 @@
                     <td th:text="${matpel.guru.nama}"></td>
                     <td class="align-content-left">
                         <a class="btn btn-sm btn-outline-primary" th:href="@{/matpel/update/} + ${matpel.id}">Ubah</a>
-                        <a class="btn btn-sm btn-outline-danger">Hapus</a>
+                        <a class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#modal-hapus">Hapus</a>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modal-hapus" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Mata Pelajaran</strong></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Apakah Anda Yakin ingin menghapus Mata Pelajaran ini? </br> </br>  Anda tidak dapat memulihkan data mata pelajaran jika sudah dihapus!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" href="/matpel">Batal</button>
+                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/matpel/delete/} + ${matpel.id}">Hapus</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                
@@ -108,5 +134,20 @@
             <br>
         </div>
     </div>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#matpel-table').DataTable();
+
+            // Menampilkan modal saat tombol "Hapus" diklik
+            $('#matpel-table').on('click', '.btn-outline-danger', function() {
+                var id = $(this).data('id');
+                $('#modal-hapus').modal('show');
+            });
+        });
+
+    </script>
+
 </body>
 </html>
