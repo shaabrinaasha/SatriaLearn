@@ -1,0 +1,72 @@
+body{
+    background: #FBFBFB;
+    font-family: 'Poppins';
+}
+
+#side_nav {
+    background: #FBFBFB;
+    min-width: 315px;
+    max-width: 315px;
+    transition: all 0.3s;
+}
+
+.content{
+    min-height: 100vh;
+    width: 100%;
+}
+
+hr.h-color{
+    background: #FBFBFB;
+}
+
+.sidebar li {
+    height: 75px;
+}
+
+.sidebar li.active{
+    background: #106EE8;;
+    border-radius: 0px 12px 12px 0px;
+}
+
+.sidebar li.active a, .sidebar li.active a:hover {
+    color: #fff;
+}
+.sidebar li a{
+    color: #868C90;
+}
+
+.vr {
+    border-left: 1px solid #B1B1B1;
+    height: 100%;
+    margin: 0 30px;
+}
+
+.vr {
+    display: none; 
+
+    @media (min-width: 768px) {
+        display: block; /* Display the vertical line on larger screens */
+        border-left: 1px solid #B1B1B1;
+        height: 100%;
+        margin: 0 30px;
+    }
+}
+
+.mini-logo embed {
+    max-width: 100%;
+    height: 68px;
+    }
+
+@media only screen and (max-width: 767px){
+    #side_nav {
+        margin-left: -345px;
+        position: absolute;
+        min-height: 100vh;
+        z-index: 1;
+    }
+    
+    #side_nav.active {
+        margin-left: 0;
+    }
+
+}
