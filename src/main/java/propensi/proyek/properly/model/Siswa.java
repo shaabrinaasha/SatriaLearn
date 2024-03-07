@@ -1,6 +1,7 @@
 package propensi.proyek.properly.model;
 
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -38,5 +39,5 @@ public class Siswa extends User {
     private OrangTua orangTua;
 
     @ManyToMany(mappedBy = "siswas")
-    private Set<Kelas> classes;
+    private Set<Kelas> classes = new HashSet<>();
 }

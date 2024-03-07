@@ -3,6 +3,7 @@ package propensi.proyek.properly.service.siswa;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -16,6 +17,9 @@ public class SiswaServiceImpl implements SiswaService {
     @Autowired
     SiswaDb siswaDb;
 
+    @Autowired
+    BCryptPasswordEncoder encoder;
+
     @Override
     public List<Siswa> getAllSiswa() {
         return siswaDb.findAll();
@@ -24,6 +28,7 @@ public class SiswaServiceImpl implements SiswaService {
     @SuppressWarnings("null")
     @Override
     public void addSiswa(Siswa siswa) {
+        siswa.setPassword(encoder.encode(siswa.getPasswordAwal()));
         siswaDb.save(siswa);
     }
 

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mata Pelajaran-Guru</title>
+
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
+</head>
+
+<style>
+
+body {
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #fbfbfb;
+    }
+
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2.5rem;
+    }
+
+    .card {
+        border-radius: 6px;
+        width: 270px;
+        height: 180px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card:hover {
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 30px -10px, rgba(0, 0, 0, 0.1) 0px 10px 10px -10px;
+    }
+
+    .top {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        height: 60%;
+        width: 100%;
+        background-color: #DDEDFF;
+        background-position: center center;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        overflow: hidden;
+        padding-left: 20px;
+        padding-bottom: 5px;
+    }
+
+    .top p {
+        font-size: 18px;
+        color: #106EE8;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .bottom {
+        display: flex;
+        align-items: center;
+        background-color: #FFFFFF;
+        border-radius: 6px;
+        height: 40%;
+        padding: 20px;
+        justify-content: flex-start;
+    }
+
+    .bottom span {
+        font-size: 15px;
+        text-decoration: none;
+        color: #4F4F4F;
+    }
+
+    .detail1,
+    .detail2 {
+        display: flex;
+        align-items: center;
+    }
+
+    i {
+        color: #4F4F4F;
+        padding-right: 20px;
+    }
+
+</style>
+
+<body>
+    <div class="alert alert-danger alert-dismissible" role="alert" style="display: none;" th:if="${error}" th:text="${error}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" style="display: none;" th:if="${success}" th:text="${success}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="main-container d-flex">
+        <div th:replace="~{fragments/fragment :: sidebar('home')}"></div>
+        <div class="d-flex">
+            <div class="vr"></div>
+        </div>
+        <div class="content">
+            <div class="dashboard-content px-3 pt-4">
+                <div th:replace="~{fragments/fragment :: header('home')}"></div>
+                <div class="container">
+                    <div>
+                        <div style="margin-top: 3rem; margin-bottom: 1rem; text-align: left;">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                  <li class="breadcrumb-item"><a href="#">Mata Pelajaran</a></li>
+                                </ol>
+                            </nav>
+                        </div>
+                     
+                        <div style="margin-bottom: 1rem; text-align: center;">
+                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" >Mata Pelajaran</h2>
+                            <br>
+                        </div>
+                    </div>
+        
+                    <div class="cards">
+                        <a href="#" class="card">
+                            <div class="top">
+                                <p class="nama-matpel">Matematika</p>
+                            </div>
+                            <div class="bottom">
+                                <div>
+                                    <div class="detail1">
+                                        <span class="guru-matpel"><i class="bi bi-person-fill guru-matpel" style="padding-right: 20px;"></i>Budi</span>
+                                    </div>
+                                    <div class="detail2">
+                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </a>
+
+                        <a href="#" class="card">
+                            <div class="top">
+                                <p class="nama-matpel">Matematika</p>
+                            </div>
+                            <div class="bottom">
+                                <div>
+                                    <div class="detail1">
+                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
+                                    </div>
+                                    <div class="detail2">
+                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                        </a>
+
+                        <a href="#" class="card">
+                            <div class="top">
+                                <p class="nama-matpel">Matematika</p>
+                            </div>
+                            <div class="bottom">
+                                <div>
+                                    <div class="detail1">
+                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
+                                    </div>
+                                    <div class="detail2">
+                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                        </a>
+
+                        <a href="#" class="card">
+                            <div class="top">
+                                <p class="nama-matpel">Matematika</p>
+                            </div>
+                            <div class="bottom">
+                                <div>
+                                    <div class="detail1">
+                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
+                                    </div>
+                                    <div class="detail2">
+                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                        </a>
+        
+                    </div>  
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
