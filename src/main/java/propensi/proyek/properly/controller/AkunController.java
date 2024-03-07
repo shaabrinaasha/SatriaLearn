@@ -48,6 +48,7 @@ public class AkunController {
     @GetMapping("akuns/create")
     public ModelAndView createNewAkunPage(Model model) {
         model.addAttribute("akun", new NewUserRequestDto());
+        model.addAttribute("siswas", siswaService.getAllSiswa());
         return new ModelAndView("/akuns/create-akun", model.asMap());
     }
 

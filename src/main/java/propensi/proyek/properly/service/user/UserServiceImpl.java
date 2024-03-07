@@ -1,13 +1,17 @@
 package propensi.proyek.properly.service.user;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.passay.CharacterRule;
 import org.passay.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.client.ResourceAccessException;
 
 import propensi.proyek.properly.model.User;
@@ -59,7 +63,7 @@ public class UserServiceImpl implements UserService{
             generatedUsername = String.format("%s.%s", names[0], names[1]);
             generatedUsername = generatedUsername.toLowerCase();
         } else if (names.length == 1) {
-            generatedUsername = String.format("%s.", names[0]);
+            generatedUsername = String.format("%s", names[0]);
             generatedUsername = generatedUsername.toLowerCase();
         } else {
             throw new IllegalArgumentException("Username format incorrect");
@@ -70,11 +74,24 @@ public class UserServiceImpl implements UserService{
         if (usersWithSimilarUsername.size() == 0) {
             return generatedUsername + "01";
         }
+        var highestPrefix = getHighestPrefix(generatedUsername, usersWithSimilarUsername);
 
-        var highestValue = Integer.parseInt(usersWithSimilarUsername.get(0).getUsername().split(generatedUsername)[1]);
-        System.out.println(highestValue);
-        return String.format("%s%2d", generatedUsername, highestValue+1).replace(" ", "0");
+        return String.format("%s%2d", generatedUsername, highestPrefix+1).replace(" ", "0");
 
+        
+    }
+
+    private Integer getHighestPrefix(String username, List<User> users) {
+        for (User user: users) {
+            try {
+                var prefix = Integer.parseInt(user.getUsername().split(username)[1]);
+                return prefix;
+            }
+            catch (Exception e) {
+                continue;
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -84,5 +101,27 @@ public class UserServiceImpl implements UserService{
     public List<User> getByUsername(String Username) {
         return userDb.findByUsername(Username);
     }
-    
+
+    @Override
+    public void addCurrentUserToModel(String username, Collection<? extends GrantedAuthority> authorities, Model model) {
+        var users = userDb.findByUsername(username);
+        if (users.size() != 1) {
+            model.addAttribute("currentUser", null);
+        } else {
+            model.addAttribute("currentUser", users.get(0));
+        }
+
+        var roles = new ArrayList<String>();
+
+        for (GrantedAuthority authority : authorities) {
+            try {
+                roles.add(authority.getAuthority().split("ROLE_")[1]);
+            } catch (Exception e) {
+                continue;
+            }
+        }
+
+        model.addAttribute("roles", roles);
+    }
+
 }
