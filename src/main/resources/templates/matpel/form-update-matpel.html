@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Mata Pelajaran</title>
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap"> -->
+
+    <head th:fragment="css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+        <!-- <link rel="stylesheet" th:href="@{/bootstrap.min.css}"/>
+        <link rel="stylesheet" th:href="@{/style.css}"/> -->
+    </head>
+    <head th:fragment="js">
+        <script src="https://code.jquery.com/jquery-3.4.1.win.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFIBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script th:src="@{/bootstrap.min.js}"></script>
+    </head>
+
+    <!-- <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
+</head>
+<style>
+    body{
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        background-color: #FBFBFB;
+    }
+
+    .container-form {
+        border-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        padding: 20px; 
+        background-color: #ffffff; 
+        margin-top: 50px;
+        width: 700px;
+    }
+
+    form {
+        width: 80%; 
+        margin: auto; 
+    }
+
+    .form-control {
+        font-size: 14px; 
+    }
+</style>
+<body>
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+        <div th:text="${error}"></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+        <div th:text="${success}"></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="container container-form">
+        <div style="margin-top: 2rem; margin-bottom: 1rem; text-align: center;">
+            <h2 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 24px; color: #106EE8;" >Ubah Mata Pelajaran</h2>
+            <br>
+        </div>
+
+        <div>
+            <form th:action="@{/matpel/update}" th:object="${matpel}" method="POST">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group" style="margin-bottom: 1rem;">
+                  <label for="inputMataPelajaran">Mata Pelajaran</label>
+                  <input class="form-control" aria-describedby="matpelHelp" id="inputMataPelajaran" th:field="*{nama}">
+                  <small id="matpelHelp" class="form-text text-muted">Mata Pelajaran dibuat untuk satu kelas.</small>
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="inputKelas">Kelas</label>
+                    <select id="inputKelas" class="form-control" name="kelasMatpel" th:field="*{kelas}">
+                        <option th:each="kelas : ${listKelas}" th:value="${kelas.id}" th:text="${kelas.nama}" th:selected="${kelas.id == matpel.kelas.id}"></option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="inputGuru">Guru</label>
+                    <select id="inputGuru" class="form-control" name="guruMatpel" th:field="*{guru}">
+                        <option th:each="guru : ${listGuru}" th:value="${guru.id}" th:text="${guru.nama}" th:selected="${guru.id == matpel.guru.id}"></option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
+                    <button type="submit" class="btn btn-outline-success" name="save">Simpan</button>
+                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel">Kembali</a>
+                </div>
+              </form>
+        </div>
+    </div>
+</body>
+</html>
