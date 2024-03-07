@@ -31,6 +31,7 @@ hr.h-color{
 .sidebar li.active a, .sidebar li.active a:hover {
     color: #fff;
 }
+
 .sidebar li a{
     color: #868C90;
 }
@@ -51,11 +52,6 @@ hr.h-color{
         margin: 0 30px;
     }
 }
-
-.mini-logo embed {
-    max-width: 100%;
-    height: 68px;
-    }
 
 @media only screen and (max-width: 767px){
     #side_nav {
