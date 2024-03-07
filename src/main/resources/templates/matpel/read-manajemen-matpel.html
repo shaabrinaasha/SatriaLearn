@@ -120,7 +120,7 @@
                                         Apakah Anda Yakin ingin menghapus Mata Pelajaran ini? </br> </br>  Anda tidak dapat memulihkan data mata pelajaran jika sudah dihapus!
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" href="/matpel">Batal</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                         <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/matpel/delete/} + ${matpel.id}">Hapus</a>
                                     </div>
                                 </div>
@@ -145,7 +145,17 @@
                 var id = $(this).data('id');
                 $('#modal-hapus').modal('show');
             });
+
+            $('#matpel-table').on('click', '.btn-secondary', function() {
+                $('#modal-hapus').modal('hide');
+            });
+
+            $('#matpel-table').on('click', '.close', function() {
+                $('#modal-hapus').modal('hide');
+            });
+
         });
+
 
     </script>
 
