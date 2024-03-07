@@ -4,10 +4,13 @@ import java.security.Principal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +25,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.model.MataPelajaran;
+import propensi.proyek.properly.model.User;
 import propensi.proyek.properly.service.guru.GuruService;
 import propensi.proyek.properly.service.kelas.KelasService;
 import propensi.proyek.properly.service.matapelajaran.*;
+import propensi.proyek.properly.service.user.UserService;
 
 @RequestMapping("/matpel")
 @Controller
@@ -35,9 +40,15 @@ public class MataPelajaranController {
     private GuruService guruService;
     @Autowired
     private KelasService kelasService;
+    @Autowired
+    UserService userService;
 
     @RequestMapping("")
-    public String viewMatpel(Model model, Principal principal) {
+    public String viewMatpel(Authentication auth, Model model, Principal principal) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+        userService.addCurrentUserToModel(username, authorities, model);
+        
         List<MataPelajaran> listMatpel = mataPelajaranService.getListMatpel();
         System.out.println(listMatpel.size());
         model.addAttribute("listMatpel", listMatpel);
@@ -45,7 +56,10 @@ public class MataPelajaranController {
     }
 
     @RequestMapping("/siswa")
-    public String viewMatpelSiswa(Model model, Principal principal) {
+    public String viewMatpelSiswa(Authentication auth, Model model, Principal principal) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+        userService.addCurrentUserToModel(username, authorities, model);
         return "matpel/read-matpel-siswa";
     }
 

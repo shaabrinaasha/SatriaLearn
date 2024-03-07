@@ -38,6 +38,52 @@
               id="input-peran"
               class="form-select"
               th:field="*{peran}"
+              onchange="
+              var dropdown = document.getElementById('input-peran');
+              var inputNipd = document.getElementById('input-nipd');
+              var inputNisn = document.getElementById('input-nisn');
+              var inputNuptk = document.getElementById('input-nuptk');
+              var inputAnak = document.getElementById('input-anak');
+
+              var divInputNipd = document.getElementById('div-input-nipd');
+              var divInputNisn = document.getElementById('div-input-nisn');
+              var divInputNuptk = document.getElementById('div-input-nuptk');
+              var divInputAnak = document.getElementById('div-input-anak');
+
+              switch (dropdown.value) {
+                case 'siswa':
+                  inputNipd.setAttribute('required', true);
+                  inputNisn.setAttribute('required', true);
+                  inputNuptk.removeAttribute('required');
+                  inputAnak.removeAttribute('required');
+                  divInputNipd.removeAttribute('hidden');
+                  divInputNisn.removeAttribute('hidden');
+                  divInputNuptk.setAttribute('hidden', true);
+                  divInputAnak.setAttribute('hidden', true)
+                  break;
+                case 'guru':
+                  inputNuptk.setAttribute('required', true);
+                  inputNipd.removeAttribute('required')
+                  inputNisn.removeAttribute('required')
+                  inputAnak.removeAttribute('required')
+                  divInputNuptk.removeAttribute('hidden');
+                  divInputNipd.setAttribute('hidden', true);
+                  divInputNisn.setAttribute('hidden', true)
+                  divInputAnak.setAttribute('hidden', true);
+
+                  break;
+                default:
+                  inputAnak.setAttribute('required', true);
+                  inputNipd.removeAttribute('required')
+                  inputNisn.removeAttribute('required')
+                  inputNuptk.removeAttribute('required')
+                  divInputAnak.removeAttribute('hidden');
+                  divInputNipd.setAttribute('hidden', true);
+                  divInputNisn.setAttribute('hidden', true)
+                  divInputNuptk.setAttribute('hidden', true);
+                  break;
+              }
+"
             >
               <option th:value="'siswa'">Siswa</option>
               <option th:value="'guru'">Guru</option>
@@ -55,8 +101,7 @@
               id="input-nama"
             />
           </div>
-
-          <div class="form-group">
+          <div class="form-group" id="div-input-nipd">
             <label for="input-nipd" class="form-label">NIPD</label>
             <input
               type="number"
@@ -70,7 +115,7 @@
             />
           </div>
 
-          <div class="form-group">
+          <div class="form-group" id="div-input-nisn">
             <label for="input-nisn" class="form-label">NISN</label>
             <input
               type="number"
@@ -82,6 +127,26 @@
               maxlength="10"
               oninput="this.value=this.value.slice(0,this.maxLength)"
             />
+          </div>
+
+          <div class="form-group" hidden id="div-input-nuptk">
+            <label for="input-nuptk" class="form-label">NUPTK</label>
+            <input
+                    type="text"
+                    placeholder="4753767668130082"
+                    th:field="*{nuptk}"
+                    required
+                    class="form-control"
+                    id="input-nuptk"
+            />
+          </div>
+
+          <div class="form-group" hidden id="div-input-anak">
+            <label for="input-anak" class="form-label">Orang Tua Dari</label>
+            <select th:field="*{orangTuaOf}" id="input-anak" class="form-select">
+              <option th:value="null" th:text="'Pilih Siswa'" selected></option>
+              <option th:each="siswa: ${siswas}" th:value="${siswa.id}" th:text="${siswa.nama}"></option>
+            </select>
           </div>
 
           <input
@@ -101,7 +166,7 @@
       class="btn btn-primary"
       data-bs-toggle="modal"
       data-bs-target="#staticBackdrop"
-      hidden
+
       id="button-trigger-modal"
     >
       Launch static backdrop modal

@@ -25,13 +25,13 @@ public class SecurityConfig {
         http
         .authorizeHttpRequests((customizer) -> 
             customizer
-            .requestMatchers("/static/**").permitAll()
-            .requestMatchers("**.css").permitAll()
-            .requestMatchers("**.js").permitAll()
-            .anyRequest().permitAll()
+            // .requestMatchers("/static/**").permitAll()
+            // .requestMatchers("**.css").permitAll()
+            // .requestMatchers("**.js").permitAll()
+            // .anyRequest().permitAll()
             // .authenticated()
-            // .requestMatchers("/static/**", "**.css", "**.js", "/error").permitAll()
-            // .anyRequest().authenticated()
+            .requestMatchers("/static/**", "**.css", "**.js", "/error").permitAll()
+            .anyRequest().authenticated()
         )
         .httpBasic(Customizer.withDefaults())
         .formLogin((customizer) ->
