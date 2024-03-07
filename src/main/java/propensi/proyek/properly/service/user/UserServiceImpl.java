@@ -106,7 +106,8 @@ public class UserServiceImpl implements UserService{
     public void addCurrentUserToModel(String username, Collection<? extends GrantedAuthority> authorities, Model model) {
         var users = userDb.findByUsername(username);
         if (users.size() != 1) {
-            model.addAttribute("currentUser", null);
+            var user = new User();
+            model.addAttribute("currentUser", user);
         } else {
             model.addAttribute("currentUser", users.get(0));
         }
