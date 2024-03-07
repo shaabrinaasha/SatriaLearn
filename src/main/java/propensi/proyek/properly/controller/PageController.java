@@ -28,21 +28,11 @@ public class PageController {
         Authentication auth, // Untuk authorities
         Principal principal, // Untuk username
         Model model) {
-        model.addAttribute("siswa", siswaService.getAllSiswa());
         var username = principal.getName();
-        var users = userService.getByUsername(username);
-        var currentUser = users.get(0);
-
         var authorities = auth.getAuthorities();
-        var roles = new ArrayList<String>();
 
-        for (GrantedAuthority authority : authorities) {
-            roles.add(authority.getAuthority().split("ROLE_")[1]);
-        }
+        userService.addCurrentUserToModel(username, authorities, model);
 
-        model.addAttribute("name", currentUser.getNama());
-        model.addAttribute("roles", roles);
-        
         return "home";
     }
 
