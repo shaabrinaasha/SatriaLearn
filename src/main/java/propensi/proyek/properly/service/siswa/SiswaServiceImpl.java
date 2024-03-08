@@ -1,6 +1,7 @@
 package propensi.proyek.properly.service.siswa;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +24,18 @@ public class SiswaServiceImpl implements SiswaService {
     @Override
     public List<Siswa> getAllSiswa() {
         return siswaDb.findAll();
+    }
+
+    @Override
+    public Siswa getSiswaById(UUID id) {
+        var optionalSiswa = siswaDb.findById(id);
+        if (optionalSiswa.isEmpty()) throw new IllegalArgumentException("id not in database");
+        return optionalSiswa.get();
+    }
+
+    @Override
+    public List<Siswa> getAllSiswaWithUndocumentedParent() {
+        return siswaDb.findAllByOrangTuaNull();
     }
 
     @SuppressWarnings("null")

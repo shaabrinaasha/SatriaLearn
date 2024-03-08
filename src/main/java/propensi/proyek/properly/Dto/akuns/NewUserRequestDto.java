@@ -1,11 +1,14 @@
 package propensi.proyek.properly.Dto.akuns;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import propensi.proyek.properly.model.Guru;
+import propensi.proyek.properly.model.OrangTua;
 import propensi.proyek.properly.model.Siswa;
 
 @Getter
@@ -17,7 +20,7 @@ public class NewUserRequestDto {
     private String nipd;
     private String nisn;
     private String nuptk;
-    private UUID orangTuaOf;
+    private List<UUID> orangTuaOf;
 
     public Siswa toSiswa() {
         var siswa = new Siswa();
@@ -25,5 +28,19 @@ public class NewUserRequestDto {
         siswa.setNipd(nipd);
         siswa.setNisn(nisn);
         return siswa;
+    }
+
+    public Guru toGuru() {
+        var guru = new Guru();
+        guru.setNama(nama);
+        guru.setNuptk(nuptk);
+        return guru;
+    }
+
+    public OrangTua toOrangTua(List<Siswa> siswas) {
+        var orangTua = new OrangTua();
+        orangTua.setNama(nama);
+        orangTua.setSiswas(siswas);
+        return orangTua;
     }
 }

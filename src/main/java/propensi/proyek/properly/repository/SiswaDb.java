@@ -4,11 +4,12 @@ import org.springframework.stereotype.Repository;
 
 import propensi.proyek.properly.model.Siswa;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
 public interface SiswaDb extends JpaRepository<Siswa, UUID> {
-    
+    List<Siswa> findAllByOrangTuaNull();
 }
