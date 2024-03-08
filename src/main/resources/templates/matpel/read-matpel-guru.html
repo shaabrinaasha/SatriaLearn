@@ -124,80 +124,23 @@ body {
                         </div>
                     </div>
         
-                    <div class="cards">
+                    <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
                         <a href="#" class="card">
                             <div class="top">
-                                <p class="nama-matpel">Matematika</p>
+                                <!-- Access the nama attribute of each matpel object -->
+                                <p class="nama-matpel" th:text="${m.nama}">Matematika</p>
                             </div>
                             <div class="bottom">
                                 <div>
                                     <div class="detail1">
-                                        <span class="guru-matpel"><i class="bi bi-person-fill guru-matpel" style="padding-right: 20px;"></i>Budi</span>
-                                    </div>
-                                    <div class="detail2">
-                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                        <span class="kelas-matpel" th:text="${m.kelas.nama}"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
                                     </div>
                                 </div>
-                                
                             </div>
                         </a>
-
-                        <a href="#" class="card">
-                            <div class="top">
-                                <p class="nama-matpel">Matematika</p>
-                            </div>
-                            <div class="bottom">
-                                <div>
-                                    <div class="detail1">
-                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
-                                    </div>
-                                    <div class="detail2">
-                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
-                                    </div>
-                                
-                                </div>
-                                
-                            </div>
-                        </a>
-
-                        <a href="#" class="card">
-                            <div class="top">
-                                <p class="nama-matpel">Matematika</p>
-                            </div>
-                            <div class="bottom">
-                                <div>
-                                    <div class="detail1">
-                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
-                                    </div>
-                                    <div class="detail2">
-                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
-                                    </div>
-                                
-                                </div>
-                                
-                            </div>
-                        </a>
-
-                        <a href="#" class="card">
-                            <div class="top">
-                                <p class="nama-matpel">Matematika</p>
-                            </div>
-                            <div class="bottom">
-                                <div>
-                                    <div class="detail1">
-                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
-                                    </div>
-                                    <div class="detail2">
-                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
-                                    </div>
-                                
-                                </div>
-                                
-                            </div>
-                        </a>
-        
-                    </div>  
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>

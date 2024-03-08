@@ -1,6 +1,7 @@
 package propensi.proyek.properly.service.siswa;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,6 +31,11 @@ public class SiswaServiceImpl implements SiswaService {
     public void addSiswa(Siswa siswa) {
         siswa.setPassword(encoder.encode(siswa.getPasswordAwal()));
         siswaDb.save(siswa);
+    }
+
+    @Override
+    public Siswa getSiswaById(UUID id) {
+        return siswaDb.findById(id).orElse(null);
     }
 
 }

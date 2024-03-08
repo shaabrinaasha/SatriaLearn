@@ -13,6 +13,7 @@ public interface UserService {
     String generateUsername(String name);
     String generatePassword();
     List<User> getByUsername(String Username);
+    User getUserByUsername(String Username);
 
     void addCurrentUserToModel(String username, Collection<? extends GrantedAuthority> authorities, Model model);
 }

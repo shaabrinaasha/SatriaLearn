@@ -125,4 +125,9 @@ public class UserServiceImpl implements UserService{
         model.addAttribute("roles", roles);
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        return userDb.findUserByUsername(username);
+    }
+
 }

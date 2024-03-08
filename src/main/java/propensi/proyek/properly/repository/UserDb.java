@@ -13,4 +13,5 @@ import java.util.List;
 public interface UserDb extends JpaRepository<User, UUID> {
     List<User> findByUsername(String username);
     List<User> findAllByUsernameLikeOrderByUsernameDesc(String pattern);
+    User findUserByUsername(String username);
 }
