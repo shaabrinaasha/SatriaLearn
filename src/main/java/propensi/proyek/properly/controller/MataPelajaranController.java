@@ -1,8 +1,11 @@
 package propensi.proyek.properly.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -25,10 +28,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.model.MataPelajaran;
+import propensi.proyek.properly.model.Semester;
+import propensi.proyek.properly.model.Siswa;
 import propensi.proyek.properly.model.User;
 import propensi.proyek.properly.service.guru.GuruService;
 import propensi.proyek.properly.service.kelas.KelasService;
 import propensi.proyek.properly.service.matapelajaran.*;
+import propensi.proyek.properly.service.siswa.SiswaService;
 import propensi.proyek.properly.service.user.UserService;
 
 @RequestMapping("/matpel")
@@ -39,33 +45,65 @@ public class MataPelajaranController {
     @Autowired
     private GuruService guruService;
     @Autowired
+    private SiswaService siswaService;
+    @Autowired
     private KelasService kelasService;
     @Autowired
     UserService userService;
 
     @RequestMapping("")
-    public String viewMatpel(Authentication auth, Model model, Principal principal) {
+    public String viewMatpel(Authentication auth, Model model, Principal principal, RedirectAttributes redirectAttrs) {
         var username = principal.getName();
         var authorities = auth.getAuthorities();
-        userService.addCurrentUserToModel(username, authorities, model);
-        
-        List<MataPelajaran> listMatpel = mataPelajaranService.getListMatpel();
-        System.out.println(listMatpel.size());
-        model.addAttribute("listMatpel", listMatpel);
-        return "matpel/read-manajemen-matpel";
+
+        Collection<? extends GrantedAuthority> authorities2 = auth.getAuthorities();
+
+        List<String> roles = authorities2.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        String userRole = roles.get(0);
+        System.out.println("ROLE");
+        System.out.println(userRole);
+
+        if (userRole.contains("Admin") || userRole.contains("admin")) {
+            List<MataPelajaran> listMatpel = mataPelajaranService.getListMatpel();
+            System.out.println(listMatpel.size());
+            userService.addCurrentUserToModel(username, authorities, model);
+            model.addAttribute("listMatpel", listMatpel);
+            return "matpel/read-manajemen-matpel";
+
+        } else if (userRole.contains("Guru") || userRole.contains("guru")) {
+            User user = userService.getUserByUsername(username);
+            Guru guru = guruService.getGuruById(user.getId());
+            List<MataPelajaran> listMatpel = new ArrayList<>(guru.getMataPelajarans());
+            userService.addCurrentUserToModel(username, authorities, model);
+            model.addAttribute("listMatpel", listMatpel);
+            return "matpel/read-matpel-guru";
+        }
+        redirectAttrs.addFlashAttribute("error","Role tidak memiliki akses ke mata pelajaran");
+        return "home";
     }
 
-    @RequestMapping("/siswa")
+    @RequestMapping("/{siswa}")
     public String viewMatpelSiswa(Authentication auth, Model model, Principal principal) {
         var username = principal.getName();
         var authorities = auth.getAuthorities();
-        userService.addCurrentUserToModel(username, authorities, model);
-        return "matpel/read-matpel-siswa";
-    }
 
-    @RequestMapping("/guru")
-    public String viewMatpelGuru(Model model, Principal principal) {
-        return "matpel/read-matpel-guru";
+        User user = userService.getUserByUsername(username);
+        Siswa siswa = siswaService.getSiswaById(user.getId());
+        Set<Kelas> kelasSiswa= siswa.getClasses();
+        List<Kelas> myList = new ArrayList<>(kelasSiswa);
+        // need to handle loop
+        Kelas kelas = myList.get(0);
+        List<MataPelajaran> listMatpel = new ArrayList<>(kelas.getMataPelajarans());
+        List<Semester> semesters = new ArrayList<>(kelas.getSemesters());
+        Semester semester = semesters.get(0);
+        userService.addCurrentUserToModel(username, authorities, model);
+        model.addAttribute("listMatpel", listMatpel);
+        model.addAttribute("kelas", kelas);
+        model.addAttribute("semester", semester);
+        return "matpel/read-matpel-siswa";
     }
 
     @GetMapping("/add")

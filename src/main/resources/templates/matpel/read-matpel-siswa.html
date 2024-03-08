@@ -108,13 +108,13 @@
         <div class="content">
             <div class="dashboard-content px-3 pt-4">
                 <div th:replace="~{fragments/fragment :: header('home')}"></div>
-                <div class="container">
+                <div class="container" th:object="${kelas}">
                     <div >
                         <div style="margin-top: 3rem; margin-bottom: 1rem; text-align: left;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                   <li class="breadcrumb-item"><a href="#">Kelas</a></li>
-                                  <li class="breadcrumb-item active kelas-matpel" aria-current="page">Kelas 10 A</li>
+                                  <li class="breadcrumb-item active kelas-matpel" th:text="${kelas.nama}" aria-current="page">Kelas 10 A</li>
                                 </ol>
                             </nav>
                         </div>
@@ -122,48 +122,28 @@
                             <a href="#"><i class="bi bi-chevron-left"></i></a>
                         </div>
                         <div style="margin-bottom: 1rem; text-align: center;">
-                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" >Kelas 10 A</h2>
-                            <p class="kelas-siswa" style="font-family: 'Poppins', sans-serif; font-size: 16px; color: #828282;" >Tahun Ajaran 2022/2023</p>
+                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" th:text="${kelas.nama}" >Kelas 10 A</h2>
+                            <p class="kelas-siswa" style="font-family: 'Poppins', sans-serif; font-size: 16px; color: #828282;" th:object="${semester}" th:text="${semester.tahunAjaran}">Tahun Ajaran 2022/2023</p>
                             <br>
                         </div>
                     </div>
         
-                    <div class="cards">
+                    <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
                         <a href="#" class="card">
                             <div class="top">
-                                <p class="nama-matpel">Matematika</p>
+                                <!-- Access the nama attribute of each matpel object -->
+                                <p class="nama-matpel" th:text="${m.nama}">Matematika</p>
                             </div>
                             <div class="bottom">
                                 <div>
                                     <div class="detail1">
-                                        <span class="guru-matpel"><i class="bi bi-person-fill guru-matpel" style="padding-right: 20px;"></i>Budi</span>
-                                    </div>
-                                    <div class="detail2">
-                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                        <!-- Access the guru.nama attribute of each matpel object -->
+                                        <span class="guru-matpel" th:text="${m.guru.nama}"><i class="bi bi-person-fill guru-matpel" style="padding-right: 20px;"></i>Budi</span>
                                     </div>
                                 </div>
-                                
                             </div>
                         </a>
-
-                        <a href="#" class="card">
-                            <div class="top">
-                                <p class="nama-matpel">Matematika</p>
-                            </div>
-                            <div class="bottom">
-                                <div>
-                                    <div class="detail1">
-                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
-                                    </div>
-                                    <div class="detail2">
-                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
-                                    </div>
-                                
-                                </div>
-                                
-                            </div>
-                        </a>
-
+<!-- 
                         <a href="#" class="card">
                             <div class="top">
                                 <p class="nama-matpel">Matematika</p>
@@ -199,6 +179,24 @@
                                 
                             </div>
                         </a>
+
+                        <a href="#" class="card">
+                            <div class="top">
+                                <p class="nama-matpel">Matematika</p>
+                            </div>
+                            <div class="bottom">
+                                <div>
+                                    <div class="detail1">
+                                        <span class="guru-matpel"><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Budi</span>
+                                    </div>
+                                    <div class="detail2">
+                                        <span class="kelas-matpel"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                        </a> -->
         
                     </div>  
                 </div>

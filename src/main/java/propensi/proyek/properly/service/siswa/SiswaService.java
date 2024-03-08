@@ -1,5 +1,6 @@
 package propensi.proyek.properly.service.siswa;
 
+import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.Siswa;
 
 import java.util.List;

@@ -2,20 +2,27 @@ package propensi.proyek.properly.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import propensi.proyek.properly.Dto.akuns.NewUserRequestDto;
 import propensi.proyek.properly.Dto.akuns.UserDto;
+import propensi.proyek.properly.model.Guru;
+import propensi.proyek.properly.model.OrangTua;
 import propensi.proyek.properly.model.Siswa;
 import propensi.proyek.properly.model.User;
 import propensi.proyek.properly.service.guru.GuruService;
@@ -25,9 +32,6 @@ import propensi.proyek.properly.service.user.UserService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
-
 
 @Controller
 public class AkunController {
@@ -49,7 +53,7 @@ public class AkunController {
         userService.addCurrentUserToModel(auth.getName(), auth.getAuthorities(), model);
 
         var usersInDb = userService.getAllUser();
-        var users  = new ArrayList<UserDto>();
+        var users = new ArrayList<UserDto>();
 
         for (User user : usersInDb) {
             users.add(UserDto.fromUser(user));
@@ -70,7 +74,7 @@ public class AkunController {
     public ModelAndView createNewAkun(@ModelAttribute NewUserRequestDto user, Model model) {
         model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
         model.addAttribute("akun", user);
-        
+
         switch (user.getPeran()) {
             case "siswa":
                 return createNewSiswa(user, model);
@@ -84,7 +88,8 @@ public class AkunController {
 
     private ModelAndView createNewSiswa(NewUserRequestDto user, Model model) {
         model.addAttribute("selected", "siswa");
-        if (inputSiswaNotCorrect(user, model)) return new ModelAndView("/akuns/create-akun", model.asMap());
+        if (inputSiswaNotCorrect(user, model))
+            return new ModelAndView("/akuns/create-akun", model.asMap());
 
         var username = userService.generateUsername(user.getNama());
         var password = userService.generatePassword();
@@ -120,7 +125,8 @@ public class AkunController {
 
     private ModelAndView createNewGuru(NewUserRequestDto user, Model model) {
         model.addAttribute("selected", "guru");
-        if (inputGuruNotCorrect(user, model)) return new ModelAndView("/akuns/create-akun", model.asMap());
+        if (inputGuruNotCorrect(user, model))
+            return new ModelAndView("/akuns/create-akun", model.asMap());
 
         var username = userService.generateUsername(user.getNama());
         var password = userService.generatePassword();
@@ -129,7 +135,6 @@ public class AkunController {
         guru.setPasswordAwal(password);
 
         guruService.addGuru(guru);
-
 
         model.addAttribute("akun", new NewUserRequestDto());
         model.addAttribute("peran", "Guru");
@@ -149,11 +154,10 @@ public class AkunController {
         return false;
     }
 
-
-
     private ModelAndView createNewOrangTua(NewUserRequestDto user, Model model) {
         model.addAttribute("selected", "orang tua");
-        if (inputOrangTuaNotCorrect(user, model)) return new ModelAndView("/akuns/create-akun", model.asMap());
+        if (inputOrangTuaNotCorrect(user, model))
+            return new ModelAndView("/akuns/create-akun", model.asMap());
 
         var username = userService.generateUsername(user.getNama());
         var password = userService.generatePassword();
@@ -169,7 +173,6 @@ public class AkunController {
 
         orangTuaService.addOrangTua(orangTua);
 
-
         model.addAttribute("akun", new NewUserRequestDto());
         model.addAttribute("peran", "Orang Tua");
         model.addAttribute("nama", orangTua.getNama());
@@ -182,11 +185,12 @@ public class AkunController {
             return true;
         }
 
-        for (UUID id: user.getOrangTuaOf()) {
+        for (UUID id : user.getOrangTuaOf()) {
             try {
                 var siswa = siswaService.getSiswaById(id);
                 if (siswa.getOrangTua() != null) {
-                    model.addAttribute("error", String.format("Orang Tua %s sudah terdaftar di sistem", siswa.getNama()));
+                    model.addAttribute("error",
+                            String.format("Orang Tua %s sudah terdaftar di sistem", siswa.getNama()));
                     return true;
                 }
             } catch (IllegalArgumentException e) {
@@ -197,6 +201,100 @@ public class AkunController {
         return false;
     }
 
+    @GetMapping("/akuns/{id}/update")
+    public String updateAkunFormPage(@PathVariable UUID id, Principal principal, Model model) {
+        User oldUser = userService.getUserById(id);
+        var oldUserDto = UserDto.fromUser(oldUser);
+        String userRole = oldUserDto.getPeran();
+        var akun = new NewUserRequestDto();
+        akun.setNama(oldUserDto.getNama());
 
+        if (userRole.contains("siswa")) {
+            Siswa oldSiswa = (Siswa) oldUser;
+            akun.setNipd(oldSiswa.getNipd());
+            akun.setNisn(oldSiswa.getNisn());
+            // model.addAttribute("akunParent", newSiswa);
+            model.addAttribute("akun", akun);
+            model.addAttribute("selected", "siswa");
+            model.addAttribute("peran", "Siswa");
+
+        } else if (userRole.contains("guru")) {
+            Guru oldGuru = (Guru) oldUser;
+            akun.setNama(oldGuru.getNama());
+            akun.setNuptk(oldGuru.getNuptk());
+            model.addAttribute("akun", akun);
+            model.addAttribute("selected", "guru");
+            model.addAttribute("peran", "Guru");
+
+        } else if (userRole.contains("orang tua") || userRole.contains("orangTua")) {
+            OrangTua oldOrtu = (OrangTua) oldUser;
+            akun.setNama(oldOrtu.getNama());
+            List<UUID> anak = new ArrayList<>();
+            for (Siswa siswa : oldOrtu.getSiswas()) {
+                anak.add(siswa.getId());
+            }
+            akun.setOrangTuaOf(anak);
+            model.addAttribute("akun", akun);
+            model.addAttribute("selected", "orang tua");
+            model.addAttribute("peran", "Orang Tua");
+            model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+
+        }
+
+        return "akuns/update-akun";
+    }
+
+    // @PostMapping("akuns/update")
+    // public ModelAndView updateAkunSubmitPage(@ModelAttribute NewUserRequestDto user, Model model) {
+    //     model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+    //     model.addAttribute("akun", user);
+
+    //     switch (user.getPeran()) {
+    //         case "siswa":
+    //             return createNewSiswa(user, model);
+    //         case "guru":
+    //             return createNewGuru(user, model);
+
+    //         default:
+    //             return createNewOrangTua(user, model);
+    //     }
+    // }
+
+    // private ModelAndView updateSiswa(NewUserRequestDto user, Model model) {
+    //     model.addAttribute("selected", "siswa");
+    //     if (inputSiswaNotCorrect(user, model))
+    //         return new ModelAndView("/akuns/update/" + user.getId, model.asMap());
+
+    //     var username = userService.generateUsername(user.getNama());
+    //     var password = userService.generatePassword();
+    //     var siswa = user.toSiswa();
+    //     siswa.setUsername(username);
+    //     siswa.setPasswordAwal(password);
+
+    //     siswaService.addSiswa(siswa);
+
+    //     model.addAttribute("akun", new NewUserRequestDto());
+    //     model.addAttribute("peran", "Siswa");
+    //     model.addAttribute("nama", siswa.getNama());
+    //     model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+    //     return new ModelAndView("/akuns/create-akun", model.asMap());
+    // }
+
+    // private Boolean inputSiswaNotCorrect(NewUserRequestDto user, Model model) {
+    //     if (user.getNama().length() > 255) {
+    //         model.addAttribute("error", "Nama terlalu panjang");
+    //         return true;
+    //     }
+    //     if (user.getNipd().length() != 9) {
+    //         model.addAttribute("error", "NIPD harus merupakan 9 digit");
+    //         return true;
+    //     }
+
+    //     if (user.getNisn().length() != 10) {
+    //         model.addAttribute("error", "NISN harus merupakan 10 digit");
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
 }
