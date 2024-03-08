@@ -1,5 +1,6 @@
 package propensi.proyek.properly.service.guru;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.MataPelajaran;
 import propensi.proyek.properly.repository.GuruDb;
@@ -20,9 +21,14 @@ public class GuruServiceImpl implements GuruService {
     @Autowired
     private GuruDb guruDb;
 
+    @Autowired
+    BCryptPasswordEncoder encoder;
+
     @SuppressWarnings("null")
     @Override
     public void addGuru(Guru guru) {
+        var password = encoder.encode(guru.getPasswordAwal());
+        guru.setPassword(password);
         guruDb.save(guru);
     }
 

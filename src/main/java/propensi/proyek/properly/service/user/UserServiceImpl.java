@@ -3,6 +3,7 @@ package propensi.proyek.properly.service.user;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import org.passay.CharacterRule;
 import org.passay.PasswordGenerator;
@@ -128,6 +129,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getUserByUsername(String username) {
         return userDb.findUserByUsername(username);
+    }
+
+    @Override
+    public User getUserById(UUID id) {
+        var optionalUser = userDb.findById(id);
+        if (optionalUser.isEmpty()) throw new IllegalArgumentException("id not in database");
+        return optionalUser.get();
     }
 
 }

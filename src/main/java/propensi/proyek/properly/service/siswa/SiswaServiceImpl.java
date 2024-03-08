@@ -26,6 +26,18 @@ public class SiswaServiceImpl implements SiswaService {
         return siswaDb.findAll();
     }
 
+    @Override
+    public Siswa getSiswaById(UUID id) {
+        var optionalSiswa = siswaDb.findById(id);
+        if (optionalSiswa.isEmpty()) throw new IllegalArgumentException("id not in database");
+        return optionalSiswa.get();
+    }
+
+    @Override
+    public List<Siswa> getAllSiswaWithUndocumentedParent() {
+        return siswaDb.findAllByOrangTuaNull();
+    }
+
     @SuppressWarnings("null")
     @Override
     public void addSiswa(Siswa siswa) {
@@ -33,9 +45,5 @@ public class SiswaServiceImpl implements SiswaService {
         siswaDb.save(siswa);
     }
 
-    @Override
-    public Siswa getSiswaById(UUID id) {
-        return siswaDb.findById(id).orElse(null);
-    }
 
 }

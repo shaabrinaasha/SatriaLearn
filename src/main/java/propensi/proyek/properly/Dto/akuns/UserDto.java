@@ -3,19 +3,20 @@ package propensi.proyek.properly.Dto.akuns;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import propensi.proyek.properly.model.Admin;
-import propensi.proyek.properly.model.Guru;
-import propensi.proyek.properly.model.OrangTua;
-import propensi.proyek.properly.model.Siswa;
-import propensi.proyek.properly.model.User;
+import propensi.proyek.properly.model.*;
+
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class UserDto {
+    private UUID id;
     private String nama;
     private String peran;
     private String nomorIdentifikasi;
+    private String kelas;
 
     public static UserDto fromUser(User user) {
         switch (user.getDecriminatorValue()) {
@@ -31,19 +32,28 @@ public class UserDto {
     }
 
     private static UserDto fromSiswa(Siswa siswa) {
-        return new UserDto(siswa.getNama(), "Siswa", siswa.getNisn());
+        return new UserDto(siswa.getId(), siswa.getNama(), "Siswa", siswa.getNisn(), getIndexableClassFromClasses(siswa.getClasses()));
     }
 
     private static UserDto fromGuru(Guru guru) {
-        return new UserDto(guru.getNama(), "Guru", guru.getNuptk());
+        if (guru.getWaliOf() == null)  return new UserDto(guru.getId(), guru.getNama(), "Guru", guru.getNuptk(), null);
+        return new UserDto(guru.getId(), guru.getNama(), "Guru", guru.getNuptk(), guru.getWaliOf().getNama());
     }
 
     private static UserDto fromOrangTua(OrangTua orangTua) {
-        return new UserDto(orangTua.getNama(), "Orang Tua", "-");
+        return new UserDto(orangTua.getId(), orangTua.getNama(), "Orang Tua", "-", null);
     }
 
     private static UserDto fromAdmin(Admin admin) {
-        return new UserDto(admin.getNama(), "Admin", "-");
+        return new UserDto(admin.getId(), admin.getNama(), "Admin", "-", null);
     }
 
+    private static String getIndexableClassFromClasses(Set<Kelas> classes) {
+        var sb = new StringBuilder();
+        for (Kelas kelas : classes) {
+            sb.append(kelas.getNama());
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
 }

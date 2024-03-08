@@ -10,5 +10,8 @@ public interface SiswaService {
     void addSiswa(Siswa siswa);
 
     List<Siswa> getAllSiswa();
+
     Siswa getSiswaById(UUID id);
+
+    List<Siswa> getAllSiswaWithUndocumentedParent();
 }
