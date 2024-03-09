@@ -23,7 +23,7 @@
         </head>
     </head>
     <body>
-        <div th:fragment="sidebar(page)" class="sidebar" id="side_nav">
+        <div th:fragment="sidebar" class="sidebar" id="side_nav">
             <div class="header-box px-2 pt-3 pb-4 d-flex justify-content-center" style="height: 300px;">
                 <h1 class="fs-4 d-flex align-items-center">
                     <img th:src="@{/LogoSatriaLearn.svg}">
@@ -31,7 +31,7 @@
             </div>
             <ul class="list-unstyled d-block align-items-center">
                 <!-- Menu beranda: role guru, siswa, orang tua -->
-                <li th:if="${#lists.contains(roles, 'guru') or #lists.contains(roles, 'siswa') or #lists.contains(roles, 'orang tua')}" class="container d-flex align-items-center active">
+                <li th:if="${#lists.contains(roles, 'guru') or #lists.contains(roles, 'siswa') or #lists.contains(roles, 'orang tua')}" class="container d-flex align-items-center">
                     <a href="/" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-house-door-fill" style="padding-right: 20px;"></i>Beranda</span>
                     </a>
@@ -55,7 +55,7 @@
                     </a>
                 </li>
                 <!-- Menu matpel: role guru, admin  -->
-                <li  th:if="${#lists.contains(roles, 'guru') or #lists.contains(roles, 'admin')}" class="container d-flex align-items-center">
+                <li th:if="${#lists.contains(roles, 'guru') or #lists.contains(roles, 'admin')}" class="container d-flex align-items-center">
                     <a href="#" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-book" style="padding-right: 20px; -webkit-text-stroke: 1.5px"></i>Mata Pelajaran</span>
                     </a>
@@ -74,27 +74,21 @@
                 </li>
                 <!-- Menu akun saya: semua role -->
                 <li class="container d-flex align-items-center">
-                    <a href="#" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
+                    <a href="/detail-akun" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Akun Saya</span>
                     </a>
                 </li>
             </ul>
             <script>
-                $(".sidebar ul li").on('click', function () {
-                $(".sidebar ul li.active").removeClass('active');
-                $(this).addClass('active');
+                $(".sidebar ul li").each(function() {
+                    var navItem = $(this);
+                    if (navItem.find("a").attr("href") == location.pathname) {
+                        navItem.addClass("active");
+                    }
                 });
-
-                $('.open-btn').on('click', function () {
-                    $('.sidebar').addClass('active');
-                });
-
-                $('.close-btn').on('click', function () {
-                    $('.sidebar').removeClass('active');
-                })
-            </script>   
+            </script>
         </div>
-        <div th:fragment="header(page)" class="header">
+        <div th:fragment="header" class="header" style="padding: 50px;">
             <div class="container d-flex align-items-center justify-content-between">
                 <div class="container">
                     <!-- Judul admin -->
@@ -124,7 +118,7 @@
                         <p th:if="${#lists.contains(roles, 'guru')}" th:text="'NUPTK: ' + ${currentUser.nuptk}"></p>
                         <p th:if="${#lists.contains(roles, 'siswa')}" th:text="'NIPD: ' + ${currentUser.nipd}"></p>
                     </div>
-                    <div class="container d-flex align-items-end">
+                    <div class="d-flex justify-content-end">
                         <img th:src="@{/LogoSMKSatriaBangsa.svg}">
                     </div>
                 </div>
