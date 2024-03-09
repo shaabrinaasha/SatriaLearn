@@ -17,23 +17,23 @@ import org.springframework.ui.Model;
 @Controller
 public class PageController {
 
-    @Autowired
-    SiswaService siswaService;
+        @Autowired
+        SiswaService siswaService;
 
-    @Autowired
-    UserService userService;
+        @Autowired
+        UserService userService;
 
-    @RequestMapping("/")
-    public String home(
-        Authentication auth, // Untuk authorities
-        Principal principal, // Untuk username
-        Model model) {
-        var username = principal.getName();
-        var authorities = auth.getAuthorities();
+        @RequestMapping("/")
+        public String home(
+                        Authentication auth, // Untuk authorities
+                        Principal principal, // Untuk username
+                        Model model) {
+                var username = principal.getName();
+                var authorities = auth.getAuthorities();
 
-        userService.addCurrentUserToModel(username, authorities, model);
+                userService.addCurrentUserToModel(username, authorities, model);
 
-        return "home";
-    }
+                return "home";
+        }
 
 }
