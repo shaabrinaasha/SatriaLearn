@@ -7,4 +7,8 @@ import propensi.proyek.properly.model.Semester;
 @Mapper(componentModel = "spring")
 public interface SemesterMapper {
     Semester createSemesterDTOToSemester(CreateSemesterDTO createSemesterDTO);
+
+    UpdateSemesterDTO semesterToUpdateSemesterDTO(Semester semester);
+
+    Semester updateSemesterDTOToSemester(UpdateSemesterDTO updateSemesterDTO);
 }
