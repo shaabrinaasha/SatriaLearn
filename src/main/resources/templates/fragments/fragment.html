@@ -71,7 +71,7 @@
                 </li>
                 <!-- Menu manajemen akun: role admin -->
                 <li th:if="${#lists.contains(roles, 'admin')}" class="container d-flex align-items-center">
-                    <a href="#" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
+                    <a th:href="@{/akuns}" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-people-fill" style="padding-right: 20px;"></i>Manajemen Akun</span>
                     </a>
                 </li>

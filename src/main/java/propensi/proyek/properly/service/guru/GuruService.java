@@ -9,6 +9,8 @@ import propensi.proyek.properly.model.MataPelajaran;
 public interface GuruService {
     void addGuru(Guru guru);
     List<Guru> getAllGuru();
+
+    void updateGuru(Guru guru);
     List<Guru> getListGuruActive();
     String getGuruMatpel(Guru guru);
     Guru getGuruById(UUID id);

@@ -2,26 +2,28 @@ package propensi.proyek.properly.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import propensi.proyek.properly.Dto.akuns.NewUserRequestDto;
 import propensi.proyek.properly.Dto.akuns.UserDto;
+import propensi.proyek.properly.model.Siswa;
 import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.model.MataPelajaran;
@@ -32,7 +34,6 @@ import propensi.proyek.properly.service.guru.GuruService;
 import propensi.proyek.properly.service.orangtua.OrangTuaService;
 import propensi.proyek.properly.service.siswa.SiswaService;
 import propensi.proyek.properly.service.user.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class AkunController {
@@ -68,6 +69,34 @@ public class AkunController {
         model.addAttribute("akun", new NewUserRequestDto());
         model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
         model.addAttribute("selected", "siswa");
+        return new ModelAndView("/akuns/create-akun", model.asMap());
+    }
+
+    @PostMapping(value = "/akuns/create", params = {"add=add"})
+    public ModelAndView addAnak(@ModelAttribute NewUserRequestDto user, Model model) {
+        model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+        model.addAttribute("selected", "orang tua");
+
+        var orangTuaOfs = user.getOrangTuaOf();
+        orangTuaOfs.add(null);
+        user.setOrangTuaOf(orangTuaOfs);
+        model.addAttribute("akun", user);
+
+
+        return new ModelAndView("/akuns/create-akun", model.asMap());
+    }
+
+    @PostMapping(value = "/akuns/create", params = {"remove"})
+    public ModelAndView removeAnak(@RequestParam(value = "remove", defaultValue = "-1") Integer remove, @ModelAttribute NewUserRequestDto user, Model model) {
+        model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+        model.addAttribute("selected", "orang tua");
+
+        var orangTuaOfs = user.getOrangTuaOf();
+        UUID removed = orangTuaOfs.remove(remove.intValue());
+        user.setOrangTuaOf(orangTuaOfs);
+        model.addAttribute("akun", user);
+
+
         return new ModelAndView("/akuns/create-akun", model.asMap());
     }
 
@@ -186,6 +215,11 @@ public class AkunController {
             return true;
         }
 
+        if (user.getNama().isEmpty()) {
+            model.addAttribute("error", "Mohon berikan nama");
+            return true;
+        }
+
         for (UUID id : user.getOrangTuaOf()) {
             try {
                 var siswa = siswaService.getSiswaById(id);
@@ -196,6 +230,12 @@ public class AkunController {
                 }
             } catch (IllegalArgumentException e) {
                 model.addAttribute("error", "Mohon isi setiap field setiap anak atau hapus");
+                return true;
+            } catch (InvalidDataAccessApiUsageException e) {
+                if (user.getOrangTuaOf().size() == 1) {
+                    model.addAttribute("error", "Setiap Orang Tua harus memiliki 1 atau lebih anak");
+                }
+                model.addAttribute("error", "ID yang diberikan tidak valid");
                 return true;
             }
         }
@@ -388,6 +428,17 @@ public class AkunController {
         userService.addCurrentUserToModel(username, authorities, model);
 
         return "akuns/detail-akun";
+    }
+
+    @GetMapping("/akuns/{id}/details")
+    public ModelAndView readDetailAkun(@PathVariable UUID id, Model model) {
+        var user = userService.getUserById(id);
+        var roles = new ArrayList<String>();
+        roles.add(user.getDecriminatorValue());
+        model.addAttribute("currentUser", user);
+        model.addAttribute("roles", roles);
+        model.addAttribute("detailUser", true);
+        return new ModelAndView("akuns/detail-akun", model.asMap());
     }
 
 }

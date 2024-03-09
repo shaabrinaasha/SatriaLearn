@@ -44,6 +44,11 @@ public class SiswaServiceImpl implements SiswaService {
     @Override
     public void addSiswa(Siswa siswa) {
         siswa.setPassword(encoder.encode(siswa.getPasswordAwal()));
+        updateSiswa(siswa);
+    }
+
+    @Override
+    public void updateSiswa(Siswa siswa) {
         siswaDb.save(siswa);
     }
 

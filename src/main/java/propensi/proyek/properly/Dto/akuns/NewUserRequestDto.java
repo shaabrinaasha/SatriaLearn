@@ -1,5 +1,6 @@
 package propensi.proyek.properly.Dto.akuns;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public class NewUserRequestDto {
     private String nipd;
     private String nisn;
     private String nuptk;
-    private List<UUID> orangTuaOf;
+    private List<UUID> orangTuaOf = new ArrayList<>(1);
     private List<Siswa> orangTuaSiswaOf;
     private UUID id;
 
@@ -42,7 +43,11 @@ public class NewUserRequestDto {
     public OrangTua toOrangTua(List<Siswa> siswas) {
         var orangTua = new OrangTua();
         orangTua.setNama(nama);
-        orangTua.setSiswas(siswas);
+        if (siswas == null) {
+            orangTua.setSiswas(new ArrayList<>());
+        } else {
+            orangTua.setSiswas(siswas);
+        }
         return orangTua;
     }
 

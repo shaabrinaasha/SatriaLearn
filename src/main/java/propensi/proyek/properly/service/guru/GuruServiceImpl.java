@@ -29,6 +29,11 @@ public class GuruServiceImpl implements GuruService {
     public void addGuru(Guru guru) {
         var password = encoder.encode(guru.getPasswordAwal());
         guru.setPassword(password);
+        updateGuru(guru);
+    }
+
+    @Override
+    public void updateGuru(Guru guru) {
         guruDb.save(guru);
     }
 

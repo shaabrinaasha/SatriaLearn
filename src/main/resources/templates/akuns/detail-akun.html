@@ -68,7 +68,7 @@
                     <div class="container text-center" style="padding: 15px 50px;">
                         <a type="button" class="btn btn-primary" href="/">Ubah Password</a>
                     </div>
-                    <form class="container text-center" style="padding: 15px 50px;" th:action="@{/logout}" method="post">
+                    <form th:if="${detailAkun}" class="container text-center" style="padding: 15px 50px;" th:action="@{/logout}" method="post">
                         <input
                                 type="hidden"
                                 name="${_csrf.parameterName}"
