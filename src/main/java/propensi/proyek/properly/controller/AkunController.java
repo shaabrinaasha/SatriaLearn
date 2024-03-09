@@ -297,4 +297,13 @@ public class AkunController {
     //     return false;
     // }
 
+    @GetMapping("detail-akun")
+    public String readAkunSaya(Authentication auth, Principal principal, Model model) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+        userService.addCurrentUserToModel(username, authorities, model);
+
+        return "akuns/detail-akun";
+    }
+
 }

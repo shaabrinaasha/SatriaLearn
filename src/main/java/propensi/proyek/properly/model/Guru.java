@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,13 +23,13 @@ import lombok.Setter;
 @DiscriminatorValue("guru")
 public class Guru extends User {
 
-    
+
     @Column(length = 16)
     @NotNull
     @Size(min = 16, max = 16)
     private String nuptk;
 
-    
+
     @OneToOne(mappedBy = "wali", optional = true)
     private Kelas waliOf;
 
