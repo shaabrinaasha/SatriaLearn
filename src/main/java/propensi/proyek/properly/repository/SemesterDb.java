@@ -1,5 +1,6 @@
 package propensi.proyek.properly.repository;
 
+import java.util.List;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ import propensi.proyek.properly.model.Semester;
 
 @Repository
 public interface SemesterDb extends JpaRepository<Semester, UUID> {
+
+    List<Semester> findByTahunAjaran(String tahunAjaran);
     // overlap if >0
     @Query(value = "SELECT COUNT(*) FROM semester s WHERE (?1) <= s.tanggal_akhir AND (?2) >= s.tanggal_awal", nativeQuery = true)
     long isOverlap(LocalDate newTanggalAwal, LocalDate newTanggalAkhir);

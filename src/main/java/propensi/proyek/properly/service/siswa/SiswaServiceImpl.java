@@ -1,6 +1,7 @@
 package propensi.proyek.properly.service.siswa;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.model.Siswa;
 import propensi.proyek.properly.repository.SiswaDb;
 
@@ -45,5 +47,31 @@ public class SiswaServiceImpl implements SiswaService {
         siswaDb.save(siswa);
     }
 
+    @SuppressWarnings("null")
+    @Override
+    public List<Siswa> getSiswasByIds(List<UUID> siswaIds) {
+        return siswaDb.findAllById(siswaIds);
+    }
+
+    @Override
+    public void addKelasToSiswa(Siswa siswa, Kelas kelas) {
+        Set<Kelas> kelasSet = siswa.getClasses();
+        kelasSet.add(kelas);
+        siswa.setClasses(kelasSet);
+        siswaDb.save(siswa);
+    }
+
+    @Override
+    public void removeKelasFromSiswa(Siswa siswa, Kelas kelas) {
+        Set<Kelas> kelasSet = siswa.getClasses();
+        for (Kelas k : kelasSet) {
+            if (k.getId().equals(kelas.getId())) {
+                kelasSet.remove(k);
+                break;
+            }
+        }
+        siswa.setClasses(kelasSet);
+        siswaDb.save(siswa);
+    }
 
 }

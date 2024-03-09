@@ -5,8 +5,8 @@ import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.MataPelajaran;
 import propensi.proyek.properly.repository.GuruDb;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,10 @@ public class GuruServiceImpl implements GuruService {
     }
 
     @Override
+    public List<Guru> getAllGuru() {
+        return guruDb.findAll();
+    }
+    
     public List<Guru> getListGuruActive() {
         List<Guru> listGuruActive = new ArrayList<>();
         for (Guru guru : guruDb.findAll()) {

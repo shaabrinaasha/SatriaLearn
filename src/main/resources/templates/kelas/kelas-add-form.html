@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Kelas</title>
+
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
+</head>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        background-color: #FBFBFB;
+    }
+    
+    .container-form {
+        border-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        padding: 20px;
+        background-color: #ffffff;
+        margin-top: 50px;
+        width: 700px;
+    }
+    
+    form {
+        width: 80%;
+        margin: auto;
+    }
+    
+    .form-control {
+        font-size: 14px;
+    }
+</style>
+
+<body>
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div style="margin-top: 2rem; margin-left: 1rem;">
+        <a type="button" class="btn btn-outline-secondary" href="/kelas">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+    </div>
+    <div class="container container-form">
+        <div style="margin-top: 2rem; margin-bottom: 1rem; text-align: center;">
+            <h2 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 24px; color: #106EE8;">Tambah Kelas Baru</h2>
+            <br>
+        </div>
+
+        <div>
+            <form th:action="@{/kelas/tambah}" th:object="${kelas}" method="POST">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="inputKelas">Nama Kelas</label>
+                    <input type="text" th:field="*{nama}" class="form-control" id="inputKelas" placeholder="Kelas 10A">
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="inputSemester">Tahun Ajaran</label>
+                    <select class="form-select" aria-label="Default select example" name="tahunAjaran">
+                        <option th:each="tahunAjaran : ${listTahunAjaran}" th:value="${tahunAjaran}" th:text="${tahunAjaran}"></option>
+                    </select>
+
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="inputGuru">Guru</label>
+                    <select class="form-control" th:field="*{wali}">
+                        <option th:each="guru : ${listGuru}" th:value="${guru.id}" th:text="${guru.nama}"></option>
+                    </select>
+                </div>
+
+                <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
+
+                    <div class="">
+                        <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div class="">
+                        <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/kelas">Kembali</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

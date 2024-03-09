@@ -25,6 +25,7 @@ public class SecurityConfig {
         http
         .authorizeHttpRequests((customizer) -> 
             customizer
+            .requestMatchers("/kelas/**").hasRole("admin")
             // .requestMatchers("/static/**").permitAll()
             // .requestMatchers("**.css").permitAll()
             // .requestMatchers("**.js").permitAll()
