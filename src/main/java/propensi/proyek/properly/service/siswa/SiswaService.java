@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface SiswaService {
     void addSiswa(Siswa siswa);
 
+    void updateSiswa(Siswa siswa);
+
     List<Siswa> getAllSiswa();
 
     List<Siswa> getSiswasByIds(List<UUID> siswaIds);
