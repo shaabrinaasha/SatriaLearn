@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Siswa Kelas</title>
+
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
+</head>
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        background-color: #FBFBFB;
+    }
+    
+    .container-form {
+        border-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        padding: 20px;
+        background-color: #ffffff;
+        margin-top: 50px;
+        width: 700px;
+    }
+    
+    form {
+        width: 80%;
+        margin: auto;
+    }
+    
+    .form-control {
+        font-size: 14px;
+    }
+    
+    table td label {
+        display: block;
+    }
+</style>
+
+<body>
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div style="margin-top: 2rem; margin-left: 1rem;">
+        <a type="button" class="btn btn-outline-secondary" th:href="@{/kelas/detail/{id}(id=${kelas.id})}">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+    </div>
+    <div class="container container-form">
+        <div style="margin-top: 2rem; margin-bottom: 1rem; text-align: center;">
+            <h2 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 24px; color: #106EE8;">Edit Siswa Kelas</h2>
+            <br>
+            <h3 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 18px; color: #106EE8;" th:text="${kelas.nama}"></h3>
+            <h4 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 14px; color: #106EE8;" th:text="'Walas: ' + ${kelas.wali.nama}"></h4>
+            <h4 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 14px; color: #106EE8;" th:text="'Tahun Ajaran: ' + ${tahunAjaran}"></h4>
+            </h4>
+            <div class="input-group mb-3 w-50 mx-auto">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                </div>
+                <input type="text" class="form-control" placeholder="Cari Nama, NIS" id="searchInput">
+                <button class="btn btn-outline-secondary" type="button" id="searchButton">Cari</button>
+            </div>
+            <div style="display: flex; justify-content: center; margin-top: 1rem; gap: 1rem;">
+                <button type="button" class="btn btn-outline-secondary" id="checkAllButton">Pilih Semua</button>
+                <button type="button" class="btn btn-outline-secondary" id="uncheckAllButton">Hapus Semua</button>
+            </div>
+        </div>
+
+        <div>
+            <form th:action="@{/kelas/{id}/edit-siswa(id=${kelas.id})}" th:object="${kelas}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <table class="table table-light table-bordered table-hover table-striped" id="siswaTable">
+                    <thead>
+                        <tr>
+                            <th>Aksi</th>
+                            <th>Nama</th>
+                            <th>NISN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through the list of siswa -->
+                        <tr th:each="siswa : ${listSiswa}">
+                            <td>
+                                <!-- Checkbox to indicate whether the siswa is in the class -->
+                                <input th:attr="id=${'siswaId-' + siswa.id}, name='siswaIds', value=${siswa.id}, checked=${kelas.siswas.contains(siswa)}, type='checkbox'">
+                            </td>
+                            <td>
+                                <label th:for="${'siswaId-' + siswa.id}">
+                                        <span th:text="${siswa.nama}"></span>
+                                    </label>
+                            </td>
+                            <td>
+                                <label th:for="${'siswaId-' + siswa.id}">
+                                        <span th:text="${siswa.nisn}"></span>
+                                    </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Hidden input field to send kelas ID -->
+                <input type="hidden" name="kelasId" th:value="${kelas.id}">
+
+                <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
+
+                    <div class="">
+                        <button name="submit" type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                    <div class="">
+                        <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" th:href="@{/kelas/detail/{id}(id=${kelas.id})}">Kembali</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#searchButton').on('click', function() {
+                var input, filter, table, tr, tds, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("siswaTable");
+                tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+
+                    // filter by all column except the first column
+                    tds = tr[i].getElementsByTagName("td");
+                    if (tds) {
+                        for (var j = 1; j < tds.length; j++) {
+                            txtValue = tds[j].textContent || tds[j].innerText;
+                            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                                break;
+                            } else {
+                                tr[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            });
+            $('#checkAllButton').on('click', function() {
+                $('input[name="siswaIds"]').prop('checked', true);
+            });
+            $('#uncheckAllButton').on('click', function() {
+                $('input[name="siswaIds"]').prop('checked', false);
+            });
+        });
+    </script>
+</body>
+
+</html>

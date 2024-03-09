@@ -36,4 +36,17 @@ public class PageController {
                 return "home";
         }
 
+    @RequestMapping("/kelas-semester")
+    public String kelasSemester(
+            Authentication auth, // Untuk authorities
+            Principal principal, // Untuk username
+            Model model) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+
+        userService.addCurrentUserToModel(username, authorities, model);
+
+        return "kelas-semester";
+    }
+
 }

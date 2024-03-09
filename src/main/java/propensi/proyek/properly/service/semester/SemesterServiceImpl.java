@@ -3,11 +3,13 @@ package propensi.proyek.properly.service.semester;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.Dto.semester.UpdateSemesterDTO;
 import propensi.proyek.properly.model.Semester;
 import propensi.proyek.properly.repository.SemesterDb;
@@ -17,6 +19,7 @@ public class SemesterServiceImpl implements SemesterService {
     @Autowired
     SemesterDb semesterDb;
 
+    @SuppressWarnings("null")
     @Override
     public void save(Semester semester) {
         // need validation for the dates
@@ -34,11 +37,48 @@ public class SemesterServiceImpl implements SemesterService {
         }
     }
 
+    
     @Override
-    public List<Semester> getAllSemesters() {
+    public List<Semester> findSemestersById(List<UUID> semesterIds) {
+        List<Semester> semesters = new ArrayList<>();
+        for (UUID id : semesterIds) {
+            @SuppressWarnings("null")
+            Semester semester = semesterDb.findById(id).get();
+            semesters.add(semester);
+        }
+        return semesters;
+    }
+
+    @Override
+    public List<Semester> getAllSemesterByTahunAjaran(String tahunAjaran) {
+        return semesterDb.findByTahunAjaran(tahunAjaran);
+    }
+
+    @Override
+    public List<Semester> getAllSemester() {
         return semesterDb.findAll();
     }
 
+    @Override
+    public void addKelasToSemester(Semester semester, Kelas kelas) {
+        Set<Kelas> kelasSet = semester.getClasses();
+        kelasSet.add(kelas);
+        semester.setClasses(kelasSet);
+        semesterDb.save(semester);
+    }
+
+    @Override
+    public void removeKelasFromSemester(Semester semester, Kelas kelas) {
+        Set<Kelas> kelasSet = semester.getClasses();
+        for (Kelas k : kelasSet) {
+            if (k.getId().equals(kelas.getId())) {
+                kelasSet.remove(k);
+                break;
+            }
+        }
+        semester.setClasses(kelasSet);
+        semesterDb.save(semester);
+    }
     @Override
     public Semester getSemesterById(UUID id) {
         return semesterDb.findById(id).get();
