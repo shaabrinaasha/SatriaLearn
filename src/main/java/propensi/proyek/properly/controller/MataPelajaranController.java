@@ -37,7 +37,6 @@ import propensi.proyek.properly.service.matapelajaran.*;
 import propensi.proyek.properly.service.siswa.SiswaService;
 import propensi.proyek.properly.service.user.UserService;
 
-@RequestMapping("/matpel")
 @Controller
 public class MataPelajaranController {
     @Autowired
@@ -51,7 +50,7 @@ public class MataPelajaranController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("")
+    @RequestMapping("/matpel")
     public String viewMatpel(Authentication auth, Model model, Principal principal, RedirectAttributes redirectAttrs) {
         var username = principal.getName();
         var authorities = auth.getAuthorities();
@@ -85,17 +84,13 @@ public class MataPelajaranController {
         return "home";
     }
 
-    @RequestMapping("/{siswa}")
-    public String viewMatpelSiswa(Authentication auth, Model model, Principal principal) {
+    @RequestMapping("/kelas/matpel/{id}")
+    public String viewMatpelSiswa(@PathVariable UUID id, Authentication auth, Model model, Principal principal) {
         var username = principal.getName();
         var authorities = auth.getAuthorities();
 
-        User user = userService.getUserByUsername(username);
-        Siswa siswa = siswaService.getSiswaById(user.getId());
-        Set<Kelas> kelasSiswa= siswa.getClasses();
-        List<Kelas> myList = new ArrayList<>(kelasSiswa);
         // need to handle loop
-        Kelas kelas = myList.get(0);
+        Kelas kelas = kelasService.getKelasById(id);
         List<MataPelajaran> listMatpel = new ArrayList<>(kelas.getMataPelajarans());
         List<Semester> semesters = new ArrayList<>(kelas.getSemesters());
         Semester semester = semesters.get(0);
@@ -106,7 +101,7 @@ public class MataPelajaranController {
         return "matpel/read-matpel-siswa";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/matpel/add")
     public String addMatpelFormPage(Model model, Principal principal) {
         System.out.println("form page");
         List<Guru> listGuru = guruService.getListGuruActive();
@@ -125,7 +120,7 @@ public class MataPelajaranController {
         return "matpel/form-add-matpel";
     }
 
-    @PostMapping(value = "/add", params = { "save" })
+    @PostMapping(value = "/matpel/add", params = { "save" })
     public String addMatpelSubmitPage(@ModelAttribute MataPelajaran matpel, String namaMatpel, UUID kelasMatpel,
             UUID guruMatpel, RedirectAttributes redirectAttrs) {
         if (namaMatpel.isEmpty()) {
@@ -158,7 +153,7 @@ public class MataPelajaranController {
         return "redirect:/matpel";
     }
 
-    @GetMapping("/update/{id}")
+    @GetMapping("/matpel/update/{id}")
     public String updateMatpelFormPage(@PathVariable UUID id, Model model, Principal principal) {
         List<Guru> listGuru = guruService.getListGuruActive();
         List<Kelas> listKelas = kelasService.getAllKelas();
@@ -176,7 +171,7 @@ public class MataPelajaranController {
         return "matpel/form-update-matpel";
     }
 
-    @PostMapping(value = "/update", params = { "save" })
+    @PostMapping(value = "/matpel/update", params = { "save" })
     public String updateMatpelSubmitPage(@ModelAttribute MataPelajaran matpel, Model model,
             RedirectAttributes redirectAttrs) {
         MataPelajaran oldMatpel = mataPelajaranService.getMatpelById(matpel.getId());
@@ -254,7 +249,7 @@ public class MataPelajaranController {
         return "redirect:/matpel";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/matpel/delete/{id}")
     public String deleteMapelForm(@PathVariable UUID id, Model model, RedirectAttributes redirectAttrs,
             Principal principal) {
         MataPelajaran matpel = mataPelajaranService.getMatpelById(id);
