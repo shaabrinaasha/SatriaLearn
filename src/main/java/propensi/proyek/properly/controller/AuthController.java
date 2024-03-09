@@ -31,18 +31,6 @@ public class AuthController {
         model.addAttribute("loginInfo", new LoginDto());
         return new ModelAndView("/login/index", model.asMap());
     }
-
-    @PostMapping("login")
-    public ModelAndView postLogin(Principal principal, @ModelAttribute LoginDto loginInfo, Model model) {
-
-        if (principal != null) return new ModelAndView("redirect:");
-
-        model.addAttribute("loginInfo", new LoginDto());
-
-        var authToken = UsernamePasswordAuthenticationToken.unauthenticated(loginInfo.getUsername(), loginInfo.getPassword());
-        authenticationManager.authenticate(authToken);
-        return new ModelAndView("redirect:");
-    }
     
     
     
