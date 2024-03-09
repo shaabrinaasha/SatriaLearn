@@ -1,6 +1,6 @@
 package propensi.proyek.properly.service.siswa;
 
-import propensi.proyek.properly.model.Guru;
+import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.model.Siswa;
 
 import java.util.List;
@@ -11,7 +11,13 @@ public interface SiswaService {
 
     List<Siswa> getAllSiswa();
 
+    List<Siswa> getSiswasByIds(List<UUID> siswaIds);
+
     Siswa getSiswaById(UUID id);
+
+    void addKelasToSiswa(Siswa siswa, Kelas kelas);
+
+    void removeKelasFromSiswa(Siswa siswa, Kelas kelas);
 
     List<Siswa> getAllSiswaWithUndocumentedParent();
 }

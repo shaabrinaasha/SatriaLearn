@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import propensi.proyek.properly.model.Kelas;
 import propensi.proyek.properly.Dto.semester.UpdateSemesterDTO;
 import propensi.proyek.properly.model.Semester;
 
@@ -11,11 +12,12 @@ public interface SemesterService {
     // save Semester in db via JPA
     void save(Semester semester);
 
-    // check if two Semester's date overlapped
+    List<Semester> findSemestersById(List<UUID> semesterIds);
+    List<Semester> getAllSemesterByTahunAjaran(String tahunAjaran);
+    List<Semester> getAllSemester();
+    void addKelasToSemester(Semester semester, Kelas kelas);
+    void removeKelasFromSemester(Semester semester, Kelas kelas);
     long semestersOverlap(LocalDate newTanggalAwal, LocalDate newTanggalAkhir);
-
-    // get all Semester via JPA
-    List<Semester> getAllSemesters();
 
     // find semester by id via JPA
     Semester getSemesterById(UUID id);

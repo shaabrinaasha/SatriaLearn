@@ -1,9 +1,11 @@
 package propensi.proyek.properly;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import propensi.proyek.properly.model.Admin;
@@ -31,120 +33,131 @@ import propensi.proyek.properly.model.MataPelajaran;
 @SpringBootApplication
 public class ProperlyApplication {
 
+	@Autowired
+	private Environment env;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProperlyApplication.class, args);
 	}
 
-	// @Bean
-	// @Transactional
-	// CommandLineRunner run(
-	// SiswaService siswaService,
-	// OrangTuaService orangTuaService,
-	// AdminService adminService,
-	// GuruService guruService,
-	// KelasService kelasService,
-	// SemesterService semesterService,
-	// MataPelajaranService mataPelajaranService,
-	// BCryptPasswordEncoder encoder) {
-	// return args -> {
-	// var faker = new Faker();
-	// List<OrangTua> orangTuaList = new ArrayList<>();
-	// List<Guru> guruList = new ArrayList<>();
-	// List<Kelas> kelasList = new ArrayList<>();
-	// List<Siswa> siswaList = new ArrayList<>();
+	@SuppressWarnings("deprecation")
+	@Bean
+	@Transactional
+	CommandLineRunner run(
+			SiswaService siswaService,
+			OrangTuaService orangTuaService,
+			AdminService adminService,
+			GuruService guruService,
+			KelasService kelasService,
+			SemesterService semesterService,
+			MataPelajaranService mataPelajaranService,
+			BCryptPasswordEncoder encoder) {
+		return args -> {
+			var faker = new Faker();
+			List<OrangTua> orangTuaList = new ArrayList<>();
+			List<Guru> guruList = new ArrayList<>();
+			List<Kelas> kelasList = new ArrayList<>();
+			List<Siswa> siswaList = new ArrayList<>();
 
-	// // Add admin
-	// addAdminIfEmpty(adminService, encoder);
+			// Add admin
+			addAdminIfEmpty(adminService, encoder);
 
-	// // Add Orang Tua
-	// for (int i = 0; i < 10; i++) {
-	// var password = faker.internet().password();
-	// OrangTua orangTua = new OrangTua();
-	// orangTua.setNama(faker.name().fullName());
-	// orangTua.setPassword(encoder.encode(password));
-	// orangTua.setUsername(faker.name().username());
-	// orangTua.setPasswordAwal(password);
-	// orangTuaList.add(orangTua);
-	// orangTuaService.addOrangTua(orangTua);
-	// }
+			if (env.acceptsProfiles("dev") || env.acceptsProfiles("test")) {
+				// Add Orang Tua
+				for (int i = 0; i < 10; i++) {
+					var password = faker.internet().password();
+					OrangTua orangTua = new OrangTua();
+					orangTua.setNama(faker.name().fullName());
+					orangTua.setPassword(encoder.encode(password));
+					orangTua.setUsername(faker.name().username());
+					orangTua.setPasswordAwal(password);
+					orangTuaList.add(orangTua);
+					orangTuaService.addOrangTua(orangTua);
+				}
 
-	// // Add Siswa
-	// for (int i = 0; i < 30; i++) {
-	// var password = faker.internet().password();
-	// Siswa siswa = new Siswa();
-	// siswa.setNama(faker.name().fullName());
-	// siswa.setUsername(faker.name().username());
-	// siswa.setPassword(encoder.encode(password));
-	// siswa.setPasswordAwal(password);
+				// Add Siswa
+				for (int i = 0; i < 30; i++) {
+					var password = faker.internet().password();
+					Siswa siswa = new Siswa();
+					siswa.setNama(faker.name().fullName());
+					siswa.setUsername(faker.name().username());
+					siswa.setPassword(encoder.encode(password));
+					siswa.setPasswordAwal(password);
 
-	// siswa.setNisn(faker.number().digits(10));
-	// siswa.setNipd(faker.number().digits(9));
-	// siswa.setOrangTua(orangTuaList.get(faker.number().numberBetween(0, 9)));
-	// siswaList.add(siswa);
+					siswa.setNisn(faker.number().digits(10));
+					siswa.setNipd(faker.number().digits(9));
+					siswa.setOrangTua(orangTuaList.get(faker.number().numberBetween(0, 9)));
+					siswaList.add(siswa);
 
-	// }
+				}
 
-	// // Add Guru
-	// for (int i = 0; i < 20; i++) {
-	// var password = faker.internet().password();
+				// Add Guru
+				for (int i = 0; i < 20; i++) {
+					var password = faker.internet().password();
 
-	// Guru guru = new Guru();
-	// guru.setNama(faker.name().fullName());
-	// guru.setUsername(faker.name().username());
-	// guru.setPassword(encoder.encode(password));
-	// guru.setPasswordAwal(password);
-	// guru.setNuptk(faker.number().digits(16));
-	// guruList.add(guru);
-	// guruService.addGuru(guru);
-	// }
+					Guru guru = new Guru();
+					guru.setNama(faker.name().fullName());
+					guru.setUsername(faker.name().username());
+					guru.setPassword(encoder.encode(password));
+					guru.setPasswordAwal(password);
+					guru.setNuptk(faker.number().digits(16));
+					guruList.add(guru);
+					guruService.addGuru(guru);
+				}
 
-	// // Add Kelas
-	// for (int i = 0; i < 12; i++) {
-	// Kelas kelas = new Kelas();
-	// // for i = 0 to 3, kelas 10A, 10B, 10C, 10D
-	// // for i = 4 to 7, kelas 11A, 11B, 11C, 11D
-	// // for i = 8 to 11, kelas 12A, 12B, 12C, 12D
-	// kelas.setNama((i / 4 + 10) + "" + (char) ('A' + i % 4));
+				// Add Kelas
+				for (int i = 0; i < 12; i++) {
+					Kelas kelas = new Kelas();
+					// for i = 0 to 3, kelas 10A, 10B, 10C, 10D
+					// for i = 4 to 7, kelas 11A, 11B, 11C, 11D
+					// for i = 8 to 11, kelas 12A, 12B, 12C, 12D
+					kelas.setNama((i / 4 + 10) + "" + (char) ('A' + i % 4));
 
-	// kelas.setWali(guruList.get(i));
+					kelas.setWali(guruList.get(i));
 
-	// kelasList.add(kelas);
-	// kelas.setSiswas(new HashSet<>(siswaList));
-	// }
+					kelasList.add(kelas);
+					kelas.setSiswas(new HashSet<>(siswaList));
+				}
 
-	// // Add Siswa to Kelas
-	// for (int i = 0; i < 30; i++) {
-	// siswaList.get(i).setClasses(new HashSet<>(kelasList));
-	// siswaService.addSiswa(siswaList.get(i));
-	// }
+				// Add Siswa to Kelas
+				for (int i = 0; i < 30; i++) {
+					siswaList.get(i).setClasses(new HashSet<>(kelasList));
+					siswaService.addSiswa(siswaList.get(i));
+				}
 
-	// for (int i = 0; i < 12; i++) {
-	// kelasService.addKelas(kelasList.get(i));
-	// }
+				for (int i = 0; i < 12; i++) {
+					kelasService.addKelas(kelasList.get(i));
+				}
 
-	// // Add Semester
-	// for (int i = 0; i < 6; i++) {
-	// Semester semester = new Semester();
-	// semester.setIsGanjil(i % 2 == 0);
-	// semester.setTahunAjaran("202" + i + "/202" + (i + 1));
-	// semester.setTanggalAwal(
-	// faker.date().birthday().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
-	// semester.setTanggalAkhir(
-	// faker.date().birthday().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate());
-	// semester.setClasses(new HashSet<>(kelasList));
-	// semesterService.save(semester);
-	// }
+				// Add Semester
+				for (int i = 0; i < 6; i++) {
+					Semester semester = new Semester();
+					semester.setIsGanjil(i % 2 == 0);
+					semester.setTahunAjaran(
+							"202" + (int) (Math.floor(i / 2)) + "/202" + ((int) (Math.floor(i / 2)) + 1));
+					// if i is ganjil then set tanggal awal to 1st of July, else set to 1st of
+					// January. the year is 2020 + i/2
+					semester.setTanggalAwal(
+							(i % 2 == 0) ? java.time.LocalDate.of(2020 + (int) (Math.floor(i / 2)), 1, 1)
+									: java.time.LocalDate.of(2020 + (int) (Math.floor(i / 2)), 7, 1));
+					semester.setClasses(new HashSet<>(kelasList));
+					// set tanggal akhir to 6 months after tanggal awal
+					semester.setTanggalAkhir(semester.getTanggalAwal().plusMonths(6));
+					semesterService.save(semester);
+				}
 
-	// // Add Mata Pelajaran
-	// for (int i = 0; i < 12; i++) {
-	// MataPelajaran mataPelajaran = new MataPelajaran();
-	// mataPelajaran.setNama(faker.educator().course());
-	// mataPelajaran.setGuru(guruList.get(i));
-	// mataPelajaran.setKelas(kelasList.get(i));
-	// mataPelajaranService.addMataPelajaran(mataPelajaran);
-	// }
-	// };
-	// }
+				// Add Mata Pelajaran
+				for (int i = 0; i < 12; i++) {
+					MataPelajaran mataPelajaran = new MataPelajaran();
+					mataPelajaran.setNama(faker.educator().course());
+					mataPelajaran.setGuru(guruList.get(i));
+					mataPelajaran.setKelas(kelasList.get(i));
+					mataPelajaranService.addMataPelajaran(mataPelajaran);
+				}
+			}
+
+		};
+	}
 
 	private void addAdminIfEmpty(AdminService adminService, BCryptPasswordEncoder encoder) {
 		var admins = adminService.getAllAdmin();

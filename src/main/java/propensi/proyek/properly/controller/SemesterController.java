@@ -100,7 +100,7 @@ public class SemesterController {
             Principal principal,
             Model model) {
         // get list of semesters via jpa
-        List<Semester> semesters = semesterService.getAllSemesters();
+        List<Semester> semesters = semesterService.getAllSemester();
         // add current user into model
         var username = principal.getName();
         var authorities = auth.getAuthorities();
