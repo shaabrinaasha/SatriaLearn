@@ -124,7 +124,7 @@
               <td th:text="${user.nomorIdentifikasi}"></td>
               <td>
                 <a th:href="@{/akuns/{id}/details(id = ${user.id})}" class="link-primary">Detail</a>
-                <a th:href="@{/akuns/{id}/update(id = ${user.id})}" class="link-success">Edit</a>
+                <a th:href="@{/akuns/update/{id}(id = ${user.id})}" class="link-success">Edit</a>
                 <a th:href="@{/akuns/{id}/delete(id = ${user.id})}" class="link-danger">Hapus</a>
               </td>
               <td th:text="${user.kelas}"></td>

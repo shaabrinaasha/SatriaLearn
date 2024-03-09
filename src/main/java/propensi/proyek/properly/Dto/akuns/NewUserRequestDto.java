@@ -21,6 +21,8 @@ public class NewUserRequestDto {
     private String nisn;
     private String nuptk;
     private List<UUID> orangTuaOf;
+    private List<Siswa> orangTuaSiswaOf;
+    private UUID id;
 
     public Siswa toSiswa() {
         var siswa = new Siswa();
@@ -43,4 +45,5 @@ public class NewUserRequestDto {
         orangTua.setSiswas(siswas);
         return orangTua;
     }
+
 }

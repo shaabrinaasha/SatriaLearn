@@ -188,10 +188,10 @@ public class MataPelajaranController {
         Guru newGuru = matpel.getGuru();
         Kelas newKelas = matpel.getKelas();
 
-        if (!oldNama.equals(matpel.getNama())) {
+        if (!oldNama.equals(newNama)) {
             if (newNama.isEmpty()) {
                 redirectAttrs.addFlashAttribute("error", "Mata Pelajaran tidak dapat diubah karena field nama kosong");
-                return "redirect:/matpel/add";
+                return "redirect:/matpel/update/" + matpel.getId();
             }
             // nama matpel berubah
             // cek apakah di kelas matpel lama sudah ada nama matpel baru
