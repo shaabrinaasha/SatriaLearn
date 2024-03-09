@@ -30,7 +30,7 @@ public class SecurityConfig {
             // .requestMatchers("**.js").permitAll()
             // .anyRequest().permitAll()
             // .authenticated()
-            .requestMatchers("/static/**", "**.css", "**.js", "/error").permitAll()
+            .requestMatchers("/static/**", "**.css", "**.js", "/error", "/login").permitAll()
             .anyRequest().authenticated()
         )
         .httpBasic(Customizer.withDefaults())
@@ -38,7 +38,6 @@ public class SecurityConfig {
             customizer
             .loginPage("/login")
             .loginProcessingUrl("/login")
-            .permitAll()
         )
         .logout(Customizer.withDefaults());
 
