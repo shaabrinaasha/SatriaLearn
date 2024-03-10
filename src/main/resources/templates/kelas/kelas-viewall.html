@@ -167,7 +167,6 @@
             $('#kelas-table').on('click', '.delete-button', function() {
                 // Get the ID of the clicked button
                 kelasIdToDelete = $(this).attr('id');
-                console.log('Clicked delete button with ID:', kelasIdToDelete);
                 // Show the modal with the ID of the clicked button
                 $('#modal-hapus-' + kelasIdToDelete).modal('show');
             });

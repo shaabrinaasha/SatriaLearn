@@ -35,7 +35,7 @@
             <ul class="list-unstyled d-block align-items-center">
                 <!-- Menu beranda: role guru, siswa, orang tua -->
                 <li th:if="${#lists.contains(roles, 'guru') or #lists.contains(roles, 'siswa') or #lists.contains(roles, 'orang tua')}" class="container d-flex align-items-center">
-                    <a href="/" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
+                    <a th:href="@{/}" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-house-door-fill" style="padding-right: 20px;"></i>Beranda</span>
                     </a>
                 </li>
@@ -59,7 +59,7 @@
                 </li>
                 <!-- Menu matpel: role guru, admin  -->
                 <li th:if="${#lists.contains(roles, 'guru') or #lists.contains(roles, 'admin')}" class="container d-flex align-items-center">
-                    <a href="#" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
+                    <a href="/matpel" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-book" style="padding-right: 20px; -webkit-text-stroke: 1.5px"></i>Mata Pelajaran</span>
                     </a>
                 </li>
@@ -77,7 +77,7 @@
                 </li>
                 <!-- Menu akun saya: semua role -->
                 <li class="container d-flex align-items-center">
-                    <a href="/detail-akun" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
+                    <a href="/akun-saya" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-person-fill" style="padding-right: 20px;"></i>Akun Saya</span>
                     </a>
                 </li>
@@ -85,8 +85,11 @@
             <script>
                 $(".sidebar ul li").each(function() {
                     var navItem = $(this);
-                    if (navItem.find("a").attr("href") == location.pathname) {
-                        navItem.addClass("active");
+                    var href = navItem.find("a").attr("href");
+                    if (location.pathname === href) {
+                        $(".sidebar ul li").removeClass("active"); // Remove active class from all other items
+                        navItem.addClass("active"); // Add active class to the matching item
+                        return false; // Exit the loop once a match is found
                     }
                 });
             </script>

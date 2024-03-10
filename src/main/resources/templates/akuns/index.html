@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" />
 
+
     <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script defer src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
@@ -17,16 +18,6 @@
     <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#akun-table").DataTable({
-                columnDefs: [{
-                    target: 4,
-                    visible: false
-                }]
-            });
-        });
-    </script>
 </head>
 
 <style>
@@ -97,7 +88,28 @@
               <td>
                 <a th:href="@{/akuns/{id}/details(id = ${user.id})}" class="link-primary">Detail</a>
                         <a th:href="@{/akuns/update/{id}(id = ${user.id})}" class="link-success">Edit</a>
-                        <a th:href="@{/akuns/{id}/delete(id = ${user.id})}" class="link-danger">Hapus</a>
+                        <a type="button" th:id="${user.id}" class="link-danger delete-button">Hapus</a>
+                        <!-- Modal -->
+                        <div class="modal fade" th:id="'modal-hapus-' + ${user.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Akun</strong></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Apakah Anda Yakin ingin menghapus akun ini? </br>
+                                        </br> Anda tidak dapat memulihkan data akun jika sudah dihapus!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/akuns/{id}/delete(id = ${user.id})}">Hapus</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         </td>
                         <td th:text="${user.kelas}"></td>
                         </tr>
@@ -109,6 +121,45 @@
             </div>
         </div>
 
+
+        <script type="text/javascript">
+            var userIdToDelete;
+            $(document).ready(function() {
+                $("#akun-table").DataTable({
+                    columnDefs: [{
+                        target: 4,
+                        visible: false
+                    }]
+                });
+
+                // Add click event listener to all buttons with class "delete-button"
+                $('#akun-table').on('click', '.delete-button', function() {
+                    // Get the ID of the clicked button
+                    userIdToDelete = $(this).attr('id');
+                    // Show the modal with the ID of the clicked button
+                    $('#modal-hapus-' + userIdToDelete).modal('show');
+                });
+
+                // Add click event listener to all buttons with class "btn-secondary"
+                $('#akun-table').on('click', '.btn-secondary', function() {
+                    // Hide the modal
+                    $('#modal-hapus-' + userIdToDelete).modal('hide');
+                });
+
+                // Add click event listener to all buttons with class "btn-danger"
+                $('#akun-table').on('click', '.btn-danger', function() {
+                    // Hide the modal
+                    $('#modal-hapus-' + userIdToDelete).modal('hide');
+                });
+
+                // Add click event listener to all buttons with class "close"
+                $('#akun-table').on('click', '.close', function() {
+                    // Hide the modal
+                    $('#modal-hapus-' + userIdToDelete).modal('hide');
+                });
+
+            });
+        </script>
 </body>
 
 </html>

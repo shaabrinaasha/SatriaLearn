@@ -138,4 +138,10 @@ public class UserServiceImpl implements UserService{
         return optionalUser.get();
     }
 
+    @Override
+    public User updateUser(User user) {
+        return userDb.save(user);
+    }
+
+
 }

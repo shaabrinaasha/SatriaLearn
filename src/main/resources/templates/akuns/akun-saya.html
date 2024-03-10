@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <title>Akun Saya - SatriaLearn</title>
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
+</head>
+
+<body>
+    <div class="main-container d-flex">
+        <div th:replace="~{fragments/fragment :: sidebar}"></div>
+        <div class="d-flex">
+            <div class="vr"></div>
+        </div>
+        <div class="content">
+            <div class="dashboard-content px-3 pt-4">
+                <div th:replace="~{fragments/fragment :: header}"></div>
+                <div class="container" style="padding: 15px 50px;">
+                    <div style="height: 100%; color: #106EE8; padding: 20px 0px 20px 0px;">
+                        <h4 class="text-center" style="font-weight: bold;">Akun Saya</h4>
+                    </div>
+                    <div class="container d-flex justify-content-around" style="padding: 20px 0px 20px 0px;">
+                        <div class="container align-items-center" style="height: 100%; font-size: 20px; color: #868C90;">
+                            <p style="font-weight: bold; color: #b4b4b4;">Peran</p>
+                            <p th:if="${#lists.contains(roles, 'admin')}" style="">Admin</p>
+                            <p th:if="${#lists.contains(roles, 'guru')}" style="">Guru</p>
+                            <p th:if="${#lists.contains(roles, 'siswa')}" style="">Siswa</p>
+                            <p th:if="${#lists.contains(roles, 'orang tua')}" style="">Orang Tua</p>
+                        </div>
+                        <div class="container align-items-center" style="height: 100%; font-size: 20px; color: #868C90;">
+                            <p style="font-weight: bold; color: #b4b4b4;">Username</p>
+                            <p th:text="${currentUser.username}" style=""></p>
+                        </div>
+                        <div class="container align-items-center" style="height: 100%; font-size: 20px; color: #868C90;">
+                            <p style="font-weight: bold; color: #b4b4b4;">Password Awal</p>
+                            <p th:text="${currentUser.passwordAwal}" style=""></p>
+                        </div>
+                    </div>
+                    <div class="container d-flex justify-content-around" style="padding: 20px 0px 20px 0px;">
+                        <div class="container align-items-center" style="height: 100%; font-size: 20px; color: #868C90;">
+                            <p style="font-weight: bold; color: #b4b4b4;">Nama</p>
+                            <p th:text="${currentUser.nama}" style=""></p>
+                        </div>
+                        <div class="container align-items-center" style="height: 100%; font-size: 20px; color: #868C90;">
+                            <p th:if="${#lists.contains(roles, 'guru')}" style="font-weight: bold; color: #b4b4b4;">NUPTK</p>
+                            <p th:if="${#lists.contains(roles, 'guru')}" th:text="${currentUser.nuptk}"></p>
+                            <p th:if="${#lists.contains(roles, 'siswa')}" style="font-weight: bold; color: #b4b4b4;">NIPD</p>
+                            <p th:if="${#lists.contains(roles, 'siswa')}" th:text="${currentUser.nipd}"></p>
+                            <p th:if="${#lists.contains(roles, 'orang tua')}" style="font-weight: bold; color: #b4b4b4;">Orang Tua Dari</p>
+                            <div th:if="${#lists.contains(roles, 'orang tua') and !#lists.isEmpty(currentUser.siswas)}">
+                                <div th:each="siswa: ${currentUser.siswas}" class="d-flex flex-column">
+                                    <div th:text="'- ' + ${siswa.nama} + ' (' + ${siswa.nipd} + ')'"></div>
+                                </div>
+                            </div>
+                            <p th:if="${#lists.contains(roles, 'orang tua') and #lists.isEmpty(currentUser.siswas)}">-</p>
+                        </div>
+                        <div class="container align-items-center" style="height: 100%; font-size: 20px; color: #868C90;">
+                            <p th:if="${#lists.contains(roles, 'guru')}" style="font-weight: bold; color: #b4b4b4;">Wali Kelas</p>
+                            <p th:if="${#lists.contains(roles, 'guru')}" th:text="${currentUser.waliOf != null} ? ${currentUser.waliOf.nama} : '-'"></p>
+                            <p th:if="${#lists.contains(roles, 'siswa')}" style="font-weight: bold; color: #b4b4b4;">NISN</p>
+                            <p th:if="${#lists.contains(roles, 'siswa')}" th:text="${currentUser.nisn}"></p>
+                        </div>
+                    </div>
+                    <div th:if="${#lists.contains(roles, 'siswa')}" class="container d-flex justify-content-around" style="padding: 20px 0px 20px 0px;">
+                        <div class="container align-items-center" style="height: 100%; font-size: 20px; color: #868C90;">
+                            <p style="font-weight: bold; color: #b4b4b4;">Orang Tua</p>
+                            <p th:text="${currentUser.orangTua != null} ? ${currentUser.orangTua.nama} : '-'"></p>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${#lists.contains(roles, 'guru')}" class="container d-flex justify-content-center" style="padding: 15px 50px;">
+                    <div class="container d-flex justify-content-around" style="padding: 20px 0px 20px 0px;">
+                        <table style="width:100%;" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mata Pelajaran</th>
+                                    <th scope="col">Kelas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${#lists.isEmpty(listMatpel)}">
+                                    <td>Belum ada mata pelajaran yang diajar</td>
+                                    <td>Belum ada kelas yang diajar</td>
+                                </tr>
+                                <tr th:unless="${#lists.isEmpty(listMatpel)}" th:each="matpel : ${listMatpel}">
+                                    <td th:text="${matpel.nama}"></td>
+                                    <td th:text="${matpel.kelas.nama}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div th:if="${#lists.contains(roles, 'siswa')}" class="container d-flex justify-content-center" style="padding: 15px 50px;">
+                    <div class="container d-flex justify-content-around" style="padding: 20px 0px 20px 0px;">
+                        <table style="width:100%;" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mata Pelajaran</th>
+                                    <th scope="col">Kelas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:if="${#lists.isEmpty(listMatpel)}">
+                                    <td>Belum ada mata pelajaran yang dipelajari</td>
+                                    <td>Belum ada kelas yang dipelajari</td>
+                                </tr>
+                                <tr th:unless="${#lists.isEmpty(listMatpel)}" th:each="matpel : ${listMatpel}">
+                                    <td th:text="${matpel.nama}"></td>
+                                    <td th:text="${matpel.kelas.nama}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="container text-center" style="padding: 15px 50px;">
+                    <a type="button" class="btn btn-primary" href="/akun-saya/update-password">Ubah Password</a>
+                </div>
+                <form class="container text-center" style="padding: 15px 50px 100px 50px;" th:action="@{/logout}" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    <button class="btn btn-primary" type="submit">Keluar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
