@@ -48,12 +48,6 @@
     <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-
-    <div style="margin-top: 2rem; margin-left: 1rem;">
-        <a type="button" class="btn btn-outline-secondary" href="/kelas">
-            <i class="fas fa-arrow-left"></i> Kembali
-        </a>
-    </div>
     <div class="container container-form">
         <div style="margin-top: 2rem; margin-bottom: 1rem; text-align: center;">
             <h2 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 24px; color: #106EE8;">Tambah Kelas Baru</h2>
@@ -84,7 +78,7 @@
                 <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
 
                     <div class="">
-                        <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+                        <button name="submit" type="submit" class="btn btn-outline-success">Submit</button>
                     </div>
                     <div class="">
                         <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/kelas">Kembali</a>

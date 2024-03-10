@@ -175,9 +175,9 @@ public class KelasController {
         Kelas kelas = kelasService.getKelasById(id);
         String message = kelasService.deleteKelas(kelas);
         if (message != null) {
-            redirectAttributes.addAttribute("error", message);
+            redirectAttributes.addFlashAttribute("error", message);
         } else {
-            redirectAttributes.addAttribute("success", "Kelas berhasil dihapus");
+            redirectAttributes.addFlashAttribute("success", "Kelas berhasil dihapus");
         }
 
         var username = principal.getName();

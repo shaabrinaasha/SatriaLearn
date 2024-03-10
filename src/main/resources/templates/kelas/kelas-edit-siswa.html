@@ -53,11 +53,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
-    <div style="margin-top: 2rem; margin-left: 1rem;">
-        <a type="button" class="btn btn-outline-secondary" th:href="@{/kelas/detail/{id}(id=${kelas.id})}">
-            <i class="fas fa-arrow-left"></i> Kembali
-        </a>
-    </div>
     <div class="container container-form">
         <div style="margin-top: 2rem; margin-bottom: 1rem; text-align: center;">
             <h2 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 24px; color: #106EE8;">Edit Siswa Kelas</h2>
@@ -111,6 +106,25 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="modal fade" id="modal-hapus" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Edit Daftar Siswa</strong></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                            </div>
+                            <div class="modal-body">
+                                Apakah Anda Yakin ingin mengubah data siswa pada kelas ini?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                <button name="submit" type="submit" class="btn btn-outline-danger">Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Hidden input field to send kelas ID -->
                 <input type="hidden" name="kelasId" th:value="${kelas.id}">
@@ -118,7 +132,7 @@
                 <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
 
                     <div class="">
-                        <button name="submit" type="submit" class="btn btn-primary">Simpan</button>
+                        <a type="button" class="btn btn-outline-success" data-toggle="modal" id="modal-toggler" data-target="#modal-hapus">Simpan</a>
                     </div>
                     <div class="">
                         <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" th:href="@{/kelas/detail/{id}(id=${kelas.id})}">Kembali</a>
@@ -158,6 +172,21 @@
             $('#uncheckAllButton').on('click', function() {
                 $('input[name="siswaIds"]').prop('checked', false);
             });
+
+            // Menampilkan modal saat tombol "Simpan" diklik
+            $('#modal-toggler').on('click', function() {
+                $('#modal-hapus').modal('show');
+            });
+
+            $('#modal-hapus').on('click', '.btn-secondary', function() {
+                $('#modal-hapus').modal('hide');
+            });
+
+            $('#modal-hapus').on('click', '.close', function() {
+                $('#modal-hapus').modal('hide');
+            });
+
+
         });
     </script>
 </body>
