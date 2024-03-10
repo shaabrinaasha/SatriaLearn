@@ -263,6 +263,8 @@ public class KelasController {
         // if kelas has no siswa sends redirect error
         if (kelas.getSiswas() == null || kelas.getSiswas().isEmpty()) {
             model.addAttribute("error", "Belum ada siswa yang didaftarkan.");
+        } else {
+            model.addAttribute("success", "Berikut adalah daftar siswa yang terdaftar dalam kelas ini.");
         }
 
         // necessities for header sidebar fragments
