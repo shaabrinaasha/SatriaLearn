@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +11,13 @@
 </head>
 
 <style>
-
-body {
+    body {
         font-family: 'Poppins';
         line-height: 1.5;
         min-height: 100vh;
         background-color: #fbfbfb;
     }
-
+    
     .cards {
         display: flex;
         flex-wrap: wrap;
@@ -25,7 +25,7 @@ body {
         justify-content: center;
         gap: 2.5rem;
     }
-
+    
     .card {
         border-radius: 6px;
         width: 270px;
@@ -36,11 +36,11 @@ body {
         display: flex;
         flex-direction: column;
     }
-
+    
     .card:hover {
         box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 30px -10px, rgba(0, 0, 0, 0.1) 0px 10px 10px -10px;
     }
-
+    
     .top {
         display: flex;
         justify-content: flex-start;
@@ -55,14 +55,14 @@ body {
         padding-left: 20px;
         padding-bottom: 5px;
     }
-
+    
     .top p {
         font-size: 18px;
         color: #106EE8;
         font-weight: 500;
         margin: 0;
     }
-
+    
     .bottom {
         display: flex;
         align-items: center;
@@ -72,24 +72,23 @@ body {
         padding: 20px;
         justify-content: flex-start;
     }
-
+    
     .bottom span {
         font-size: 15px;
         text-decoration: none;
         color: #4F4F4F;
     }
-
+    
     .detail1,
     .detail2 {
         display: flex;
         align-items: center;
     }
-
-    i {
+    
+    .dark-icon {
         color: #4F4F4F;
         padding-right: 20px;
     }
-
 </style>
 
 <body>
@@ -106,10 +105,10 @@ body {
                 <div class="container">
                     <div>
                         <!-- Breadcrumb -->
-                        <div style="margin-bottom: 1rem; text-align: left;">
+                        <div style="margin: 1rem 0 1rem 0; text-align: left;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                  <li class="breadcrumb-item"><a href="#">Mata Pelajaran</a></li>
+                                    <li class="breadcrumb-item"><a href="#">Mata Pelajaran</a></li>
                                 </ol>
                             </nav>
                         </div>
@@ -124,11 +123,11 @@ body {
 
                         <!-- Title -->
                         <div style="margin-bottom: 1rem; text-align: center;">
-                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins'; font-size: 22px; color: #106EE8;" >Mata Pelajaran</h2>
+                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins'; font-size: 22px; color: #106EE8;">Mata Pelajaran</h2>
                             <br>
                         </div>
                     </div>
-        
+
                     <!-- Content -->
                     <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
                         <a href="#" class="card">
@@ -138,7 +137,7 @@ body {
                             <div class="bottom">
                                 <div>
                                     <div class="detail1">
-                                        <span class="kelas-matpel" th:text="${m.kelas.nama}"><i class="bi bi-easel" style="padding-right: 20px;"></i>Kelas 10A</span>
+                                        <span class="kelas-matpel" th:text="${m.kelas.nama}"><i class="bi bi-easel dark-icon" style="padding-right: 20px;"></i>Kelas 10A</span>
                                     </div>
                                 </div>
                             </div>
@@ -151,4 +150,5 @@ body {
     </div>
 
 </body>
+
 </html>

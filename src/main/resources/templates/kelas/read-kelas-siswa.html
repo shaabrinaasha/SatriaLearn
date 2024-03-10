@@ -1,224 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mata Pelajaran-Siswa</title>
 
     <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
-  </head>
+</head>
 
-  <style>
+<style>
     body {
-      font-family: "Poppins";
-      line-height: 1.5;
-      min-height: 100vh;
-      background-color: #fbfbfb;
+        font-family: "Poppins";
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #fbfbfb;
     }
-
+    
     .cards {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 2.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2.5rem;
     }
-
+    
     .card {
-      border-radius: 6px;
-      width: 270px;
-      height: 180px;
-      box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
-        rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
+        border-radius: 6px;
+        width: 270px;
+        height: 180px;
+        box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
     }
-
+    
     .card:hover {
-      box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 30px -10px,
-        rgba(0, 0, 0, 0.1) 0px 10px 10px -10px;
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 30px -10px, rgba(0, 0, 0, 0.1) 0px 10px 10px -10px;
     }
-
+    
     .top {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      height: 60%;
-      width: 100%;
-      background-color: #ddedff;
-      background-position: center center;
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
-      overflow: hidden;
-      padding-left: 20px;
-      padding-bottom: 5px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        height: 60%;
+        width: 100%;
+        background-color: #ddedff;
+        background-position: center center;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        overflow: hidden;
+        padding-left: 20px;
+        padding-bottom: 5px;
     }
-
+    
     .top p {
-      font-size: 18px;
-      color: #106ee8;
-      font-weight: 500;
-      margin: 0;
+        font-size: 18px;
+        color: #106ee8;
+        font-weight: 500;
+        margin: 0;
     }
-
+    
     .bottom {
-      display: flex;
-      align-items: center;
-      background-color: #ffffff;
-      border-radius: 6px;
-      height: 40%;
-      padding: 20px;
-      justify-content: flex-start;
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        border-radius: 6px;
+        height: 40%;
+        padding: 20px;
+        justify-content: flex-start;
     }
-
+    
     .bottom span {
-      font-size: 15px;
-      text-decoration: none;
-      color: #4f4f4f;
+        font-size: 15px;
+        text-decoration: none;
+        color: #4f4f4f;
     }
-
+    
     .detail {
-      display: flex;
-      align-items: center;
+        display: flex;
+        align-items: center;
     }
-
-    i {
-      color: #4f4f4f;
-      padding-right: 20px;
-    }
-
+    
     .card-container {
-      display: flex;
-      width: 100%;
-      gap: 3rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 2rem;
-      margin-bottom: 3rem;
+        display: flex;
+        width: 100%;
+        gap: 3rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 2rem;
+        margin-bottom: 3rem;
     }
-
+    
     .svg-container {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
     }
-  </style>
+</style>
 
-  <body>
+<body>
     <div class="main-container d-flex">
-      <div th:replace="~{fragments/fragment :: sidebar}"></div>
-      <div class="d-flex">
-        <div class="vr"></div>
-      </div>
-      <div class="content">
-        <div class="container">
-          <div class="dashboard-content px-3 pt-4">
-            <!-- Header -->
-            <div th:replace="~{fragments/fragment :: header}"></div>
-            <!-- Breadcrumb -->
-            <div style="margin-top: 1rem; text-align: left">
-              <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item active" aria-current="page">
-                    Kelas
-                  </li>
-                </ol>
-              </nav>
-            </div>
+        <div th:replace="~{fragments/fragment :: sidebar}"></div>
+        <div class="d-flex">
+            <div class="vr"></div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="dashboard-content px-3 pt-4">
+                    <!-- Header -->
+                    <div th:replace="~{fragments/fragment :: header}"></div>
+                    <!-- Breadcrumb -->
+                    <div style="margin-top: 1rem; text-align: left">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Kelas
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
 
-            <div style="text-align: center">
-              <h2
-                class="kelas-siswa"
-                style="
+                    <div style="text-align: center">
+                        <h2 class="kelas-siswa" style="
                   font-weight: bold;
                   font-family: 'Poppins', sans-serif;
                   font-size: 22px;
                   color: #106ee8;
-                "
-              >
-                Kelas
-              </h2>
-            </div>
-
-            <!-- Error Alert -->
-            <div
-              class="alert alert-danger alert-dismissible"
-              role="alert"
-              th:if="${error}"
-            >
-              <div th:text="${error}"></div>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-            </div>
-            <!-- Success Alert -->
-            <div
-              class="alert alert-success alert-dismissible"
-              role="alert"
-              th:if="${success}"
-            >
-              <div th:text="${success}"></div>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-            </div>
-            <!-- Flex Div for Cards -->
-            <div class="card-container">
-              <div
-                class="cards"
-                th:object="${listKelas}"
-                th:each="kelas : ${listKelas}"
-              >
-                <a th:href="@{/kelas/matpel/{id}(id=${kelas.id})}" class="card">
-                  <div class="top">
-                    <!-- Access kelas's nama -->
-                    <p th:text="${kelas.nama}"></p>
-                  </div>
-                  <div class="bottom">
-                    <div>
-                      <div class="detail">
-                        <div class="svg-container">
-                          <!-- SVG tahun ajaran -->
-                          <img
-                            th:src="@{/calendar.svg}"
-                            alt="Wali Kelas Logo"
-                          />
-                          <!-- Access kelas's tahun ajaran -->
-                          <div th:each="semester, iStat : ${kelas.semesters}">
-                            <div th:if="${iStat.index == 0}">
-                              <span th:text="${semester.tahunAjaran}"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="detail">
-                        <div class="svg-container">
-                          <!-- SVG wali -->
-                          <img
-                            th:src="@{/profile-head.svg}"
-                            alt="Wali Kelas Logo"
-                          />
-                          <!-- Access kelas's wali -->
-                          <span th:text="${kelas.wali.nama}"></span>
-                        </div>
-                      </div>
+                ">
+                            Kelas
+                        </h2>
                     </div>
-                  </div>
-                </a>
-              </div>
+
+                    <!-- Error Alert -->
+                    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+                        <div th:text="${error}"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <!-- Success Alert -->
+                    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+                        <div th:text="${success}"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <!-- Flex Div for Cards -->
+                    <div class="card-container">
+                        <div class="cards" th:object="${listKelas}" th:each="kelas : ${listKelas}">
+                            <a th:href="@{/kelas/matpel/{id}(id=${kelas.id})}" class="card">
+                                <div class="top">
+                                    <!-- Access kelas's nama -->
+                                    <p th:text="${kelas.nama}"></p>
+                                </div>
+                                <div class="bottom">
+                                    <div>
+                                        <div class="detail">
+                                            <div class="svg-container">
+                                                <!-- SVG tahun ajaran -->
+                                                <img th:src="@{/calendar.svg}" alt="Wali Kelas Logo" />
+                                                <!-- Access kelas's tahun ajaran -->
+                                                <div th:each="semester, iStat : ${kelas.semesters}">
+                                                    <div th:if="${iStat.index == 0}">
+                                                        <span th:text="${semester.tahunAjaran}"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="detail">
+                                            <div class="svg-container">
+                                                <!-- SVG wali -->
+                                                <img th:src="@{/profile-head.svg}" alt="Wali Kelas Logo" />
+                                                <!-- Access kelas's wali -->
+                                                <span th:text="${kelas.wali.nama}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </body>
+</body>
+
 </html>

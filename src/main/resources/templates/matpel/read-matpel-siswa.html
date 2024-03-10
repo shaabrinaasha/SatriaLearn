@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +12,13 @@
 </head>
 
 <style>
-
     body {
         font-family: 'Poppins';
         line-height: 1.5;
         min-height: 100vh;
         background-color: #fbfbfb;
     }
-
+    
     .cards {
         display: flex;
         flex-wrap: wrap;
@@ -26,7 +26,7 @@
         justify-content: center;
         gap: 2.5rem;
     }
-
+    
     .card {
         border-radius: 6px;
         width: 270px;
@@ -37,11 +37,11 @@
         display: flex;
         flex-direction: column;
     }
-
+    
     .card:hover {
         box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 30px -10px, rgba(0, 0, 0, 0.1) 0px 10px 10px -10px;
     }
-
+    
     .top {
         display: flex;
         justify-content: flex-start;
@@ -58,14 +58,14 @@
         padding-bottom: 10px;
         padding-top: 10px;
     }
-
+    
     .top p {
         font-size: 18px;
         color: #106EE8;
         font-weight: 500;
         margin: 0;
     }
-
+    
     .bottom {
         display: flex;
         align-items: center;
@@ -75,31 +75,30 @@
         padding: 20px;
         justify-content: flex-start;
     }
-
+    
     .bottom span {
         font-size: 15px;
         text-decoration: none;
         color: #4F4F4F;
         margin-left: 10px;
     }
-
+    
     .detail1,
     .detail2 {
         display: flex;
         align-items: center;
     }
-
-    i {
+    
+    .dark-icon {
         color: #4F4F4F;
         padding-right: 20px;
     }
-
+    
     .svg-container {
         display: flex;
         gap: 0.5rem;
         align-items: center;
     }
-
 </style>
 
 <body>
@@ -112,20 +111,15 @@
             <div class="dashboard-content px-3 pt-4">
                 <div th:replace="~{fragments/fragment :: header}"></div>
                 <div class="container" th:object="${kelas}">
-                    <div >
+                    <div>
                         <!-- Bread Crumb -->
-                        <div style="margin-bottom: 1rem; text-align: left;">
+                        <div style="margin: 1rem 0 1rem 0; text-align: left;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                  <li class="breadcrumb-item"><a href="/kelas/siswa-view">Kelas</a></li>
-                                  <li class="breadcrumb-item active kelas-matpel" th:text="${kelas.nama}" aria-current="page">Kelas 10 A</li>
+                                    <li class="breadcrumb-item"><a href="/kelas/siswa-view">Kelas</a></li>
+                                    <li class="breadcrumb-item active kelas-matpel" th:text="${kelas.nama}" aria-current="page">Kelas 10 A</li>
                                 </ol>
                             </nav>
-                        </div>
-
-                        <!-- Back Button -->
-                        <div style="margin-bottom: 1rem; text-align: left;">
-                            <a href="/kelas/siswa-view"><i class="bi bi-chevron-left"></i></a>
                         </div>
 
                         <!-- Alert -->
@@ -138,12 +132,12 @@
 
                         <!-- Title Page -->
                         <div style="margin-bottom: 1rem; text-align: center;">
-                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" th:text="${kelas.nama}" >Kelas 10 A</h2>
+                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" th:text="${kelas.nama}">Kelas 10 A</h2>
                             <p class="kelas-siswa" style="font-family: 'Poppins', sans-serif; font-size: 16px; color: #828282;" th:object="${semester}" th:text="${semester.tahunAjaran}">Tahun Ajaran 2022/2023</p>
                             <br>
                         </div>
                     </div>
-        
+
                     <!-- Content -->
                     <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
                         <a href="#" class="card">
@@ -154,7 +148,7 @@
                                 <div>
                                     <div class="detail1">
                                         <img th:src="@{/profile-head.svg}" alt="Wali Kelas Logo">
-                                        <!-- <i class="bi bi-person-fill" style="padding-right: 20px;"></i> -->
+                                        <!-- <i class="bi bi-person-fill dark-icon" style="padding-right: 20px;"></i> -->
                                         <span class="guru-matpel" th:text="${m.guru.nama}">
                                             Budi
                                         </span>
@@ -162,11 +156,12 @@
                                 </div>
                             </div>
                         </a>
-                    </div>                      
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 </body>
+
 </html>
