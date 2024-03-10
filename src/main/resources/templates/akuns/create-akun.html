@@ -24,23 +24,46 @@
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
   </head>
-  <body style="background-color: #fbfbfb">
-    <div class="d-flex flex-column p-4 m-4">
-      <div class="d-flex w-100 justify-content-between">
-        <a class="btn btn-light" th:href="@{/akuns}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-          </svg>
-        </a>
-        <label class=" h1 text-center" for="form-create-akun">Buat Akun</label>
-        <div>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      font-size: 14px;
+      background-color: #fbfbfb;
+    }
 
-        </div>
-      </div>
+    .container-form {
+      border-radius: 15px;
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+      rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+      padding: 20px;
+      background-color: #ffffff;
+      margin-top: 50px;
+      width: 700px;
+    }
+
+    form {
+      width: 80%;
+      margin: auto;
+    }
+
+    .form-control {
+      font-size: 14px;
+    }
+  </style>
+  <body style="background-color: #fbfbfb">
+  <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+    <div class="d-flex flex-column p-4 container-form mx-auto my-4">
+      <label class=" h1 text-center" for="form-create-akun" style="
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+            color: #106ee8;
+          ">Buat Akun</label>
       <form
         method="post"
         id="form-create-akun"
-        class="mx-4 w-50 align-self-center"
+        class="mx-4 align-self-center"
         th:object="${akun}"
       >
         <div class="d-flex flex-column gap-2">
@@ -183,7 +206,10 @@
             th:value="${_csrf.token}"
           />
 
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <div class="d-flex gap-3 justify-content-around">
+            <button type="submit" class="btn btn-outline-success">Simpan</button>
+            <a th:href="@{/akuns}" class="btn btn-outline-danger">Kembali</a>
+          </div>
         </div>
       </form>
     </div>
@@ -196,18 +222,6 @@
       data-bs-target="#staticBackdrop"
       hidden
       id="button-trigger-modal"
-    >
-      Launch static backdrop modal
-    </button>
-
-    <!-- Button trigger modal -->
-    <button
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#staticBackdropError"
-            hidden
-            id="button-trigger-modal-error"
     >
       Launch static backdrop modal
     </button>
@@ -247,45 +261,6 @@
               Buat Akun Lain
             </button>
             <a th:href="@{/akuns}" class="btn btn-primary">Selesai</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Error-->
-    <div
-            class="modal fade"
-            id="staticBackdropError"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabindex="-1"
-            aria-labelledby="staticBackdropLabelError"
-            aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabelError">Error</h1>
-            <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p
-                    th:text="${error}"
-            ></p>
-          </div>
-          <div class="modal-footer">
-            <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-            >
-              OK
-            </button>
           </div>
         </div>
       </div>
