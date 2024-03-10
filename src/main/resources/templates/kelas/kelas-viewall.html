@@ -47,80 +47,110 @@
             <div class="vr"></div>
         </div>
         <div class="content">
-            <div class="dashboard-content px-3 pt-4">
-                <div th:replace="~{fragments/fragment :: header}"></div>
-                <div th:if="${param.success}" class="alert alert-success alert-dismissible" role="alert">
-                    <span th:text="${param.success}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+            <div class="container">
 
-                <div th:if="${param.error}" class="alert alert-danger alert-dismissible" role="alert">
-                    <span th:text="${param.error}"></span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+                <div class="dashboard-content px-3 pt-4">
+                    <!-- Header -->
+                    <div th:replace="~{fragments/fragment :: header}"></div>
+                    <!-- Breadcrumb -->
+                    <div style="margin-bottom:1rem; text-align: left;">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="/kelas-semester">Kelas & Semester</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    Manajemen Kelas
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
 
-                <div class="container">
-                    <div>
-                        <h1 style="font-weight: bold; margin-bottom: 2rem; font-family: 'Poppins', sans-serif; font-size: 24px;" class="text-secondary">Kelas & Semester/Manajemen Kelas/Daftar Kelas</h1>
-                        <div style="margin-top: 3rem; margin-bottom: 2rem; text-align: center;">
-                            <h2 style="font-weight: bold; margin-bottom: 0.25rem; font-family: 'Poppins', sans-serif; font-size: 18px; color: #106EE8;">Daftar Kelas</h2>
-                            <br>
-                        </div>
-                        <div style="float: right;">
-                            <a class="btn" href="/kelas/tambah" style="background-color: #106EE8;  color: white;">
+                    <!-- Error Alert -->
+                    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+                        <div th:text="${error}"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <!-- Success Alert -->
+                    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+                        <div th:text="${success}"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="container">
+                        <div>
+                            <div style="
+                            margin-top: 2rem;
+                            margin-bottom: 2rem;
+                            text-align: center;
+                          ">
+                                <h2 style="
+                              font-weight: bold;
+                              font-family: 'Poppins', sans-serif;
+                              font-size: 18px;
+                              color: #106ee8;
+                            ">
+                                    Daftar Kelas
+                                </h2>
+                                <br />
+                            </div>
+
+                            <div style="float: right;">
+                                <a class="btn" href="/kelas/tambah" style="background-color: #106EE8;  color: white;">
                             Tambah Kelas
                         </a>
-                        </div>
-                        <table id="kelas-table" style="width:100%;" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Kelas</th>
-                                    <th scope="col">Wali Kelas</th>
-                                    <th scope="col">Tahun Ajaran</th>
-                                    <th scope="col">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="kelas, iterationStatus : ${listKelas}">
-                                    <td th:text="${iterationStatus.index + 1}"></td>
-                                    <td th:text="${kelas.nama}"></td>
-                                    <td th:text="${kelas.wali.nama}"></td>
-                                    <td>
-                                        <span th:if="${kelas.semesters.size() > 0}" th:text="${kelas.semesters.iterator().next().tahunAjaran}"></span>
-                                    </td>
-                                    <td class="align-content-center">
-                                        <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/detail/} + ${kelas.id}">Detail</a>
-                                        <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/ubah/} + ${kelas.id}">Ubah</a>
-                                        <button th:id="${kelas.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
-                                        <!-- Modal -->
-                                        <div class="modal fade" th:id="'modal-hapus-' + ${kelas.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Mata Pelajaran</strong></h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            </div>
+                            <table id="kelas-table" style="width:100%;" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Kelas</th>
+                                        <th scope="col">Wali Kelas</th>
+                                        <th scope="col">Tahun Ajaran</th>
+                                        <th scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="kelas, iterationStatus : ${listKelas}">
+                                        <td th:text="${iterationStatus.index + 1}"></td>
+                                        <td th:text="${kelas.nama}"></td>
+                                        <td th:text="${kelas.wali.nama}"></td>
+                                        <td>
+                                            <span th:if="${kelas.semesters.size() > 0}" th:text="${kelas.semesters.iterator().next().tahunAjaran}"></span>
+                                        </td>
+                                        <td class="align-content-center">
+                                            <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/detail/} + ${kelas.id}">Detail</a>
+                                            <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/ubah/} + ${kelas.id}">Ubah</a>
+                                            <button th:id="${kelas.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" th:id="'modal-hapus-' + ${kelas.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Mata Pelajaran</strong></h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Apakah Anda Yakin ingin menghapus kelas ini? </br>
-                                                        </br> Anda tidak dapat memulihkan data kelas jika sudah dihapus!
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/kelas/hapus/} + ${kelas.id}">Hapus</a>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Apakah Anda Yakin ingin menghapus kelas ini? </br>
+                                                            </br> Anda tidak dapat memulihkan data kelas jika sudah dihapus!
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                            <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/kelas/hapus/} + ${kelas.id}">Hapus</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,6 +170,18 @@
                 console.log('Clicked delete button with ID:', kelasIdToDelete);
                 // Show the modal with the ID of the clicked button
                 $('#modal-hapus-' + kelasIdToDelete).modal('show');
+            });
+
+            // Add click event listener to all buttons with class "btn-secondary"
+            $('#kelas-table').on('click', '.btn-secondary', function() {
+                // Hide the modal
+                $('#modal-hapus-' + kelasIdToDelete).modal('hide');
+            });
+
+            // Add click event listener to all buttons with class "close"
+            $('#kelas-table').on('click', '.close', function() {
+                // Hide the modal
+                $('#modal-hapus-' + kelasIdToDelete).modal('hide');
             });
         });
     </script>

@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://thymeleaf.org">
-  <head>
+
+<head>
     <title>Manajemen Akun - SatriaLearn</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css" />
 
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Poppins&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap" />
 
     <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -24,89 +16,67 @@
     <script defer src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
     <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
-    />
 
     <script type="text/javascript">
-      $(document).ready(function () {
-        $("#akun-table").DataTable({
-          columnDefs: [{target:4, visible: false}]
+        $(document).ready(function() {
+            $("#akun-table").DataTable({
+                columnDefs: [{
+                    target: 4,
+                    visible: false
+                }]
+            });
         });
-      });
     </script>
-  </head>
+</head>
 
-  <style>
-
+<style>
     table,
     th,
     tr,
     button {
-      font-family: "Poppins", sans-serif;
-      font-size: 14px;
+        font-family: "Poppins", sans-serif;
+        font-size: 14px;
     }
-
+    
     .btn-sm {
-      font-size: 10px;
+        font-size: 10px;
     }
-  </style>
+</style>
 
-  <body style="background-color: #fbfbfb">
-  <div class="main-container d-flex">
-    <div th:replace="~{fragments/fragment :: sidebar}"></div>
-    <div class="d-flex">
-      <div class="vr"></div>
-    </div>
-    <div class="content">
-      <div class="dashboard-content px-3 pt-4">
-        <div th:replace="~{fragments/fragment :: header}"></div>
-      </div>
-      <div
-              class="alert alert-danger alert-dismissible"
-              role="alert"
-              th:if="${error}"
-              th:text="${error}"
-      >
-        <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-        ></button>
-      </div>
-      <div
-              class="alert alert-success alert-dismissible"
-              role="alert"
-              th:if="${success}"
-              th:text="${success}"
-      >
-        <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-        ></button>
-      </div>
+<body style="background-color: #fbfbfb">
+    <div class="main-container d-flex">
+        <div th:replace="~{fragments/fragment :: sidebar}"></div>
+        <div class="d-flex">
+            <div class="vr"></div>
+        </div>
+        <div class="content">
+            <div class="dashboard-content px-3 pt-4">
+                <div th:replace="~{fragments/fragment :: header}"></div>
+            </div>
+            <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
-      <div class="container">
-        <div>
-          <div style="margin-top: 3rem; margin-bottom: 2rem; text-align: center">
-            <h2
-                    style="
+            <div class="container">
+                <div>
+                    <div style="margin-top: 3rem; margin-bottom: 2rem; text-align: center">
+                        <h2 style="
               font-weight: bold;
               margin-bottom: 0.75rem;
               font-family: 'Poppins', sans-serif;
               font-size: 18px;
               color: #106ee8;
-            "
-            >
-              Manajemen Akun
-            </h2>
-            <!-- <a class="btn" href="/mapel/add" style="background-color: #31318B;  color: white;">Tambah Mata Pelajaran</a> -->
-            <br />
-          </div>
-          <div style="float: right">
-            <a th:href="@{/akuns/create}" class="btn btn-primary"
-            >Buat Akun Baru</a
+            ">
+                            Manajemen Akun
+                        </h2>
+                        <!-- <a class="btn" href="/mapel/add" style="background-color: #31318B;  color: white;">Tambah Mata Pelajaran</a> -->
+                        <br />
+                    </div>
+                    <div style="float: right">
+                        <a th:href="@{/akuns/create}" class="btn btn-primary">Buat Akun Baru</a
             >
           </div>
           <table id="akun-table" style="width: 100%" class="table table-striped">
@@ -126,18 +96,19 @@
               <td th:text="${user.nomorIdentifikasi}"></td>
               <td>
                 <a th:href="@{/akuns/{id}/details(id = ${user.id})}" class="link-primary">Detail</a>
-                <a th:href="@{/akuns/update/{id}(id = ${user.id})}" class="link-success">Edit</a>
-                <a th:href="@{/akuns/{id}/delete(id = ${user.id})}" class="link-danger">Hapus</a>
-              </td>
-              <td th:text="${user.kelas}"></td>
-            </tr>
-            </tbody>
-          </table>
-          <br />
+                        <a th:href="@{/akuns/update/{id}(id = ${user.id})}" class="link-success">Edit</a>
+                        <a th:href="@{/akuns/{id}/delete(id = ${user.id})}" class="link-danger">Hapus</a>
+                        </td>
+                        <td th:text="${user.kelas}"></td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        <br />
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  </body>
+</body>
+
 </html>
