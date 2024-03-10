@@ -13,10 +13,16 @@ public interface SemesterService {
     void save(Semester semester);
 
     List<Semester> findSemestersById(List<UUID> semesterIds);
+
     List<Semester> getAllSemesterByTahunAjaran(String tahunAjaran);
+
     List<Semester> getAllSemester();
+
     void addKelasToSemester(Semester semester, Kelas kelas);
+
     void removeKelasFromSemester(Semester semester, Kelas kelas);
+
+    // check if new set of dates overlap with db
     long semestersOverlap(LocalDate newTanggalAwal, LocalDate newTanggalAkhir);
 
     // find semester by id via JPA

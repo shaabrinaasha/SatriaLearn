@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
+    <title>500 Error</title>
+    <!-- Style -->
+    <style th:inline="text">
+      .holder {
+        padding: 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      class="d-flex justify-content-center align-items-center vh-100"
+      th:style="'background-image:url(' + @{/error-background.svg} + '); background-repeat: no-repeat; background-size: cover;'"
+    >
+      <div class="card">
+        <div class="card-body">
+          <div class="holder text-center">
+            <h1 style="color: #106ee8"><b>500</b></h1>
+            <h3 style="color: #106ee8">Internal server error.</h3>
+            <a type="button" class="btn btn-outline-info mt-3" href="/"
+              >Kembali ke Beranda</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

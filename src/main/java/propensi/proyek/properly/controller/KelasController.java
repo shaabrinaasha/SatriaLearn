@@ -250,4 +250,44 @@ public class KelasController {
         return "/kelas/read-kelas-siswa";
     }
 
+    @GetMapping("/kelas/detail/{id}")
+    public String detailKelasSeeSiswa(@PathVariable("id") UUID id, Authentication auth, Principal principal,
+            Model model) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+
+        // get model kelas from id
+        var kelas = kelasService.getKelasById(id);
+        model.addAttribute("kelas", kelas);
+
+        // if kelas has no siswa sends redirect error
+        if (kelas.getSiswas() == null || kelas.getSiswas().isEmpty()) {
+            model.addAttribute("error", "Belum ada siswa yang didaftarkan.");
+        }
+
+        // necessities for header sidebar fragments
+        userService.addCurrentUserToModel(username, authorities, model);
+        return "/kelas/detail-kelas-siswa.html";
+    }
+
+    @GetMapping("/kelas/detail/{id}/view-matpel")
+    public String detailKelasSeeMatpel(@PathVariable("id") UUID id, Authentication auth, Principal principal,
+            Model model) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+
+        // get model kelas from id
+        var kelas = kelasService.getKelasById(id);
+        model.addAttribute("kelas", kelas);
+
+        // if kelas has no matpel sends redirect error
+        if (kelas.getMataPelajarans() == null || kelas.getMataPelajarans().isEmpty()) {
+            model.addAttribute("error", "Belum ada mata pelajaran yang didaftarkan.");
+        }
+
+        // necessities for header sidebar fragments
+        userService.addCurrentUserToModel(username, authorities, model);
+        return "/kelas/detail-kelas-matpel";
+    }
+
 }

@@ -37,7 +37,6 @@ public class SemesterServiceImpl implements SemesterService {
         }
     }
 
-    
     @Override
     public List<Semester> findSemestersById(List<UUID> semesterIds) {
         List<Semester> semesters = new ArrayList<>();
@@ -79,6 +78,7 @@ public class SemesterServiceImpl implements SemesterService {
         semester.setClasses(kelasSet);
         semesterDb.save(semester);
     }
+
     @Override
     public Semester getSemesterById(UUID id) {
         return semesterDb.findById(id).get();
@@ -147,8 +147,9 @@ public class SemesterServiceImpl implements SemesterService {
         List<String> changedFields = new ArrayList<String>();
         if (!oldSemester.getIsGanjil().equals(updateSemesterDTO.getIsGanjil())) {
             changedFields.add("isGanjil");
-        } else if (!(oldSemester.getTanggalAwal().equals(updateSemesterDTO.getTanggalAwal())
-                || oldSemester.getTanggalAkhir().equals(updateSemesterDTO.getTanggalAkhir()))) {
+        } else if (!oldSemester.getTanggalAwal().equals(updateSemesterDTO.getTanggalAwal())) {
+            changedFields.add("tanggal");
+        } else if (!oldSemester.getTanggalAkhir().equals(updateSemesterDTO.getTanggalAkhir())) {
             changedFields.add("tanggal");
         } else if (!(oldSemester.getTahunAjaran().equals(updateSemesterDTO.getTahunAjaran()))) {
             changedFields.add("tahunAjaran");

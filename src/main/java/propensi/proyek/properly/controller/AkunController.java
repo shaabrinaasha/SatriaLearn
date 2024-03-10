@@ -74,7 +74,7 @@ public class AkunController {
         return new ModelAndView("/akuns/create-akun", model.asMap());
     }
 
-    @PostMapping(value = "/akuns/create", params = {"add=add"})
+    @PostMapping(value = "/akuns/create", params = { "add=add" })
     public ModelAndView addAnak(@ModelAttribute NewUserRequestDto user, Model model) {
         model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
         model.addAttribute("selected", "orang tua");
@@ -84,12 +84,12 @@ public class AkunController {
         user.setOrangTuaOf(orangTuaOfs);
         model.addAttribute("akun", user);
 
-
         return new ModelAndView("/akuns/create-akun", model.asMap());
     }
 
-    @PostMapping(value = "/akuns/create", params = {"remove"})
-    public ModelAndView removeAnak(@RequestParam(value = "remove", defaultValue = "-1") Integer remove, @ModelAttribute NewUserRequestDto user, Model model) {
+    @PostMapping(value = "/akuns/create", params = { "remove" })
+    public ModelAndView removeAnak(@RequestParam(value = "remove", defaultValue = "-1") Integer remove,
+            @ModelAttribute NewUserRequestDto user, Model model) {
         model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
         model.addAttribute("selected", "orang tua");
 
@@ -97,7 +97,6 @@ public class AkunController {
         UUID removed = orangTuaOfs.remove(remove.intValue());
         user.setOrangTuaOf(orangTuaOfs);
         model.addAttribute("akun", user);
-
 
         return new ModelAndView("/akuns/create-akun", model.asMap());
     }
@@ -245,7 +244,8 @@ public class AkunController {
     }
 
     @GetMapping("/akuns/update/{id}")
-    public String updateAkunFormPage(@PathVariable UUID id, Principal principal, Model model, RedirectAttributes redirectAttrs) {
+    public String updateAkunFormPage(@PathVariable UUID id, Principal principal, Model model,
+            RedirectAttributes redirectAttrs) {
         User oldUser = userService.getUserById(id);
         // var oldUserDto = UserDto.fromUser(oldUser);
         String userRole = oldUser.getDecriminatorValue();
@@ -281,7 +281,7 @@ public class AkunController {
             akun.setNama(oldOrtu.getNama());
             // List<UUID> anak = new ArrayList<>();
             // for (Siswa siswa : oldOrtu.getSiswas()) {
-            //     anak.add(siswa.getId());
+            // anak.add(siswa.getId());
             // }
 
             akun.setOrangTuaSiswaOf(oldOrtu.getSiswas());
@@ -298,7 +298,8 @@ public class AkunController {
     }
 
     @PostMapping(value = "/akuns/update", params = { "save" })
-    public String updateAkunSubmitPage(@ModelAttribute NewUserRequestDto akun, Model model, RedirectAttributes redirectAttrs) {
+    public String updateAkunSubmitPage(@ModelAttribute NewUserRequestDto akun, Model model,
+            RedirectAttributes redirectAttrs) {
         User user = userService.getUserById(akun.getId());
         String userRole = user.getDecriminatorValue();
         System.out.println("SUBMIT UPDATE");
@@ -323,7 +324,8 @@ public class AkunController {
 
                 oldSiswa.setNama(newNama);
 
-            } if (!oldNISN.equals(newNISN)) {
+            }
+            if (!oldNISN.equals(newNISN)) {
                 if (newNISN.isEmpty()) {
                     redirectAttrs.addFlashAttribute("error", "Akun Siswa tidak dapat diubah karena field NISN kosong");
                     return "redirect:/akuns/update/" + oldSiswa.getId();
@@ -331,7 +333,8 @@ public class AkunController {
 
                 oldSiswa.setNisn(newNISN);
 
-            } if (!oldNIPD.equals(newNIPD)) {
+            }
+            if (!oldNIPD.equals(newNIPD)) {
                 if (newNIPD.isEmpty()) {
                     redirectAttrs.addFlashAttribute("error", "Akun Siswa tidak dapat diubah karena field NIPD kosong");
                     return "redirect:/akuns/update/" + oldSiswa.getId();
@@ -357,22 +360,23 @@ public class AkunController {
                     redirectAttrs.addFlashAttribute("error", "Akun Guru tidak dapat diubah karena field nama kosong");
                     return "redirect:/akuns/update/" + oldGuru.getId();
                 }
-    
+
                 oldGuru.setNama(newNama);
 
-            } if (!oldNUPTK.equals(newNUPTK)) {
+            }
+            if (!oldNUPTK.equals(newNUPTK)) {
                 if (newNUPTK.isEmpty()) {
                     redirectAttrs.addFlashAttribute("error", "Akun Guru tidak dapat diubah karena field NUPTK kosong");
                     return "redirect:/akuns/update/" + oldGuru.getId();
                 }
-    
+
                 oldGuru.setNuptk(newNUPTK);
             }
 
             guruService.addGuru(oldGuru);
             redirectAttrs.addFlashAttribute("success", "Akun Guru berhasil diubah");
             return "redirect:/akuns";
-    
+
         } else if (userRole.contains("orang tua")) {
             OrangTua oldOrtu = orangTuaService.getOrangTuaById(akun.getId());
             String oldNama = oldOrtu.getNama();
@@ -382,18 +386,18 @@ public class AkunController {
             // List<Siswa> newAnak = akun.getOrangTuaSiswaOf();
             // System.out.println(newAnak);
 
-            List<UUID> newAnak = akun.getOrangTuaOf(); 
+            List<UUID> newAnak = akun.getOrangTuaOf();
             List<Siswa> newSiswa = new ArrayList<>();
-        
 
             if (!oldNama.equals(newNama)) {
                 if (newNama.isEmpty()) {
-                    redirectAttrs.addFlashAttribute("error", "Akun Orang Tua tidak dapat diubah karena field nama kosong");
+                    redirectAttrs.addFlashAttribute("error",
+                            "Akun Orang Tua tidak dapat diubah karena field nama kosong");
                     return "redirect:/akuns/update/" + oldOrtu.getId();
                 }
-    
+
                 oldOrtu.setNama(newNama);
-            } 
+            }
 
             if (newAnak != null) {
                 for (UUID id : newAnak) {
@@ -402,18 +406,18 @@ public class AkunController {
                 System.out.println("Jumlah anak baru");
                 System.out.println(newAnak.size());
             }
-            
-            if (oldAnak.isEmpty() && !newSiswa.isEmpty()){
+
+            if (oldAnak.isEmpty() && !newSiswa.isEmpty()) {
                 oldOrtu.setSiswas(newSiswa);
-            } else if (!oldAnak.isEmpty() && newSiswa.isEmpty()){
+            } else if (!oldAnak.isEmpty() && newSiswa.isEmpty()) {
                 // kemungkinan tidak diperlukan
                 oldOrtu.setSiswas(null);
-            } else if (!oldAnak.isEmpty() && !newSiswa.isEmpty()){
+            } else if (!oldAnak.isEmpty() && !newSiswa.isEmpty()) {
                 if (!(oldAnak.containsAll(newSiswa) && newSiswa.containsAll(oldAnak))) {
                     oldOrtu.setSiswas(newSiswa);
                 }
             }
-            
+
             orangTuaService.addOrangTua(oldOrtu);
             redirectAttrs.addFlashAttribute("success", "Akun Orang Tua berhasil diubah");
             return "redirect:/akuns";

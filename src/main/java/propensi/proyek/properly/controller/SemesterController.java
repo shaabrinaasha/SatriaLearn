@@ -142,7 +142,7 @@ public class SemesterController {
                     "Tanggal awal harus sebelum tanggal akhir. Silahkan ubah tanggal awal dan tanggal akhir.");
             return String.format("redirect:/semester/%s/update", semesterDTO.getId().toString());
 
-        } else if (changedFields.contains("tanggal") && isOverlap > 1) {
+        } else if (changedFields.contains("tanggal") && isOverlap >= 1) {
             redirectAttrs.addFlashAttribute("error",
                     "Tanggal awal dan akhir semester tumpang tindih dengan semester lain di basis data. Silahkan ubah tanggal semester.");
             return String.format("redirect:/semester/%s/update", semesterDTO.getId().toString());
@@ -171,12 +171,17 @@ public class SemesterController {
     public String deleteSemester(@PathVariable("id") UUID id, Model model, RedirectAttributes redirectAttrs) {
         // get semester by id
         var semester = semesterService.getSemesterById(id);
+        // get its name for alerts
+        var semesterName = semesterService.semesterNameGenerator(semester.getIsGanjil(), semester.getTahunAjaran());
+
         // check if semester is not related to any class
         if (semester.getClasses() == null || semester.getClasses().isEmpty()) {
             semesterService.deleteSemester(id);
+            redirectAttrs.addFlashAttribute("success",
+                    semesterName + " berhasil dihapus.");
         } else {
             redirectAttrs.addFlashAttribute("error",
-                    "Semester tidak bisa dihapus karena masih memiliki relasi dengan kelas lain.");
+                    semesterName + " tidak bisa dihapus karena masih memiliki relasi dengan kelas lain.");
             return "redirect:/semester/view-all";
         }
         return "redirect:/semester/view-all";
