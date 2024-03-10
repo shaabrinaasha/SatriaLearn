@@ -23,39 +23,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain chain(HttpSecurity http) throws Exception {
         http
-        .authorizeHttpRequests((customizer) -> 
-            customizer
-            .requestMatchers("/kelas/**").hasRole("admin")
-            // .requestMatchers("/static/**").permitAll()
-            // .requestMatchers("**.css").permitAll()
-            // .requestMatchers("**.js").permitAll()
-            // .anyRequest().permitAll()
-            // .authenticated()
-            .requestMatchers("/static/**", "**.css", "**.js", "/error", "/login").permitAll()
-            .anyRequest().authenticated()
-        )
-        .httpBasic(Customizer.withDefaults())
-        .formLogin((customizer) ->
-            customizer
-            .loginPage("/login")
-            .loginProcessingUrl("/login")
-        )
-        .logout(Customizer.withDefaults());
+                .authorizeHttpRequests((customizer) -> customizer
+                        .requestMatchers("/kelas/matpel/**").hasAnyRole("siswa", "guru")
+                        .requestMatchers("/kelas/siswa-view").hasRole("siswa")
+                        .requestMatchers("/kelas/**").hasRole("admin")
+                        .requestMatchers("/semester/**").hasRole("admin")
+                        // .requestMatchers("/static/**").permitAll()
+                        // .requestMatchers("**.css").permitAll()
+                        // .requestMatchers("**.js").permitAll()
+                        // .anyRequest().permitAll()
+                        // .authenticated()
+                        .requestMatchers("/static/**", "**.css", "**.js", "/error", "/login").permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .formLogin((customizer) -> customizer
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login"))
+                .logout(Customizer.withDefaults());
 
-        
         return http.build();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(
-			UserDetailsService userDetailsService,
-			PasswordEncoder passwordEncoder) {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
 
-		return new ProviderManager(authenticationProvider);
-	}
+        return new ProviderManager(authenticationProvider);
+    }
 
     @Bean
     public BCryptPasswordEncoder encoder() {
@@ -75,7 +73,7 @@ public class SecurityConfig {
             public String getCharacters() {
                 return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!.";
             }
-            
+
         });
 
         return rule;

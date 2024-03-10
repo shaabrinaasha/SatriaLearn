@@ -31,7 +31,8 @@ public class SiswaServiceImpl implements SiswaService {
     @Override
     public Siswa getSiswaById(UUID id) {
         var optionalSiswa = siswaDb.findById(id);
-        if (optionalSiswa.isEmpty()) throw new IllegalArgumentException("id not in database");
+        if (optionalSiswa.isEmpty())
+            throw new IllegalArgumentException("id not in database");
         return optionalSiswa.get();
     }
 

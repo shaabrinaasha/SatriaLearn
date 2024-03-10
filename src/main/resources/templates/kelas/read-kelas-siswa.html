@@ -91,19 +91,19 @@
     }
 
     .card-container {
-        display: flex;
-        width: 100%;
-        gap: 3rem;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 2rem;
-        margin-bottom: 3rem;
+      display: flex;
+      width: 100%;
+      gap: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 2rem;
+      margin-bottom: 3rem;
     }
 
     .svg-container {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
     }
   </style>
 
@@ -114,35 +114,35 @@
         <div class="vr"></div>
       </div>
       <div class="content">
-        <div class="dashboard-content px-3 pt-4">
-          <div th:replace="~{fragments/fragment :: header}"></div>
-          <div class="container">
-            <div>
-              <div
-                style="margin-top: 3rem; text-align: left;"
-              >
-                <!-- Breadcrumb -->
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb" style="margin-bottom: 0px;">
-                    <li class="breadcrumb-item" aria-current="page">Kelas</a></li>
-                  </ol>
-                </nav>
-              </div>
-
-              <div style="text-align: center">
-                <h2
-                  class="kelas-siswa"
-                  style="
-                    font-weight: bold;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 22px;
-                    color: #106ee8;
-                  "
-                >
-                  Kelas
-                </h2>
-              </div>
+        <div class="container">
+          <div class="dashboard-content px-3 pt-4">
+            <!-- Header -->
+            <div th:replace="~{fragments/fragment :: header}"></div>
+            <!-- Breadcrumb -->
+            <div style="margin-top: 1rem; text-align: left">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item active" aria-current="page">
+                    Kelas
+                  </li>
+                </ol>
+              </nav>
             </div>
+
+            <div style="text-align: center">
+              <h2
+                class="kelas-siswa"
+                style="
+                  font-weight: bold;
+                  font-family: 'Poppins', sans-serif;
+                  font-size: 22px;
+                  color: #106ee8;
+                "
+              >
+                Kelas
+              </h2>
+            </div>
+
             <!-- Error Alert -->
             <div
               class="alert alert-danger alert-dismissible"
@@ -173,42 +173,48 @@
             </div>
             <!-- Flex Div for Cards -->
             <div class="card-container">
-                <div
-              class="cards"
-              th:object="${listKelas}"
-              th:each="kelas : ${listKelas}"
-            >
-              <a th:href="@{/kelas/matpel/{id}(id=${kelas.id})}" class="card">
-                <div class="top">
-                  <!-- Access kelas's nama -->
-                  <p th:text="${kelas.nama}"></p>
-                </div>
-                <div class="bottom">
-                  <div>
-                    <div class="detail">
-                      <div class="svg-container">
-                        <!-- SVG tahun ajaran -->
-                        <img th:src="@{/calendar.svg}" alt="Wali Kelas Logo">
-                        <!-- Access kelas's tahun ajaran -->
-                        <div th:each="semester, iStat : ${kelas.semesters}">
+              <div
+                class="cards"
+                th:object="${listKelas}"
+                th:each="kelas : ${listKelas}"
+              >
+                <a th:href="@{/kelas/matpel/{id}(id=${kelas.id})}" class="card">
+                  <div class="top">
+                    <!-- Access kelas's nama -->
+                    <p th:text="${kelas.nama}"></p>
+                  </div>
+                  <div class="bottom">
+                    <div>
+                      <div class="detail">
+                        <div class="svg-container">
+                          <!-- SVG tahun ajaran -->
+                          <img
+                            th:src="@{/calendar.svg}"
+                            alt="Wali Kelas Logo"
+                          />
+                          <!-- Access kelas's tahun ajaran -->
+                          <div th:each="semester, iStat : ${kelas.semesters}">
                             <div th:if="${iStat.index == 0}">
-                                <span th:text="${semester.tahunAjaran}"></span>
+                              <span th:text="${semester.tahunAjaran}"></span>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="detail">
+                        <div class="svg-container">
+                          <!-- SVG wali -->
+                          <img
+                            th:src="@{/profile-head.svg}"
+                            alt="Wali Kelas Logo"
+                          />
+                          <!-- Access kelas's wali -->
+                          <span th:text="${kelas.wali.nama}"></span>
                         </div>
                       </div>
                     </div>
-                    <div class="detail">
-                        <div class="svg-container">
-                            <!-- SVG wali -->
-                            <img th:src="@{/profile-head.svg}" alt="Wali Kelas Logo">
-                            <!-- Access kelas's wali -->
-                            <span th:text="${kelas.wali.nama}"></span>
-                        </div>
-                      </div>
                   </div>
-                </div>
-              </a>
-            </div>
+                </a>
+              </div>
             </div>
           </div>
         </div>

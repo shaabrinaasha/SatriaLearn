@@ -47,7 +47,7 @@
                 </li>
                 <!-- Menu kelas: role siswa -->
                 <li th:if="${#lists.contains(roles, 'siswa')}" class="container d-flex align-items-center">
-                    <a href="#" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
+                    <a href="/kelas/siswa-view" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-easel" style="padding-right: 20px; -webkit-text-stroke: 1.5px;"></i>Kelas</span>
                     </a>
                 </li>
@@ -65,7 +65,7 @@
                 </li>
                 <!-- Menu kelas & semester: role admin  -->
                 <li th:if="${#lists.contains(roles, 'admin')}" class="container d-flex align-items-center">
-                    <a href="#" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
+                    <a href="/kelas-semester" class="text-decoration-none container" style="font-size: 20px; font-weight: bold;">
                         <span><i class="bi bi-easel" style="padding-right: 20px; -webkit-text-stroke: 1.5px;"></i>Kelas & Semester</span>
                     </a>
                 </li>
@@ -91,7 +91,7 @@
                 });
             </script>
         </div>
-        <div th:fragment="header" class="header" style="padding: 50px;">
+        <div th:fragment="header" class="header" style="padding: 0px;">
             <div class="container d-flex align-items-center justify-content-between">
                 <div class="container">
                     <!-- Judul admin -->
