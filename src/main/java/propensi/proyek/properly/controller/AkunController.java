@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Collection;
 import java.util.List;
+import java.util.*;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,7 @@ public class AkunController {
         var users = new ArrayList<UserDto>();
 
         for (User user : usersInDb) {
+            if (Objects.equals(user.getDecriminatorValue(), "admin")) continue;
             users.add(UserDto.fromUser(user));
         }
         model.addAttribute("users", users);
@@ -437,7 +439,7 @@ public class AkunController {
         roles.add(user.getDecriminatorValue());
         model.addAttribute("currentUser", user);
         model.addAttribute("roles", roles);
-        model.addAttribute("detailUser", true);
+        model.addAttribute("detailAkun", true);
         return new ModelAndView("akuns/detail-akun", model.asMap());
     }
 
