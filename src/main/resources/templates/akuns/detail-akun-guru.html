@@ -76,11 +76,62 @@
                     <div class="container text-center" style="padding: 30px 50px 30px 50px;">
                         <a type="button" class="btn btn-primary" th:href="@{/akuns/update/{id}(id = ${user.id})}">Ubah Detail Akun</a>
                     </div>
-                    <div class="container text-center" style="padding: 0px 50px 30px 50px;">
-                        <a type="button" class="btn btn-danger" th:href="@{/akuns/{id}/delete(id = ${user.id})}">Hapus Akun</a>
+                    <div class="container text-center" style="padding: 0px 50px 30px 50px;" id="button-hapus">
+                        <a type="button" class="btn btn-danger delete-button" th:id="${user.id}">Hapus Akun</a>
+                        <div class="modal fade" th:id="'modal-hapus-' + ${user.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Akun</strong></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Apakah Anda Yakin ingin menghapus akun ini? </br>
+                                        </br> Anda tidak dapat memulihkan data akun jika sudah dihapus!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/akuns/{id}/delete(id = ${user.id})}">Hapus</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            var userIdToDelete;
+            $(document).ready(function() {
+                // Add click event listener to all buttons with class "delete-button"
+                $('#button-hapus').on('click', '.delete-button', function() {
+                    // Get the ID of the clicked button
+                    userIdToDelete = $(this).attr('id');
+                    // Show the modal with the ID of the clicked button
+                    $('#modal-hapus-' + userIdToDelete).modal('show');
+                });
+
+                // Add click event listener to all buttons with class "btn-secondary"
+                $('#button-hapus').on('click', '.btn-secondary', function() {
+                    // Hide the modal
+                    $('#modal-hapus-' + userIdToDelete).modal('hide');
+                });
+
+                // Add click event listener to all buttons with class "btn-danger"
+                $('#button-hapus').on('click', '.btn-danger', function() {
+                    // Hide the modal
+                    $('#modal-hapus-' + userIdToDelete).modal('hide');
+                });
+
+                // Add click event listener to all buttons with class "close"
+                $('#button-hapus').on('click', '.close', function() {
+                    // Hide the modal
+                    $('#modal-hapus-' + userIdToDelete).modal('hide');
+                });
+
+            });
+        </script>
     </body>
 </html>
