@@ -1,6 +1,7 @@
 package propensi.proyek.properly.controller;
 
 import java.security.Principal;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.Collection;
@@ -18,12 +19,15 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import propensi.proyek.properly.Dto.akuns.NewUserRequestDto;
 import propensi.proyek.properly.Dto.akuns.UserDto;
+import propensi.proyek.properly.model.*;
 import propensi.proyek.properly.model.Siswa;
 import propensi.proyek.properly.model.Guru;
 import propensi.proyek.properly.model.Kelas;
@@ -59,8 +63,9 @@ public class AkunController {
         var users = new ArrayList<UserDto>();
 
         for (User user : usersInDb) {
-            if (Objects.equals(user.getDecriminatorValue(), "admin")) continue;
-            users.add(UserDto.fromUser(user));
+            if (user.getIsActive() && !Objects.equals(user.getDecriminatorValue(), "admin")){
+                users.add(UserDto.fromUser(user));
+            }
         }
         model.addAttribute("users", users);
         return new ModelAndView("/akuns/index", model.asMap());
@@ -427,24 +432,189 @@ public class AkunController {
         return "redirect:/akuns";
     }
 
-    @GetMapping("detail-akun")
+    @GetMapping("akun-saya")
     public String readAkunSaya(Authentication auth, Principal principal, Model model) {
         var username = principal.getName();
         var authorities = auth.getAuthorities();
         userService.addCurrentUserToModel(username, authorities, model);
 
-        return "akuns/detail-akun";
+        Collection<? extends GrantedAuthority> authorities2 = auth.getAuthorities();
+
+        List<String> roles = authorities2.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        String userRole = roles.get(0);
+
+        if (userRole.contains("Guru") || userRole.contains("guru")) {
+            User user = userService.getUserByUsername(username);
+            Guru guru = guruService.getGuruById(user.getId());
+
+            List<MataPelajaran> listMatpel = new ArrayList<>(guru.getMataPelajarans());
+
+            model.addAttribute("listMatpel", listMatpel);
+        }
+
+        if (userRole.contains("Siswa") || userRole.contains("siswa")) {
+            User user = userService.getUserByUsername(username);
+            Siswa siswa = siswaService.getSiswaById(user.getId());
+
+            Set<Kelas> kelasSiswa = siswa.getClasses();
+            List<Kelas> listKelas = new ArrayList<>(kelasSiswa);
+
+            List<MataPelajaran> listMatpel = new ArrayList<>();
+
+            for (Kelas kelas : listKelas) {
+                listMatpel.addAll(kelas.getMataPelajarans());
+            }
+
+            model.addAttribute("listKelas", listKelas);
+            model.addAttribute("listMatpel", listMatpel);
+        }
+
+        return "akuns/akun-saya";
     }
 
     @GetMapping("/akuns/{id}/details")
-    public ModelAndView readDetailAkun(@PathVariable UUID id, Model model) {
-        var user = userService.getUserById(id);
-        var roles = new ArrayList<String>();
-        roles.add(user.getDecriminatorValue());
-        model.addAttribute("currentUser", user);
-        model.addAttribute("roles", roles);
-        model.addAttribute("detailAkun", true);
-        return new ModelAndView("akuns/detail-akun", model.asMap());
+    public String detailAkun(@PathVariable UUID id, Authentication auth, Principal principal, Model model, RedirectAttributes redirectAttrs) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+        userService.addCurrentUserToModel(username, authorities, model);
+
+        User user = userService.getUserById(id);
+        String userRole = user.getDecriminatorValue();
+
+        if (userRole.contains("siswa") || userRole.contains("Siswa")) {
+            Siswa siswa = siswaService.getSiswaById(user.getId());
+
+            Set<Kelas> kelasSiswa = siswa.getClasses();
+            List<Kelas> listKelas = new ArrayList<>(kelasSiswa);
+
+            List<MataPelajaran> listMatpel = new ArrayList<>();
+
+            for (Kelas kelas : listKelas) {
+                listMatpel.addAll(kelas.getMataPelajarans());
+            }
+
+            model.addAttribute("user", user);
+            model.addAttribute("peran", "Siswa");
+            model.addAttribute("listKelas", listKelas);
+            model.addAttribute("listMatpel", listMatpel);
+
+            return "akuns/detail-akun-siswa";
+
+        } else if (userRole.contains("guru") || userRole.contains("Guru")) {
+            Guru guru = guruService.getGuruById(user.getId());
+
+            List<MataPelajaran> listMatpel = new ArrayList<>(guru.getMataPelajarans());
+
+            model.addAttribute("user", user);
+            model.addAttribute("peran", "Guru");
+            model.addAttribute("listMatpel", listMatpel);
+
+            return "akuns/detail-akun-guru";
+
+        } else if (userRole.contains("orang tua") || userRole.contains("Orang Tua")) {
+            model.addAttribute("user", user);
+            model.addAttribute("peran", "Orang Tua");
+
+            return "akuns/detail-akun-ortu";
+        } else if (userRole.contains("admin") || userRole.contains("Admin")) {
+            model.addAttribute("user", user);
+            model.addAttribute("peran", "Admin");
+
+            return "akuns/detail-akun-admin";
+        }
+
+        redirectAttrs.addFlashAttribute("error", "Akun tidak ditemukan");
+        return "redirect:/akuns";
     }
+
+    @GetMapping("/akun-saya/update-password")
+    public String updatePasswordFormPage(Model model, Principal principal) {
+        User user = userService.getUserByUsername(principal.getName());
+        UpdatePassword updatePassword = new UpdatePassword();
+
+        model.addAttribute("updatePassword", updatePassword);
+
+        return "akuns/update-password";
+    }
+
+    @PostMapping("/akun-saya/update-password")
+    public String updatePasswordSubmitPage(@Validated @ModelAttribute UpdatePassword updatePassword, BindingResult bindingResult, Principal principal, Model model, RedirectAttributes redirectAttrs) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        User user = userService.getUserByUsername(principal.getName());
+
+        String currentPassword = user.getPassword();
+        String oldPassword = updatePassword.getOldPassword(); // user input
+        String newPassword = updatePassword.getNewPassword(); // user input
+        String confirmationPass = updatePassword.getConfirmNewPassword(); // user input
+
+        // Checking if old password and current password match
+        boolean checkMatch = passwordEncoder.matches(oldPassword, currentPassword);
+
+        // Checking if new password and confirmation new password match
+        boolean checkConfirmation = newPassword.equals(confirmationPass);
+
+        // Checking if password is valid (min. 8 chars with upper case, lower case, and digit)
+        boolean checkValidation = false;
+
+        int passwordLength = newPassword.length();
+        int upChars = 0, lowChars = 0, digits = 0;
+
+        if (passwordLength < 8) {
+            checkValidation = false;
+        } else {
+            for (int i = 0; i < passwordLength; i++) {
+                char ch = newPassword.charAt(i);
+                if (Character.isUpperCase(ch))
+                    upChars = 1;
+                else if (Character.isLowerCase(ch))
+                    lowChars = 1;
+                else if (Character.isDigit(ch))
+                    digits = 1;
+            }
+
+            if (upChars == 1 && lowChars == 1 && digits == 1) {
+                checkValidation = true;
+            }
+        }
+
+        if (checkMatch && checkConfirmation && checkValidation) {
+            user.setPassword(passwordEncoder.encode(updatePassword.getNewPassword()));
+            userService.updateUser(user);
+            redirectAttrs.addFlashAttribute("success", "Password akun berhasil diubah.");
+            return "redirect:/akun-saya/update-password";
+        } else if (!checkMatch) {
+            redirectAttrs.addFlashAttribute("error", "Password lama tidak sesuai.");
+            return "redirect:/akun-saya/update-password";
+        } else if (!checkConfirmation) {
+            redirectAttrs.addFlashAttribute("error", "Password baru dan konfirmasi password baru tidak sesuai.");
+            return "redirect:/akun-saya/update-password";
+        } else if (!checkValidation) {
+            redirectAttrs.addFlashAttribute("error", "Password tidak valid. Password minimal 8 karakter yang terdiri dari karakter kecil, besar, dan numerik.");
+            return "redirect:/akun-saya/update-password";
+        } else {
+            return "redirect:/akun-saya/update-password";
+        }
+    }
+
+    @GetMapping("/akuns/{id}/delete")
+    public String deleteAkun(@PathVariable UUID id, RedirectAttributes redirectAttrs) {
+        User user = userService.getUserById(id);
+        String userRole = user.getDecriminatorValue();
+
+        if (userRole.contains("admin") || userRole.contains("Admin")) {
+            redirectAttrs.addFlashAttribute("error", "Akun admin tidak dapat dihapus.");
+            return "redirect:/akuns";
+        } else {
+            user.setIsActive(false);
+            userService.updateUser(user);
+
+            redirectAttrs.addFlashAttribute("success", "Akun berhasil dihapus.");
+            return "redirect:/akuns";
+        }
+    }
+
 
 }
