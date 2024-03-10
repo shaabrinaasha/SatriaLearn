@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mata Pelajaran-Siswa</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
@@ -53,7 +54,9 @@
         border-top-right-radius: 6px;
         overflow: hidden;
         padding-left: 20px;
-        padding-bottom: 5px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        padding-top: 10px;
     }
 
     .top p {
@@ -77,6 +80,7 @@
         font-size: 15px;
         text-decoration: none;
         color: #4F4F4F;
+        margin-left: 10px;
     }
 
     .detail1,
@@ -90,16 +94,15 @@
         padding-right: 20px;
     }
 
+    .svg-container {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
 </style>
 
 <body>
-    <div class="alert alert-danger alert-dismissible" role="alert" style="display: none;" th:if="${error}" th:text="${error}">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <div class="alert alert-success alert-dismissible" role="alert" style="display: none;" th:if="${success}" th:text="${success}">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
     <div class="main-container d-flex">
         <div th:replace="~{fragments/fragment :: sidebar}"></div>
         <div class="d-flex">
@@ -109,9 +112,9 @@
             <div class="dashboard-content px-3 pt-4">
                 <div th:replace="~{fragments/fragment :: header}"></div>
                 <div class="container" th:object="${kelas}">
-                    <!-- Bread Crumb -->
                     <div >
-                        <div style="margin-top: 3rem; margin-bottom: 1rem; text-align: left;">
+                        <!-- Bread Crumb -->
+                        <div style="margin-bottom: 1rem; text-align: left;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                   <li class="breadcrumb-item"><a href="/kelas/siswa-view">Kelas</a></li>
@@ -125,6 +128,14 @@
                             <a href="/kelas/siswa-view"><i class="bi bi-chevron-left"></i></a>
                         </div>
 
+                        <!-- Alert -->
+                        <div class="alert alert-danger alert-dismissible" role="alert" style="display: none;" th:if="${error}" th:text="${error}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="alert alert-success alert-dismissible" role="alert" style="display: none;" th:if="${success}" th:text="${success}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
                         <!-- Title Page -->
                         <div style="margin-bottom: 1rem; text-align: center;">
                             <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" th:text="${kelas.nama}" >Kelas 10 A</h2>
@@ -133,6 +144,7 @@
                         </div>
                     </div>
         
+                    <!-- Content -->
                     <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
                         <a href="#" class="card">
                             <div class="top">
@@ -141,12 +153,16 @@
                             <div class="bottom">
                                 <div>
                                     <div class="detail1">
-                                        <span class="guru-matpel" th:text="${m.guru.nama}"><i class="bi bi-person-fill guru-matpel" style="padding-right: 20px;"></i>Budi</span>
+                                        <img th:src="@{/profile-head.svg}" alt="Wali Kelas Logo">
+                                        <!-- <i class="bi bi-person-fill" style="padding-right: 20px;"></i> -->
+                                        <span class="guru-matpel" th:text="${m.guru.nama}">
+                                            Budi
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </a>
-                    </div>  
+                    </div>                      
                 </div>
             </div>
         </div>

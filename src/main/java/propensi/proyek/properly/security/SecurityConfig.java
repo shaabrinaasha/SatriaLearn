@@ -24,6 +24,9 @@ public class SecurityConfig {
     public SecurityFilterChain chain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((customizer) -> customizer
+                        .requestMatchers("/matpel").hasAnyRole("admin", "guru")
+                        .requestMatchers("/akuns/**").hasRole("admin")
+                        .requestMatchers("/matpel/**").hasRole("admin")
                         .requestMatchers("/kelas/matpel/**").hasAnyRole("siswa", "guru")
                         .requestMatchers("/kelas/siswa-view").hasRole("siswa")
                         .requestMatchers("/kelas/**").hasRole("admin")

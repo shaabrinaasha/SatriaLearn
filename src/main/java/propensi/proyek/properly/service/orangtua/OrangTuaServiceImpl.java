@@ -37,19 +37,19 @@ public class OrangTuaServiceImpl implements OrangTuaService {
     @Override
     public void updateOrangTua(OrangTua orangTua) {
         if (orangTua.getSiswas() != null) {
-            for (Siswa siswa: orangTua.getSiswas()) {
+            for (Siswa siswa : orangTua.getSiswas()) {
                 siswa.setOrangTua(orangTua);
                 siswaService.updateSiswa(siswa);
             }
         }
         orangTuaDb.save(orangTua);
-
     }
 
     @Override
     public OrangTua getOrangTuaById(UUID id) {
         var optionalOrtu = orangTuaDb.findById(id);
-        if (optionalOrtu.isEmpty()) throw new IllegalArgumentException("id not in database");
+        if (optionalOrtu.isEmpty())
+            throw new IllegalArgumentException("id not in database");
         return optionalOrtu.get();
     }
 

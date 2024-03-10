@@ -284,17 +284,23 @@ public class AkunController {
         } else if (userRole.contains("orang tua") || userRole.contains("Orang Tua")) {
             OrangTua oldOrtu = (OrangTua) oldUser;
             akun.setNama(oldOrtu.getNama());
-            // List<UUID> anak = new ArrayList<>();
-            // for (Siswa siswa : oldOrtu.getSiswas()) {
-            // anak.add(siswa.getId());
-            // }
+    
+            List<UUID> anak = new ArrayList<>();
+            for (Siswa siswa : oldOrtu.getSiswas()) {
+                anak.add(siswa.getId());
+            }
 
-            akun.setOrangTuaSiswaOf(oldOrtu.getSiswas());
+            var siswa = siswaService.getAllSiswaWithUndocumentedParent();
+            for (Siswa s : oldOrtu.getSiswas()) {
+                siswa.add(s);
+            }
+
+            akun.setOrangTuaOf(anak);
             System.out.println("JUMLAH ANAK");
             System.out.println(oldOrtu.getSiswas().size());
             model.addAttribute("akun", akun);
             model.addAttribute("peran", "Orang Tua");
-            model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+            model.addAttribute("siswas", siswa);
             return "akuns/update-akun-ortu";
         }
 
@@ -348,7 +354,7 @@ public class AkunController {
                 oldSiswa.setNipd(newNIPD);
             }
 
-            siswaService.addSiswa(oldSiswa);
+            siswaService.updateSiswa(oldSiswa);
             redirectAttrs.addFlashAttribute("success", "Akun Siswa berhasil diubah");
             return "redirect:/akuns";
 
@@ -378,7 +384,7 @@ public class AkunController {
                 oldGuru.setNuptk(newNUPTK);
             }
 
-            guruService.addGuru(oldGuru);
+            guruService.updateGuru(oldGuru);
             redirectAttrs.addFlashAttribute("success", "Akun Guru berhasil diubah");
             return "redirect:/akuns";
 
@@ -387,12 +393,7 @@ public class AkunController {
             String oldNama = oldOrtu.getNama();
             List<Siswa> oldAnak = oldOrtu.getSiswas();
 
-            String newNama = akun.getNama();
-            // List<Siswa> newAnak = akun.getOrangTuaSiswaOf();
-            // System.out.println(newAnak);
-
-            List<UUID> newAnak = akun.getOrangTuaOf();
-            List<Siswa> newSiswa = new ArrayList<>();
+            String newNama = akun.getNama();        
 
             if (!oldNama.equals(newNama)) {
                 if (newNama.isEmpty()) {
@@ -402,28 +403,64 @@ public class AkunController {
                 }
 
                 oldOrtu.setNama(newNama);
+            } 
+            
+            List<UUID> newAnak = akun.getOrangTuaOf(); 
+
+            for (UUID id : newAnak) {
+                try {
+                    var siswa = siswaService.getSiswaById(id);
+                    if (siswa.getOrangTua() != null && !siswa.getOrangTua().getId().equals(oldOrtu.getId())) {
+                        redirectAttrs.addFlashAttribute("error", "Orang Tua sudah terdaftar di sistem");
+                        return "redirect:/akuns/update/" + oldOrtu.getId();
+
+                    }
+                } catch (IllegalArgumentException e) {
+                    redirectAttrs.addFlashAttribute("error", "Mohon isi setiap field setiap anak");
+                    return "redirect:/akuns/update/" + oldOrtu.getId();
+                } catch (InvalidDataAccessApiUsageException e) {
+                    redirectAttrs.addFlashAttribute("error", "Id anak tidak ditemukan");
+                    return "redirect:/akuns/update/" + oldOrtu.getId();
+                }
+            }
+            
+            for (Siswa siswa: oldOrtu.getSiswas()) {
+                siswa.setOrangTua(null);
+                siswaService.updateSiswa(siswa);
             }
 
-            if (newAnak != null) {
+            if (oldAnak.size() == 0 && newAnak.size() > 0){
+                var newSiswa = new ArrayList<Siswa>();
                 for (UUID id : newAnak) {
                     newSiswa.add(siswaService.getSiswaById(id));
                 }
-                System.out.println("Jumlah anak baru");
-                System.out.println(newAnak.size());
-            }
-
-            if (oldAnak.isEmpty() && !newSiswa.isEmpty()) {
+        
                 oldOrtu.setSiswas(newSiswa);
-            } else if (!oldAnak.isEmpty() && newSiswa.isEmpty()) {
-                // kemungkinan tidak diperlukan
-                oldOrtu.setSiswas(null);
-            } else if (!oldAnak.isEmpty() && !newSiswa.isEmpty()) {
-                if (!(oldAnak.containsAll(newSiswa) && newSiswa.containsAll(oldAnak))) {
+                System.out.println(oldOrtu.getSiswas().size());
+                System.out.println("dari tidak ada menjadi ada anak");
+
+            } else if (oldAnak.size() > 0 && newAnak.size() == 0 ){
+                redirectAttrs.addFlashAttribute("error", "Akun Orang Tua tidak dapat diubah karena field anak harus diisi");
+                return "redirect:/akuns/update/" + oldOrtu.getId();
+
+            } else if (oldAnak.size() > 0 && newAnak.size() > 0){
+
+                if (!(oldAnak.containsAll(newAnak) && newAnak.containsAll(oldAnak))) {
+                    var newSiswa = new ArrayList<Siswa>();
+                    for (UUID id : newAnak) {
+                        newSiswa.add(siswaService.getSiswaById(id));
+                    }
                     oldOrtu.setSiswas(newSiswa);
+                    System.out.println(oldOrtu.getSiswas().size());
+                    System.out.println("dari ada menjadi ada anak");
                 }
             }
+            
+            System.out.println("FINAL ANAK");
 
-            orangTuaService.addOrangTua(oldOrtu);
+            orangTuaService.updateOrangTua(oldOrtu);
+            System.out.println(oldOrtu.getSiswas().size());
+            System.out.println(oldOrtu);
             redirectAttrs.addFlashAttribute("success", "Akun Orang Tua berhasil diubah");
             return "redirect:/akuns";
         }
@@ -616,5 +653,61 @@ public class AkunController {
         }
     }
 
+    @PostMapping(value = "/akuns/update", params = {"add=add"})
+    public ModelAndView addAnakUpdate(@ModelAttribute NewUserRequestDto user, Model model) {
+        // model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+        // model.addAttribute("selected", "orang tua");
+
+        // List<Siswa> orangTuaOfs = akun.getOrangTuaSiswaOf();
+        // orangTuaOfs.add(null);
+        // akun.setOrangTuaSiswaOf(orangTuaOfs);
+        // System.out.println("JUMLAH ANAK AFTER ADD");
+        // System.out.println(akun.getOrangTuaSiswaOf().size());
+        // model.addAttribute("akun", akun);
+
+        var orangTuaOfs = user.getOrangTuaOf();
+        orangTuaOfs.add(null);
+
+        var siswa = siswaService.getAllSiswaWithUndocumentedParent();
+        var oldOrtu = orangTuaService.getOrangTuaById(user.getId());
+        for (Siswa s : oldOrtu.getSiswas()) {
+            siswa.add(s);
+        }
+        user.setOrangTuaOf(orangTuaOfs);
+
+        model.addAttribute("akun", user);
+        model.addAttribute("siswas", siswa);
+        model.addAttribute("selected", "orang tua");
+
+        return new ModelAndView("akuns/update-akun-ortu", model.asMap());
+    }
+
+    @PostMapping(value = "/akuns/update", params = {"remove"})
+    public ModelAndView removeAnakUpdate(@RequestParam(value = "remove", defaultValue = "-1") Integer remove, @ModelAttribute NewUserRequestDto user, Model model) {
+        // model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
+        // model.addAttribute("selected", "orang tua");
+
+        // var orangTuaOfs = akun.getOrangTuaSiswaOf();
+        // Siswa removed = orangTuaOfs.remove(remove.intValue());
+        // akun.setOrangTuaSiswaOf(orangTuaOfs);
+        // model.addAttribute("akun", akun);
+
+        var orangTuaOfs = user.getOrangTuaOf();
+        UUID removed = orangTuaOfs.remove(remove.intValue());
+
+        var siswa = siswaService.getAllSiswaWithUndocumentedParent();
+        var oldOrtu = orangTuaService.getOrangTuaById(user.getId());
+        for (Siswa s : oldOrtu.getSiswas()) {
+            siswa.add(s);
+        }
+
+        user.setOrangTuaOf(orangTuaOfs);
+        model.addAttribute("akun", user);
+        model.addAttribute("siswas", siswa);
+        model.addAttribute("selected", "orang tua");
+
+
+        return new ModelAndView("akuns/update-akun-ortu", model.asMap());
+    }
 
 }

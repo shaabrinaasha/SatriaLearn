@@ -65,23 +65,58 @@
               id="input-nama"
             />
           </div>
+<!-- 
+          <div th:if="${#lists.isEmpty(akun.orangTuaSiswaOf)}">
+            <div class="d-flex justify-content-between mb-1">
+              <label class="form-label m-0 me-4 pt-2">Orang Tua Dari</label>
+              <button class="btn btn-light" name="add" value="add" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+              </button>
+            </div>
+            <div th:each="anak, itr: *{orangTuaSiswaOf}" id="input-anak" class="d-flex mb-3">
+              <select class="form-select input-anak me-2" th:field="*{orangTuaSiswaOf[__${itr.index}__]}">
+                <option th:value="null" th:unless="${#lists.isEmpty(siswas)}" th:text="'Pilih Siswa'" selected></option>
+                <option th:value="null" th:if="${#lists.isEmpty(siswas)}" th:text="'Tidak ada akun siswa yang belum terhubung dengan Orang Tua'"selected></option>
+                <option th:each="siswa: ${siswas}" th:value="${siswa}" th:text="${siswa.nama}"></option>
+              </select>
+              <button class="btn btn-close pt-4" type="submit" name="remove" th:value="${itr.index}">
+              </button>
+            </div>
+          </div> -->
 
-          <div class="form-group" th:if="${#lists.isEmpty(akun.orangTuaSiswaOf)}">
+          <!-- <div class="form-group" th:if="${#lists.isEmpty(akun.orangTuaSiswaOf)}">
             <label for="input-anak" class="form-label">Orang Tua Dari</label>
             <select th:field="*{orangTuaOf}" id="input-anak" class="form-select">
                 <option th:value="null" th:text="'Pilih Siswa'" selected></option>
                 <option th:each="siswa: ${siswas}" th:value="${siswa.id}" th:text="${siswa.nama}"></option>
             </select>
-          </div>
+          </div> -->
+
           
-          <div th:each="anak: ${akun.orangTuaSiswaOf}">
+          <div >
             <div class="form-group">
-              <label for="input-anak" class="form-label">Orang Tua Dari</label>
-              <select th:field="*{orangTuaSiswaOf}" id="input-anak" class="form-select">
-                <!-- <option th:value="null" th:text="'Pilih Siswa'" selected></option> -->
-                <option th:value="${anak.id}" th:text="${anak.nama}" ></option>
-                <option th:each="siswa: ${siswas}" th:value="${siswa.id}" th:text="${siswa.nama}" ></option>
-              </select>
+              <div class="d-flex justify-content-between mb-1">
+                <label class="form-label m-0 me-4 pt-2">Orang Tua Dari</label>
+                <button class="btn btn-light" name="add" value="add" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                  </svg>
+                </button>
+              </div>
+              <div th:each="anak, itr: *{orangTuaOf}" id="input-anak" class="d-flex mb-3">
+                <select class="form-select input-anak me-2" th:field="*{orangTuaOf[__${itr.index}__]}">
+                  <!-- <option th:value="${anak.id}" th:text="${anak.nama}" th:if="${anak != null}"></option> -->
+                  <option th:value="null" th:unless="${#lists.isEmpty(siswas)}" th:text="'Pilih Siswa'" selected></option>
+                  <option th:value="null" th:if="${#lists.isEmpty(siswas)}" th:text="'Tidak ada akun siswa yang belum terhubung dengan Orang Tua'"selected></option>
+                  <option th:each="siswa: ${siswas}" th:value="${siswa.id}" th:text="${siswa.nama}" th:if="${siswa.id} == ${anak}" selected></option>
+                  <option th:each="siswa: ${siswas}" th:value="${siswa.id}" th:text="${siswa.nama}" th:unless="${siswa.id} == ${anak}"></option>
+                </select>
+                <button class="btn btn-close pt-4" name="remove" th:value="${itr.index}">
+                </button>
+              </div>
+              
             </div>
           </div>
 
@@ -94,6 +129,28 @@
                   </select>
               </div>
           </div> -->
+
+          <!-- <div>
+            <div class="d-flex justify-content-between mb-1">
+              <label class="form-label m-0 me-4 pt-2">Orang Tua Dari</label>
+              <button class="btn btn-light" name="add" value="add" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+              </button>
+            </div> -->
+
+            <!-- <div th:each="anak, ${akun.orangTuaSiswaOf}" id="input-anak" class="d-flex mb-3">
+              <select class="form-select input-anak me-2" th:field="*{orangTuaSiswaOf}">
+                <option th:value="null" th:unless="${#lists.isEmpty(siswas)}" th:text="'Pilih Siswa'" selected></option>
+                <option th:value="null" th:if="${#lists.isEmpty(siswas)}" th:text="'Tidak ada akun siswa yang belum terhubung dengan Orang Tua'"selected></option>
+                <option th:value="${anak}" th:text="${anak.nama}"></option>
+                <option th:each="siswa: ${siswas}" th:value="${siswa.id}" th:text="${siswa.nama}"></option>
+              </select>
+              <button class="btn btn-close pt-4" type="submit" name="remove" th:value="${itr.index}">
+              </button>
+            </div> -->
+
       
           <input
             type="hidden"
@@ -101,7 +158,10 @@
             th:value="${_csrf.token}"
           />
 
-          <button name="save" type="submit" class="btn btn-primary">Submit</button>
+          <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
+            <button type="submit" class="btn btn-outline-success" name="save">Simpan</button>
+            <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/akuns">Kembali</a>
+        </div>
         </div>
       </form>
     </div>

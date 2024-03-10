@@ -93,13 +93,6 @@ body {
 </style>
 
 <body>
-    <div class="alert alert-danger alert-dismissible" role="alert" style="display: none;" th:if="${error}" th:text="${error}">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <div class="alert alert-success alert-dismissible" role="alert" style="display: none;" th:if="${success}" th:text="${success}">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
     <div class="main-container d-flex">
         <div th:replace="~{fragments/fragment :: sidebar}"></div>
         <div class="d-flex">
@@ -107,27 +100,39 @@ body {
         </div>
         <div class="content">
             <div class="dashboard-content px-3 pt-4">
+                <!-- Header -->
                 <div th:replace="~{fragments/fragment :: header}"></div>
+
                 <div class="container">
                     <div>
-                        <div style="margin-top: 3rem; margin-bottom: 1rem; text-align: left;">
+                        <!-- Breadcrumb -->
+                        <div style="margin-bottom: 1rem; text-align: left;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                   <li class="breadcrumb-item"><a href="#">Mata Pelajaran</a></li>
                                 </ol>
                             </nav>
                         </div>
-                     
+
+                        <!-- Alert -->
+                        <div class="alert alert-danger alert-dismissible" role="alert" style="display: none;" th:if="${error}" th:text="${error}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div class="alert alert-success alert-dismissible" role="alert" style="display: none;" th:if="${success}" th:text="${success}">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Title -->
                         <div style="margin-bottom: 1rem; text-align: center;">
-                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" >Mata Pelajaran</h2>
+                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins'; font-size: 22px; color: #106EE8;" >Mata Pelajaran</h2>
                             <br>
                         </div>
                     </div>
         
+                    <!-- Content -->
                     <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
                         <a href="#" class="card">
                             <div class="top">
-                                <!-- Access the nama attribute of each matpel object -->
                                 <p class="nama-matpel" th:text="${m.nama}">Matematika</p>
                             </div>
                             <div class="bottom">
