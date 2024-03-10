@@ -44,10 +44,13 @@
             <div class="dashboard-content px-3 pt-4">
                 <div th:replace="~{fragments/fragment :: header}"></div>
             </div>
-            <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}" th:text="${error}">
+
+            <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+                <div th:text="${error}"></div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}" th:text="${success}">
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+                <div th:text="${success}"></div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
 
@@ -55,12 +58,12 @@
                 <div>
                     <div style="margin-top: 3rem; margin-bottom: 2rem; text-align: center">
                         <h2 style="
-              font-weight: bold;
-              margin-bottom: 0.75rem;
-              font-family: 'Poppins', sans-serif;
-              font-size: 18px;
-              color: #106ee8;
-            ">
+        font-weight: bold;
+        margin-bottom: 0.75rem;
+        font-family: 'Poppins', sans-serif;
+        font-size: 18px;
+        color: #106ee8;
+      ">
                             Manajemen Akun
                         </h2>
                         <!-- <a class="btn" href="/mapel/add" style="background-color: #31318B;  color: white;">Tambah Mata Pelajaran</a> -->
@@ -68,48 +71,27 @@
                     </div>
                     <div style="float: right">
                         <a th:href="@{/akuns/create}" class="btn btn-primary">Buat Akun Baru</a
-            >
-          </div>
-          <table id="akun-table" style="width: 100%" class="table table-striped">
-            <thead>
-            <tr>
-              <th scope="col">Nama</th>
-              <th scope="col">Peran</th>
-              <th scope="col">Nomor Identifikasi</th>
-              <th scope="col">Aksi</th>
-              <th scope="col">Kelas</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user, iterationStatus : ${users}">
-              <td th:text="${user.nama}"></td>
-              <td th:text="${user.peran}"></td>
-              <td th:text="${user.nomorIdentifikasi}"></td>
-              <td>
-                <a th:href="@{/akuns/{id}/details(id = ${user.id})}" class="link-primary">Detail</a>
+      >
+    </div>
+    <table id="akun-table" style="width: 100%" class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">Nama</th>
+        <th scope="col">Peran</th>
+        <th scope="col">Nomor Identifikasi</th>
+        <th scope="col">Aksi</th>
+        <th scope="col">Kelas</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="user, iterationStatus : ${users}">
+        <td th:text="${user.nama}"></td>
+        <td th:text="${user.peran}"></td>
+        <td th:text="${user.nomorIdentifikasi}"></td>
+        <td>
+          <a th:href="@{/akuns/{id}/details(id = ${user.id})}" class="link-primary">Detail</a>
                         <a th:href="@{/akuns/update/{id}(id = ${user.id})}" class="link-success">Edit</a>
-                        <a type="button" th:id="${user.id}" class="link-danger delete-button">Hapus</a>
-                        <!-- Modal -->
-                        <div class="modal fade" th:id="'modal-hapus-' + ${user.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Akun</strong></h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Apakah Anda Yakin ingin menghapus akun ini? </br>
-                                        </br> Anda tidak dapat memulihkan data akun jika sudah dihapus!
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/akuns/{id}/delete(id = ${user.id})}">Hapus</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <a th:href="@{/akuns/{id}/delete(id = ${user.id})}" class="link-danger">Hapus</a>
                         </td>
                         <td th:text="${user.kelas}"></td>
                         </tr>
@@ -118,48 +100,96 @@
                         <br />
                     </div>
                 </div>
+                <table id="akun-table" style="width: 100%" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Peran</th>
+                            <th scope="col">Nomor Identifikasi</th>
+                            <th scope="col">Aksi</th>
+                            <th scope="col">Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user, iterationStatus : ${users}">
+                            <td th:text="${user.nama}"></td>
+                            <td th:text="${user.peran}"></td>
+                            <td th:text="${user.nomorIdentifikasi}"></td>
+                            <td>
+                                <a th:href="@{/akuns/{id}/details(id = ${user.id})}" class="link-primary">Detail</a>
+                                <a th:href="@{/akuns/update/{id}(id = ${user.id})}" class="link-success">Edit</a>
+                                <a type="button" th:id="${user.id}" class="link-danger delete-button">Hapus</a>
+                                <!-- Modal -->
+                                <div class="modal fade" th:id="'modal-hapus-' + ${user.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Akun</strong></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Apakah Anda Yakin ingin menghapus akun ini? </br>
+                                                </br> Anda tidak dapat memulihkan data akun jika sudah dihapus!
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/akuns/{id}/delete(id = ${user.id})}">Hapus</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td th:text="${user.kelas}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
             </div>
         </div>
+    </div>
+    </div>
 
 
-        <script type="text/javascript">
-            var userIdToDelete;
-            $(document).ready(function() {
-                $("#akun-table").DataTable({
-                    columnDefs: [{
-                        target: 4,
-                        visible: false
-                    }]
-                });
-
-                // Add click event listener to all buttons with class "delete-button"
-                $('#akun-table').on('click', '.delete-button', function() {
-                    // Get the ID of the clicked button
-                    userIdToDelete = $(this).attr('id');
-                    // Show the modal with the ID of the clicked button
-                    $('#modal-hapus-' + userIdToDelete).modal('show');
-                });
-
-                // Add click event listener to all buttons with class "btn-secondary"
-                $('#akun-table').on('click', '.btn-secondary', function() {
-                    // Hide the modal
-                    $('#modal-hapus-' + userIdToDelete).modal('hide');
-                });
-
-                // Add click event listener to all buttons with class "btn-danger"
-                $('#akun-table').on('click', '.btn-danger', function() {
-                    // Hide the modal
-                    $('#modal-hapus-' + userIdToDelete).modal('hide');
-                });
-
-                // Add click event listener to all buttons with class "close"
-                $('#akun-table').on('click', '.close', function() {
-                    // Hide the modal
-                    $('#modal-hapus-' + userIdToDelete).modal('hide');
-                });
-
+    <script type="text/javascript">
+        var userIdToDelete;
+        $(document).ready(function() {
+            $("#akun-table").DataTable({
+                columnDefs: [{
+                    target: 4,
+                    visible: false
+                }]
             });
-        </script>
+
+            // Add click event listener to all buttons with class "delete-button"
+            $('#akun-table').on('click', '.delete-button', function() {
+                // Get the ID of the clicked button
+                userIdToDelete = $(this).attr('id');
+                // Show the modal with the ID of the clicked button
+                $('#modal-hapus-' + userIdToDelete).modal('show');
+            });
+
+            // Add click event listener to all buttons with class "btn-secondary"
+            $('#akun-table').on('click', '.btn-secondary', function() {
+                // Hide the modal
+                $('#modal-hapus-' + userIdToDelete).modal('hide');
+            });
+
+            // Add click event listener to all buttons with class "btn-danger"
+            $('#akun-table').on('click', '.btn-danger', function() {
+                // Hide the modal
+                $('#modal-hapus-' + userIdToDelete).modal('hide');
+            });
+
+            // Add click event listener to all buttons with class "close"
+            $('#akun-table').on('click', '.close', function() {
+                // Hide the modal
+                $('#modal-hapus-' + userIdToDelete).modal('hide');
+            });
+
+        });
+    </script>
 </body>
 
 </html>

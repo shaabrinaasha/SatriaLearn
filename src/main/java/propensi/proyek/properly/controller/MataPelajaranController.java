@@ -80,7 +80,7 @@ public class MataPelajaranController {
             model.addAttribute("listMatpel", listMatpel);
             return "matpel/read-matpel-guru";
         }
-        redirectAttrs.addFlashAttribute("error","Role tidak memiliki akses ke mata pelajaran");
+        redirectAttrs.addFlashAttribute("error", "Role tidak memiliki akses ke mata pelajaran");
         return "home";
     }
 
@@ -150,6 +150,7 @@ public class MataPelajaranController {
         guru.getMataPelajarans().add(matpel);
         kelas.getMataPelajarans().add(matpel);
 
+        redirectAttrs.addFlashAttribute("success", "Mata Pelajaran " + matpel.getNama() + " berhasil dibuat");
         return "redirect:/matpel";
     }
 
@@ -184,21 +185,37 @@ public class MataPelajaranController {
         Kelas newKelas = matpel.getKelas();
 
         if (!oldNama.equals(newNama)) {
-            if (newNama.isEmpty()) {
-                redirectAttrs.addFlashAttribute("error", "Mata Pelajaran tidak dapat diubah karena field nama kosong");
-                return "redirect:/matpel/update/" + matpel.getId();
-            }
-            // nama matpel berubah
-            // cek apakah di kelas matpel lama sudah ada nama matpel baru
-            for (MataPelajaran mataPelajaran : oldKelas.getMataPelajarans()) {
-                if (mataPelajaran.getNama().equals(newNama)) {
-                    redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + newNama
-                            + " tidak dapat ditambahkan karena sudah ada di kelas" + oldKelas.getNama());
-                    return "redirect:/matpel/update/" + oldMatpel.getId();
+            if (oldKelas.getId() != newKelas.getId()) {
+                // nama dan kelas matpel berubah
+                // cek apakah di kelas matpel baru sudah ada nama matpel baru
+                for (MataPelajaran mataPelajaran : newKelas.getMataPelajarans()) {
+                    if (mataPelajaran.getNama().equals(newNama)) {
+                        redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + newNama
+                                + " tidak dapat ditambahkan karena sudah ada di kelas" + newKelas);
+                        model.addAttribute("matpel", oldMatpel);
+                        return "redirect:/matpel/update/" + oldMatpel.getId();
+                    }
                 }
+                oldMatpel.setNama(newNama);
+            } else {
+                if (newNama.isEmpty()) {
+                    redirectAttrs.addFlashAttribute("error",
+                            "Mata Pelajaran tidak dapat diubah karena field nama kosong");
+                    return "redirect:/matpel/update/" + matpel.getId();
+                }
+                // nama matpel berubah
+                // cek apakah di kelas matpel lama sudah ada nama matpel baru
+                for (MataPelajaran mataPelajaran : oldKelas.getMataPelajarans()) {
+                    if (mataPelajaran.getNama().equals(newNama)) {
+                        redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + newNama
+                                + " tidak dapat ditambahkan karena sudah ada di kelas" + oldKelas.getNama());
+                        return "redirect:/matpel/update/" + oldMatpel.getId();
+                    }
+                }
+                oldMatpel.setNama(newNama);
             }
-            oldMatpel.setNama(newNama);
-        } else if (oldKelas.getId() != newKelas.getId()) {
+        }
+        if (oldKelas.getId() != newKelas.getId()) {
             // kelas matpel berubah
             // cek apakah di kelas matpel baru sudah ada nama matpel lama
             for (MataPelajaran mataPelajaran : newKelas.getMataPelajarans()) {
@@ -218,18 +235,6 @@ public class MataPelajaranController {
             }
             oldMatpel.setKelas(newKelas);
             newKelas.getMataPelajarans().add(mataPelajaranService.getMatpelById(matpel.getId()));
-        } else if (!oldNama.equals(matpel.getNama()) && oldKelas.getId() != newKelas.getId()) {
-            // nama dan kelas matpel berubah
-            // cek apakah di kelas matpel baru sudah ada nama matpel baru
-            for (MataPelajaran mataPelajaran : newKelas.getMataPelajarans()) {
-                if (mataPelajaran.getNama().equals(newNama)) {
-                    redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + newNama
-                            + " tidak dapat ditambahkan karena sudah ada di kelas" + newKelas);
-                    model.addAttribute("matpel", oldMatpel);
-                    return "redirect:/matpel/update/" + oldMatpel.getId();
-                }
-            }
-            oldMatpel.setNama(newNama);
         }
         if (oldGuru.getId() != newGuru.getId()) {
             Iterator<MataPelajaran> iterator = oldGuru.getMataPelajarans().iterator();
@@ -245,16 +250,16 @@ public class MataPelajaranController {
 
         // save matpel
         mataPelajaranService.addMataPelajaran(oldMatpel);
-
+        redirectAttrs.addFlashAttribute("success", "Mata Pelajaran " + matpel.getNama() + " berhasil diubah");
         return "redirect:/matpel";
     }
 
     @GetMapping("/matpel/delete/{id}")
-    public String deleteMapelForm(@PathVariable UUID id, Model model, RedirectAttributes redirectAttrs,
+    public String deleteMatpelForm(@PathVariable UUID id, Model model, RedirectAttributes redirectAttrs,
             Principal principal) {
         MataPelajaran matpel = mataPelajaranService.getMatpelById(id);
         mataPelajaranService.deleteMatpel(matpel);
-        redirectAttrs.addFlashAttribute("success", "Mapel " + matpel.getNama() + " berhasil dihapus");
+        redirectAttrs.addFlashAttribute("success", "Mata Pelajaran " + matpel.getNama() + " berhasil dihapus");
         return "redirect:/matpel";
     }
 
