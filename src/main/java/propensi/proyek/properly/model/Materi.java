@@ -1,54 +1,51 @@
 package propensi.proyek.properly.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.GenerationType;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "mata_pelajaran")
-public class MataPelajaran implements Serializable {
-
+@Table(name = "materi")
+public class Materi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotNull
-    @Column(nullable = false)
-    private String nama;
+    @Column(name = "judul", nullable = false)
+    private String judul;
+
+    @NotNull
+    @Column(name = "deskripsi", nullable = false)
+    private String deskripsi;
+
+    @NotNull
+    @Column(nullable = false, name = "file")
+    private String file;
+
+    @NotNull
+    @Column(name="tanggal_upload", nullable = false)
+    private LocalDate tanggalUpload;
 
     @ManyToOne
-    @JoinColumn(name = "id_guru",  referencedColumnName = "id")
-    private Guru guru;
-
-    @ManyToOne
-    @JoinColumn(name="id_kelas", referencedColumnName = "id")
-    private Kelas kelas;
-
-    @OneToMany(mappedBy = "mataPelajaran")
-    private List<KomponenPenilaian> komponenPenilaians;
-
-    @OneToMany(mappedBy = "mataPelajaran")
-    private List<Materi> materis;
-
-
-
+    @JoinColumn(name = "matpel_id", nullable = true)
+    private MataPelajaran mataPelajaran;
 }

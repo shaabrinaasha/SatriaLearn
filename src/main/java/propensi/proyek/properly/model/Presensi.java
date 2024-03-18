@@ -1,13 +1,13 @@
 package propensi.proyek.properly.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,37 +18,26 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.GenerationType;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "mata_pelajaran")
-public class MataPelajaran implements Serializable {
-
+@Table(name = "presensi")
+public class Presensi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
     @NotNull
-    @Column(nullable = false)
-    private String nama;
+    @Column(name="tanggal", nullable = false)
+    private LocalDate tanggal;
 
     @ManyToOne
-    @JoinColumn(name = "id_guru",  referencedColumnName = "id")
-    private Guru guru;
+    @JoinColumn(name = "matpel_id", nullable = true)
+    private MataPelajaran mataPelajaran;
 
-    @ManyToOne
-    @JoinColumn(name="id_kelas", referencedColumnName = "id")
-    private Kelas kelas;
-
-    @OneToMany(mappedBy = "mataPelajaran")
-    private List<KomponenPenilaian> komponenPenilaians;
-
-    @OneToMany(mappedBy = "mataPelajaran")
-    private List<Materi> materis;
-
-
-
+    @OneToMany(mappedBy = "presensi")
+    Set<SiswaPresensi> siswaPresensis;
 }
