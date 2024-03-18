@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -40,4 +41,10 @@ public class Siswa extends User {
 
     @ManyToMany(mappedBy = "siswas")
     private Set<Kelas> classes = new HashSet<>();
+
+    @OneToMany(mappedBy = "siswa")
+    Set<Nilai> nilais;
+
+    @OneToMany(mappedBy = "siswa")
+    Set<SiswaPresensi> siswaPresensis;
 }
