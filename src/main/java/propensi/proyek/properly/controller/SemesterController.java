@@ -47,7 +47,7 @@ public class SemesterController {
         var semesterDTO = new CreateSemesterDTO();
         model.addAttribute("semesterDTO", semesterDTO);
 
-        return "/semester/form-create-semester";
+        return "semester/form-create-semester";
     }
 
     // Process create semester from form
@@ -106,7 +106,7 @@ public class SemesterController {
         var authorities = auth.getAuthorities();
         userService.addCurrentUserToModel(username, authorities, model);
         model.addAttribute("semesters", semesters);
-        return "/semester/view-all-semester";
+        return "semester/view-all-semester";
     }
 
     // Show form update semester
@@ -119,7 +119,7 @@ public class SemesterController {
         var semesterDTO = semesterMapper.semesterToUpdateSemesterDTO(semester);
         model.addAttribute("semesterDTO", semesterDTO);
 
-        return "/semester/form-update-semester";
+        return "semester/form-update-semester";
     }
 
     // Process update semester

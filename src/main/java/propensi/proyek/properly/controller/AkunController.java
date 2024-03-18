@@ -68,7 +68,7 @@ public class AkunController {
             }
         }
         model.addAttribute("users", users);
-        return new ModelAndView("/akuns/index", model.asMap());
+        return new ModelAndView("akuns/index", model.asMap());
     }
 
     @GetMapping("akuns/create")
@@ -76,7 +76,7 @@ public class AkunController {
         model.addAttribute("akun", new NewUserRequestDto());
         model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
         model.addAttribute("selected", "siswa");
-        return new ModelAndView("/akuns/create-akun", model.asMap());
+        return new ModelAndView("akuns/create-akun", model.asMap());
     }
 
     @PostMapping(value = "/akuns/create", params = { "add=add" })
@@ -89,7 +89,7 @@ public class AkunController {
         user.setOrangTuaOf(orangTuaOfs);
         model.addAttribute("akun", user);
 
-        return new ModelAndView("/akuns/create-akun", model.asMap());
+        return new ModelAndView("akuns/create-akun", model.asMap());
     }
 
     @PostMapping(value = "/akuns/create", params = { "remove" })
@@ -103,7 +103,7 @@ public class AkunController {
         user.setOrangTuaOf(orangTuaOfs);
         model.addAttribute("akun", user);
 
-        return new ModelAndView("/akuns/create-akun", model.asMap());
+        return new ModelAndView("akuns/create-akun", model.asMap());
     }
 
     @PostMapping("akuns/create")
@@ -125,7 +125,7 @@ public class AkunController {
     private ModelAndView createNewSiswa(NewUserRequestDto user, Model model) {
         model.addAttribute("selected", "siswa");
         if (inputSiswaNotCorrect(user, model))
-            return new ModelAndView("/akuns/create-akun", model.asMap());
+            return new ModelAndView("akuns/create-akun", model.asMap());
 
         var username = userService.generateUsername(user.getNama());
         var password = userService.generatePassword();
@@ -139,7 +139,7 @@ public class AkunController {
         model.addAttribute("peran", "Siswa");
         model.addAttribute("nama", siswa.getNama());
         model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
-        return new ModelAndView("/akuns/create-akun", model.asMap());
+        return new ModelAndView("akuns/create-akun", model.asMap());
     }
 
     private Boolean inputSiswaNotCorrect(NewUserRequestDto user, Model model) {
@@ -162,7 +162,7 @@ public class AkunController {
     private ModelAndView createNewGuru(NewUserRequestDto user, Model model) {
         model.addAttribute("selected", "guru");
         if (inputGuruNotCorrect(user, model))
-            return new ModelAndView("/akuns/create-akun", model.asMap());
+            return new ModelAndView("akuns/create-akun", model.asMap());
 
         var username = userService.generateUsername(user.getNama());
         var password = userService.generatePassword();
@@ -175,7 +175,7 @@ public class AkunController {
         model.addAttribute("akun", new NewUserRequestDto());
         model.addAttribute("peran", "Guru");
         model.addAttribute("nama", guru.getNama());
-        return new ModelAndView("/akuns/create-akun", model.asMap());
+        return new ModelAndView("akuns/create-akun", model.asMap());
     }
 
     private Boolean inputGuruNotCorrect(NewUserRequestDto user, Model model) {
@@ -193,7 +193,7 @@ public class AkunController {
     private ModelAndView createNewOrangTua(NewUserRequestDto user, Model model) {
         model.addAttribute("selected", "orang tua");
         if (inputOrangTuaNotCorrect(user, model))
-            return new ModelAndView("/akuns/create-akun", model.asMap());
+            return new ModelAndView("akuns/create-akun", model.asMap());
 
         var username = userService.generateUsername(user.getNama());
         var password = userService.generatePassword();
@@ -212,7 +212,7 @@ public class AkunController {
         model.addAttribute("akun", new NewUserRequestDto());
         model.addAttribute("peran", "Orang Tua");
         model.addAttribute("nama", orangTua.getNama());
-        return new ModelAndView("/akuns/create-akun", model.asMap());
+        return new ModelAndView("akuns/create-akun", model.asMap());
     }
 
     private Boolean inputOrangTuaNotCorrect(NewUserRequestDto user, Model model) {

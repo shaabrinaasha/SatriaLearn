@@ -7,14 +7,13 @@ COPY build.gradle .
 COPY src ./src
 
 # Run Gradle build
-RUN gradle clean build
+RUN gradle clean build -x test
 
 # Stage 2: Run with Java 17
 FROM openjdk:17-alpine
 
 # Copy the built JAR from the previous stage
-ARG JAR_FILE=build/libs/properly-0.0.1-SNAPSHOT.jar
-COPY --from=builder ${JAR_FILE} app.jar
+COPY --from=builder /home/gradle/build/libs/*.jar /app.jar
 
 # Expose port
 EXPOSE 8080

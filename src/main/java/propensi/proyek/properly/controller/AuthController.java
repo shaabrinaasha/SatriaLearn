@@ -29,7 +29,7 @@ public class AuthController {
         if (principal != null) return new ModelAndView("redirect:");
 
         model.addAttribute("loginInfo", new LoginDto());
-        return new ModelAndView("/login/index", model.asMap());
+        return new ModelAndView("login/index", model.asMap());
     }
     
     

@@ -247,7 +247,7 @@ public class KelasController {
             model.addAttribute("error", "Siswa belum bergabung dalam kelas apapun.");
         }
         model.addAttribute("listKelas", listKelas);
-        return "/kelas/read-kelas-siswa";
+        return "kelas/read-kelas-siswa";
     }
 
     @GetMapping("/kelas/detail/{id}")
@@ -269,7 +269,7 @@ public class KelasController {
 
         // necessities for header sidebar fragments
         userService.addCurrentUserToModel(username, authorities, model);
-        return "/kelas/detail-kelas-siswa.html";
+        return "kelas/detail-kelas-siswa.html";
     }
 
     @GetMapping("/kelas/detail/{id}/view-matpel")
@@ -289,7 +289,7 @@ public class KelasController {
 
         // necessities for header sidebar fragments
         userService.addCurrentUserToModel(username, authorities, model);
-        return "/kelas/detail-kelas-matpel";
+        return "kelas/detail-kelas-matpel";
     }
 
 }
