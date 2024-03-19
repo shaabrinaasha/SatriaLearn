@@ -37,7 +37,7 @@ public class SiswaPresensi implements Serializable {
     @JoinColumn(name = "id_presensi")
     Presensi presensi;
     
-    // Alfa / Hadir / Sakit / Izin
+    // Alpa / Hadir / Sakit / Izin
     @NotNull
     @Column(name = "status", nullable = false)
     String status;
