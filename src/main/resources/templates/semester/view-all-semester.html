@@ -2,212 +2,196 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 
 <head>
-    <title>Manajemen Mata Pelajaran - SatriaLearn</title>
-    <meta charset="UTF-8">
-    <meta name="_csrf" th:content="${_csrf.token}" />
-    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
-    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
-    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
-    <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
+  <title>Manajemen Mata Pelajaran - SatriaLearn</title>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.bootstrap5.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+  <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+  <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
+  <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.0.1/js/dataTables.bootstrap5.js"></script>
 </head>
 
 <style>
-    table,
-    th,
-    tr,
-    button {
-        font-family: "Poppins", sans-serif;
-        font-size: 14px;
-    }
-    
-    .btn-sm {
-        font-size: 10px;
-    }
+  table,
+  th,
+  tr,
+  button {
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+  }
+
+  .btn-sm {
+    font-size: 10px;
+  }
 </style>
 
 <body>
-    <div class="main-container d-flex">
-        <!-- Sidebar -->
-        <div th:replace="~{fragments/fragment :: sidebar}"></div>
-        <div class="d-flex">
-            <div class="vr"></div>
-        </div>
-        <div class="content">
-            <div class="container">
-                <div class="dashboard-content px-3 pt-4">
-                    <!-- Header -->
-                    <div th:replace="~{fragments/fragment :: header}"></div>
-                    <!-- Breadcrumb -->
-                    <div style="text-align: left">
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="/kelas-semester">Kelas & Semester</a>
-                                </li>
-                                <li class="breadcrumb-item active" aria-current="page">
-                                    Manajemen Semester
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <!-- Error Alert -->
-                    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
-                        <div th:text="${error}"></div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <!-- Success Alert -->
-                    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
-                        <div th:text="${success}"></div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <div>
-                        <div style="
-                  margin-top: 2rem;
-                  margin-bottom: 2rem;
-                  text-align: center;
+  <div class="main-container d-flex">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/fragment :: sidebar}"></div>
+    <div class="d-flex">
+      <div class="vr"></div>
+    </div>
+    <div class="content">
+      <div class="dashboard-content px-3 pt-4">
+        <!-- Header -->
+        <div th:replace="~{fragments/fragment :: header}"></div>
+
+        <div class="container">
+          <!-- Breadcrumb -->
+          <div style="text-align: left">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="/kelas-semester">Kelas & Semester</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Manajemen Semester
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <!-- Error Alert -->
+          <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+            <div th:text="${error}"></div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <!-- Success Alert -->
+          <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+            <div th:text="${success}"></div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <div>
+            <div style="
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+                text-align: center;
+              ">
+              <h2 style="
+                  font-weight: bold;
+                  font-family: 'Poppins', sans-serif;
+                  font-size: 22px;
+                  color: #106ee8;
                 ">
-                            <h2 style="
-                    font-weight: bold;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 18px;
-                    color: #106ee8;
-                  ">
-                                Daftar Semester
-                            </h2>
+                Daftar Semester
+              </h2>
+              <br />
+            </div>
+            <div style="float: right">
+              <a class="btn btn-primary" style="background-color: #106ee8" href="/semester/create">
+                Tambah Semester
+              </a>
+            </div>
+            <table id="tableSemester" style="width: 100%" class="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Nama Semester</th>
+                  <th scope="col">Tanggal Awal</th>
+                  <th scope="col">Tanggal Akhir</th>
+                  <th scope="col">Tahun Ajaran</th>
+                  <th scope="col">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="semester : ${semesters}">
+                  <td
+                    th:text="${semester.isGanjil ? 'Semester Ganjil ' + semester.tahunAjaran : 'Semester Genap ' + semester.tahunAjaran}">
+                  </td>
+                  <td th:text="${semester.tanggalAwal}"></td>
+                  <td th:text="${semester.tanggalAkhir}"></td>
+                  <td th:text="${semester.tahunAjaran}"></td>
+                  <td class="align-content-center">
+                    <a class="btn btn-sm btn-outline-primary align-content-center"
+                      th:href="@{/semester/{id}/update(id=${semester.id})}">Ubah</a>
+                    <button th:id="${semester.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
+
+
+                    <!-- Modal -->
+                    <div class="modal fade" th:id="'modal-hapus-' + ${semester.id}" tabindex="-1" role="dialog"
+                      aria-labelledby="popupLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="popupLabel">
+                              <strong>Konfirmasi Hapus Semester</strong>
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Apakah Anda yakin ingin menghapus Semester ini?
                             <br />
-                        </div>
-                        <div style="float: right">
-                            <a class="btn btn-primary" style="background-color: #106ee8" href="/semester/create">
-                  Tambah Semester
-                </a>
-                        </div>
-                        <table id="tableSemester" style="width: 100%" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Nama Semester</th>
-                                    <th scope="col">Tanggal Awal</th>
-                                    <th scope="col">Tanggal Akhir</th>
-                                    <th scope="col">Tahun Ajaran</th>
-                                    <th scope="col">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="semester : ${semesters}">
-                                    <td th:text="${semester.isGanjil ? 'Semester Ganjil ' + semester.tahunAjaran : 'Semester Genap ' + semester.tahunAjaran}"></td>
-                                    <td th:text="${semester.tanggalAwal}"></td>
-                                    <td th:text="${semester.tanggalAkhir}"></td>
-                                    <td th:text="${semester.tahunAjaran}"></td>
-                                    <td class="align-content-center">
-                                        <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/semester/{id}/update(id=${semester.id})}">Ubah</a
-                      >
-                      <button th:id="${semester.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
-
-
-                      <!-- Modal -->
-                      <div
-                        class="modal fade"
-                        th:id="'modal-hapus-' + ${semester.id}"
-                        tabindex="-1"
-                        role="dialog"
-                        aria-labelledby="popupLabel"
-                        aria-hidden="true"
-                      >
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="popupLabel">
-                                <strong>Konfirmasi Hapus Semester</strong>
-                              </h5>
-                              <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                              >
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              Apakah Anda yakin ingin menghapus Semester ini?
-                              <br />
-                              <br />
-                              Anda tidak dapat memulihkan data semester jika
-                              sudah dihapus!
-                            </div>
-                            <div class="modal-footer">
-                              <button
-                                type="button"
-                                class="btn btn-secondary"
-                                data-dismiss="modal"
-                              >
-                                Batal
-                              </button>
-                              <a
-                                type="button"
-                                class="btn btn-danger"
-                                id="hapusButton"
-                                th:href="@{/semester/{id}/delete(id=${semester.id})}"
-                                >Hapus</a
-                              >
-                            </div>
+                            <br />
+                            Anda tidak dapat memulihkan data semester jika
+                            sudah dihapus!
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                              Batal
+                            </button>
+                            <a type="button" class="btn btn-danger" id="hapusButton"
+                              th:href="@{/semester/{id}/delete(id=${semester.id})}">Hapus</a>
                           </div>
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-            </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br />
           </div>
         </div>
       </div>
     </div>
-    <!-- Script -->
-    <script>
-      var semesterIdToDelete;
-      $(document).ready(function () {
-        $("#tableSemester").DataTable({
-          columnDefs: [
-            { searchable: false, targets: [1, 2, 3, 4] },
-            { orderable: false, targets: [0, 1, 2, 4] },
-          ],
-        });
-
-        // Add click event listener to all buttons with class "delete-button"
-        $('#tableSemester').on('click', '.delete-button', function() {
-            // Get the ID of the clicked button
-            semesterIdToDelete = $(this).attr('id');
-            // Show the modal with the ID of the clicked button
-            $('#modal-hapus-' + semesterIdToDelete).modal('show');
-        });
-
-        // Add click event listener to all buttons with class "btn-secondary"
-        $('#tableSemester').on('click', '.btn-secondary', function() {
-            // Hide the modal
-            $('#modal-hapus-' + semesterIdToDelete).modal('hide');
-        });
-
-        // Add click event listener to all buttons with class "close"
-        $('#tableSemester').on('click', '.close', function() {
-            // Hide the modal
-            $('#modal-hapus-' + semesterIdToDelete).modal('hide');
-        });
+  </div>
+  <!-- Script -->
+  <script>
+    var semesterIdToDelete;
+    $(document).ready(function () {
+      $("#tableSemester").DataTable({
+        columnDefs: [
+          { searchable: false, targets: [1, 2, 3, 4] },
+          { orderable: false, targets: [0, 1, 2, 4] },
+        ],
       });
 
-      
+      // Add click event listener to all buttons with class "delete-button"
+      $('#tableSemester').on('click', '.delete-button', function () {
+        // Get the ID of the clicked button
+        semesterIdToDelete = $(this).attr('id');
+        // Show the modal with the ID of the clicked button
+        $('#modal-hapus-' + semesterIdToDelete).modal('show');
+      });
 
-      // close alert
-      var alertNode = document.querySelector(".alert");
-      var alert = bootstrap.Alert.getInstance(alertNode);
-      alert.close();
-    </script>
-  </body>
+      // Add click event listener to all buttons with class "btn-secondary"
+      $('#tableSemester').on('click', '.btn-secondary', function () {
+        // Hide the modal
+        $('#modal-hapus-' + semesterIdToDelete).modal('hide');
+      });
+
+      // Add click event listener to all buttons with class "close"
+      $('#tableSemester').on('click', '.close', function () {
+        // Hide the modal
+        $('#modal-hapus-' + semesterIdToDelete).modal('hide');
+      });
+    });
+
+
+
+    // close alert
+    var alertNode = document.querySelector(".alert");
+    var alert = bootstrap.Alert.getInstance(alertNode);
+    alert.close();
+  </script>
+</body>
+
 </html>

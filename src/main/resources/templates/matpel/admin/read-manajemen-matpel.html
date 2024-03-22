@@ -24,7 +24,7 @@
     tr,
     button {
         font-family: 'Poppins';
-        font-size: 12px;
+        font-size: 14px;
     }
     
     .btn-sm {
@@ -42,18 +42,18 @@
             <div class="dashboard-content px-3 pt-4">
                 <!-- Header -->
                 <div th:replace="~{fragments/fragment :: header}"></div>
-                <!-- Alert -->
-                <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
-                    <div th:text="${error}"></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
-                    <div th:text="${success}"></div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-
                 <!-- Content -->
                 <div class="container">
+                    <!-- Alert -->
+                    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+                        <div th:text="${error}"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+                        <div th:text="${success}"></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    
                     <div>
                         <div style="margin-bottom: 2rem; text-align: center;">
                             <h2 style="font-weight: bold; margin-bottom: 0.75rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;">Manajemen Mata Pelajaran</h2>
@@ -65,18 +65,20 @@
                         <table id="matpel-table" style="width:100%;" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th scope="col">No</th>
+                                    <th scope="col" style="text-align: left;">No</th>
                                     <th scope="col">Mata Pelajaran</th>
                                     <th scope="col">Kelas</th>
+                                    <th scope="col">Tahun Ajaran</th>
                                     <th scope="col">Guru</th>
                                     <th scope="col">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="matpel, iterationStatus : ${listMatpel}">
-                                    <td th:text="${iterationStatus.index + 1}"></td>
+                                    <td style="text-align: left;" th:text="${iterationStatus.index + 1}"></td>
                                     <td th:text="${matpel.nama}"></td>
                                     <td th:text="${matpel.kelas.nama}"></td>
+                                    <td th:each="semester, iStat : ${matpel.kelas.semesters}" th:if="${iStat.index == 0}" th:text="${semester.tahunAjaran}"></td>
                                     <td th:text="${matpel.guru.nama}"></td>
                                     <td class="align-content-left">
                                         <a class="btn btn-sm btn-outline-primary" th:href="@{/matpel/update/} + ${matpel.id}">Ubah</a>

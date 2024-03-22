@@ -47,11 +47,11 @@
             <div class="vr"></div>
         </div>
         <div class="content">
-            <div class="container">
-
-                <div class="dashboard-content px-3 pt-4">
-                    <!-- Header -->
-                    <div th:replace="~{fragments/fragment :: header}"></div>
+            <div class="dashboard-content px-3 pt-4">
+                <!-- Header -->
+                <div th:replace="~{fragments/fragment :: header}"></div>
+        
+                <div class="container">
                     <!-- Breadcrumb -->
                     <div style="margin-bottom:1rem; text-align: left;">
                         <nav aria-label="breadcrumb">
@@ -77,80 +77,78 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
 
-                    <div class="container">
-                        <div>
-                            <div style="
-                            margin-top: 2rem;
-                            margin-bottom: 2rem;
-                            text-align: center;
-                          ">
-                                <h2 style="
-                              font-weight: bold;
-                              font-family: 'Poppins', sans-serif;
-                              font-size: 18px;
-                              color: #106ee8;
-                            ">
-                                    Daftar Kelas
-                                </h2>
-                                <br />
-                            </div>
+                    <div>
+                        <div style="
+                        margin-top: 2rem;
+                        margin-bottom: 2rem;
+                        text-align: center;
+                        ">
+                            <h2 style="
+                            font-weight: bold;
+                            font-family: 'Poppins', sans-serif;
+                            font-size: 22px;
+                            color: #106ee8;
+                        ">
+                                Daftar Kelas
+                            </h2>
+                            <br />
+                        </div>
 
-                            <div style="float: right;">
-                                <a class="btn" href="/kelas/tambah" style="background-color: #106EE8;  color: white;">
-                            Tambah Kelas
-                        </a>
-                            </div>
-                            <table id="kelas-table" style="width:100%;" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Kelas</th>
-                                        <th scope="col">Wali Kelas</th>
-                                        <th scope="col">Tahun Ajaran</th>
-                                        <th scope="col">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="kelas, iterationStatus : ${listKelas}">
-                                        <td th:text="${iterationStatus.index + 1}"></td>
-                                        <td th:text="${kelas.nama}"></td>
-                                        <td th:text="${kelas.wali.nama}"></td>
-                                        <td>
-                                            <span th:if="${kelas.semesters.size() > 0}" th:text="${kelas.semesters.iterator().next().tahunAjaran}"></span>
-                                        </td>
-                                        <td class="align-content-center">
-                                            <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/detail/} + ${kelas.id}">Detail</a>
-                                            <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/ubah/} + ${kelas.id}">Ubah</a>
-                                            <button th:id="${kelas.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
-                                            <!-- Modal -->
-                                            <div class="modal fade" th:id="'modal-hapus-' + ${kelas.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Mata Pelajaran</strong></h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Apakah Anda Yakin ingin menghapus kelas ini? </br>
-                                                            </br> Anda tidak dapat memulihkan data kelas jika sudah dihapus!
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                            <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/kelas/hapus/} + ${kelas.id}">Hapus</a>
-                                                        </div>
+                        <div style="float: right;">
+                            <a class="btn" href="/kelas/tambah" style="background-color: #106EE8;  color: white;">
+                        Tambah Kelas
+                    </a>
+                        </div>
+                        <table id="kelas-table" style="width:100%;" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: left;" scope="col">No</th>
+                                    <th scope="col">Kelas</th>
+                                    <th scope="col">Wali Kelas</th>
+                                    <th scope="col">Tahun Ajaran</th>
+                                    <th scope="col">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="kelas, iterationStatus : ${listKelas}">
+                                    <td style="text-align: left;" th:text="${iterationStatus.index + 1}"></td>
+                                    <td th:text="${kelas.nama}"></td>
+                                    <td th:text="${kelas.wali.nama}"></td>
+                                    <td>
+                                        <span th:if="${kelas.semesters.size() > 0}" th:text="${kelas.semesters.iterator().next().tahunAjaran}"></span>
+                                    </td>
+                                    <td class="align-content-center">
+                                        <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/detail/} + ${kelas.id}">Detail</a>
+                                        <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/ubah/} + ${kelas.id}">Ubah</a>
+                                        <button th:id="${kelas.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" th:id="'modal-hapus-' + ${kelas.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="popupLabel"><strong>Konfirmasi Hapus Mata Pelajaran</strong></h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Apakah Anda Yakin ingin menghapus kelas ini? </br>
+                                                        </br> Anda tidak dapat memulihkan data kelas jika sudah dihapus!
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/kelas/hapus/} + ${kelas.id}">Hapus</a>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </div>
+                                    </td>
 
 
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <br>
-                        </div>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
                     </div>
                 </div>
             </div>

@@ -3,6 +3,8 @@ package propensi.proyek.properly.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +52,7 @@ public class MataPelajaranController {
     @Autowired
     UserService userService;
 
+    // admin & guru
     @RequestMapping("/matpel")
     public String viewMatpel(Authentication auth, Model model, Principal principal, RedirectAttributes redirectAttrs) {
         var username = principal.getName();
@@ -62,62 +65,45 @@ public class MataPelajaranController {
                 .collect(Collectors.toList());
 
         String userRole = roles.get(0);
-        System.out.println("ROLE");
-        System.out.println(userRole);
 
         if (userRole.contains("Admin") || userRole.contains("admin")) {
             List<MataPelajaran> listMatpel = mataPelajaranService.getListMatpel();
-            System.out.println(listMatpel.size());
             userService.addCurrentUserToModel(username, authorities, model);
+
+            Collections.sort(listMatpel, Comparator.comparing(MataPelajaran::getNama));
+
             model.addAttribute("listMatpel", listMatpel);
-            return "matpel/read-manajemen-matpel";
+            return "matpel/admin/read-manajemen-matpel";
 
         } else if (userRole.contains("Guru") || userRole.contains("guru")) {
             User user = userService.getUserByUsername(username);
             Guru guru = guruService.getGuruById(user.getId());
             List<MataPelajaran> listMatpel = new ArrayList<>(guru.getMataPelajarans());
             userService.addCurrentUserToModel(username, authorities, model);
+
+            Collections.sort(listMatpel, Comparator.comparing(MataPelajaran::getNama));
+
             model.addAttribute("listMatpel", listMatpel);
-            return "matpel/read-matpel-guru";
+            return "matpel/guru/read-matpel-guru";
         }
         redirectAttrs.addFlashAttribute("error", "Role tidak memiliki akses ke mata pelajaran");
         return "home";
     }
 
-    @RequestMapping("/kelas/matpel/{id}")
-    public String viewMatpelSiswa(@PathVariable UUID id, Authentication auth, Model model, Principal principal) {
-        var username = principal.getName();
-        var authorities = auth.getAuthorities();
-
-        // need to handle loop
-        Kelas kelas = kelasService.getKelasById(id);
-        List<MataPelajaran> listMatpel = new ArrayList<>(kelas.getMataPelajarans());
-        List<Semester> semesters = new ArrayList<>(kelas.getSemesters());
-        Semester semester = semesters.get(0);
-        userService.addCurrentUserToModel(username, authorities, model);
-        model.addAttribute("listMatpel", listMatpel);
-        model.addAttribute("kelas", kelas);
-        model.addAttribute("semester", semester);
-        return "matpel/read-matpel-siswa";
-    }
-
+    // admin
     @GetMapping("/matpel/add")
     public String addMatpelFormPage(Model model, Principal principal) {
-        System.out.println("form page");
         List<Guru> listGuru = guruService.getListGuruActive();
-        System.out.println("list GURU");
-        System.out.println(listGuru.size());
-
         List<Kelas> listKelas = kelasService.getAllKelas();
-        System.out.println("list KELAS");
-        System.out.println(listKelas.size());
 
         MataPelajaran matpel = new MataPelajaran();
+        Collections.sort(listGuru, Comparator.comparing(Guru::getNama));
+        Collections.sort(listKelas, Comparator.comparing(Kelas::getNama));
 
         model.addAttribute("listGuru", listGuru);
         model.addAttribute("listKelas", listKelas);
         model.addAttribute("matpel", matpel);
-        return "matpel/form-add-matpel";
+        return "matpel/admin/form-add-matpel";
     }
 
     @PostMapping(value = "/matpel/add", params = { "save" })
@@ -131,11 +117,15 @@ public class MataPelajaranController {
 
         Guru guru = guruService.getGuruById(guruMatpel);
         Kelas kelas = kelasService.getKelasById(kelasMatpel);
+        var tahunAjaran = "";  
+        for (Semester s : kelas.getSemesters()) {
+            tahunAjaran = s.getTahunAjaran();
+        }
 
         for (MataPelajaran mataPelajaran : kelas.getMataPelajarans()) {
             if (mataPelajaran.getNama().equals(namaMatpel)) {
                 redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + namaMatpel
-                        + " tidak dapat ditambahkan karena sudah ada di kelas" + kelas.getNama());
+                        + " tidak dapat ditambahkan karena sudah ada di kelas " + kelas.getNama() + " " + tahunAjaran);
                 return "redirect:/matpel/add";
             }
         }
@@ -144,8 +134,6 @@ public class MataPelajaranController {
         matpel.setGuru(guru);
         matpel.setKelas(kelas);
         mataPelajaranService.addMataPelajaran(matpel);
-        System.out.println("MATPEL BARU");
-        System.out.println(matpel);
 
         guru.getMataPelajarans().add(matpel);
         kelas.getMataPelajarans().add(matpel);
@@ -166,10 +154,13 @@ public class MataPelajaranController {
         matpel.setGuru(oldMatpel.getGuru());
         matpel.setKelas(oldMatpel.getKelas());
 
+        Collections.sort(listGuru, Comparator.comparing(Guru::getNama));
+        Collections.sort(listKelas, Comparator.comparing(Kelas::getNama));
+
         model.addAttribute("listGuru", listGuru);
         model.addAttribute("listKelas", listKelas);
         model.addAttribute("matpel", matpel);
-        return "matpel/form-update-matpel";
+        return "matpel/admin/form-update-matpel";
     }
 
     @PostMapping(value = "/matpel/update", params = { "save" })
@@ -190,8 +181,12 @@ public class MataPelajaranController {
                 // cek apakah di kelas matpel baru sudah ada nama matpel baru
                 for (MataPelajaran mataPelajaran : newKelas.getMataPelajarans()) {
                     if (mataPelajaran.getNama().equals(newNama)) {
+                        var tahunAjaran = "";  
+                        for (Semester s : newKelas.getSemesters()) {
+                            tahunAjaran = s.getTahunAjaran();
+                        }
                         redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + newNama
-                                + " tidak dapat ditambahkan karena sudah ada di kelas" + newKelas);
+                                + " tidak dapat ditambahkan karena sudah ada di kelas" + newKelas.getNama() + " " + tahunAjaran);
                         model.addAttribute("matpel", oldMatpel);
                         return "redirect:/matpel/update/" + oldMatpel.getId();
                     }
@@ -207,8 +202,12 @@ public class MataPelajaranController {
                 // cek apakah di kelas matpel lama sudah ada nama matpel baru
                 for (MataPelajaran mataPelajaran : oldKelas.getMataPelajarans()) {
                     if (mataPelajaran.getNama().equals(newNama)) {
+                        var tahunAjaran = "";  
+                        for (Semester s : oldKelas.getSemesters()) {
+                            tahunAjaran = s.getTahunAjaran();
+                        }
                         redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + newNama
-                                + " tidak dapat ditambahkan karena sudah ada di kelas" + oldKelas.getNama());
+                                + " tidak dapat ditambahkan karena sudah ada di kelas" + oldKelas.getNama() + " " + tahunAjaran);
                         return "redirect:/matpel/update/" + oldMatpel.getId();
                     }
                 }
@@ -220,8 +219,12 @@ public class MataPelajaranController {
             // cek apakah di kelas matpel baru sudah ada nama matpel lama
             for (MataPelajaran mataPelajaran : newKelas.getMataPelajarans()) {
                 if (mataPelajaran.getNama().equals(oldNama)) {
+                    var tahunAjaran = "";  
+                    for (Semester s : newKelas.getSemesters()) {
+                        tahunAjaran = s.getTahunAjaran();
+                    }
                     redirectAttrs.addFlashAttribute("error", "Mata Pelajaran " + oldNama
-                            + " tidak dapat ditambahkan karena sudah ada di kelas" + newKelas.getNama());
+                            + " tidak dapat ditambahkan karena sudah ada di kelas" + newKelas.getNama() + " " + tahunAjaran);
                     model.addAttribute("matpel", oldMatpel);
                     return "redirect:/matpel/update/" + oldMatpel.getId();
                 }
@@ -250,7 +253,7 @@ public class MataPelajaranController {
 
         // save matpel
         mataPelajaranService.addMataPelajaran(oldMatpel);
-        redirectAttrs.addFlashAttribute("success", "Mata Pelajaran " + matpel.getNama() + " berhasil diubah");
+        redirectAttrs.addFlashAttribute("success", "Mata Pelajaran berhasil diubah");
         return "redirect:/matpel";
     }
 
@@ -263,4 +266,69 @@ public class MataPelajaranController {
         return "redirect:/matpel";
     }
 
+    // guru
+    @RequestMapping("/matpel/{id}/materi")
+    public String viewDetailMatpelMateriGuru(@PathVariable UUID id, Authentication auth, Model model, Principal principal, RedirectAttributes redirectAttrs) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+
+        MataPelajaran matpel = mataPelajaranService.getMatpelById(id);
+        User user = userService.getUserByUsername(username);
+        Guru guru = guruService.getGuruById(user.getId());
+        List<MataPelajaran> listMatpel = new ArrayList<>(guru.getMataPelajarans());
+
+        userService.addCurrentUserToModel(username, authorities, model);
+        model.addAttribute("listMatpel", listMatpel);
+        return "matpel/guru/detail-matpel-guru-materi";
+    }
+
+    @RequestMapping("/matpel/{id}/nilai")
+    public String viewDetailMatpelNilaiGuru(@PathVariable UUID id, Authentication auth, Model model, Principal principal, RedirectAttributes redirectAttrs) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+
+        MataPelajaran matpel = mataPelajaranService.getMatpelById(id);
+        User user = userService.getUserByUsername(username);
+        Guru guru = guruService.getGuruById(user.getId());
+        List<MataPelajaran> listMatpel = new ArrayList<>(guru.getMataPelajarans());
+
+        userService.addCurrentUserToModel(username, authorities, model);
+        model.addAttribute("listMatpel", listMatpel);
+        return "matpel/guru/detail-matpel-guru-materi";
+    }
+
+    // siswa
+    @RequestMapping("/kelas/matpel/{id}")
+    public String viewMatpelSiswa(@PathVariable UUID id, Authentication auth, Model model, Principal principal) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+        Kelas kelas = kelasService.getKelasById(id);
+        List<MataPelajaran> listMatpel = new ArrayList<>(kelas.getMataPelajarans());
+        List<Semester> semesters = new ArrayList<>(kelas.getSemesters());
+        Semester semester = semesters.get(0);
+
+        Collections.sort(listMatpel, Comparator.comparing(MataPelajaran::getNama));
+
+        userService.addCurrentUserToModel(username, authorities, model);
+        model.addAttribute("listMatpel", listMatpel);
+        model.addAttribute("kelas", kelas);
+        model.addAttribute("semester", semester);
+        return "matpel/siswa/read-matpel-siswa";
+    }
+
+    @RequestMapping("/kelas/matpel/{id}/materi-tugas")
+    public String viewMatpelDetailMateriSiswa(@PathVariable UUID id, Authentication auth, Model model, Principal principal) {
+        var username = principal.getName();
+        var authorities = auth.getAuthorities();
+
+        Kelas kelas = kelasService.getKelasById(id);
+        List<MataPelajaran> listMatpel = new ArrayList<>(kelas.getMataPelajarans());
+        List<Semester> semesters = new ArrayList<>(kelas.getSemesters());
+        Semester semester = semesters.get(0);
+        userService.addCurrentUserToModel(username, authorities, model);
+        model.addAttribute("listMatpel", listMatpel);
+        model.addAttribute("kelas", kelas);
+        model.addAttribute("semester", semester);
+        return "matpel/siswa/read-matpel-siswa";
+    }
 }

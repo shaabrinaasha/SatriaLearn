@@ -3,6 +3,9 @@ package propensi.proyek.properly.model;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +38,7 @@ public class SiswaPresensi implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "id_presensi")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     Presensi presensi;
     
     // Alpa / Hadir / Sakit / Izin

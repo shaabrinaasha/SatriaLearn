@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mata Pelajaran-Siswa</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Mata Pelajaran-Guru</title>
 
     <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
@@ -54,9 +53,7 @@
         border-top-right-radius: 6px;
         overflow: hidden;
         padding-left: 20px;
-        padding-right: 20px;
-        padding-bottom: 10px;
-        padding-top: 10px;
+        padding-bottom: 5px;
     }
     
     .top p {
@@ -80,11 +77,9 @@
         font-size: 15px;
         text-decoration: none;
         color: #4F4F4F;
-        margin-left: 10px;
     }
     
-    .detail1,
-    .detail2 {
+    .detail {
         display: flex;
         align-items: center;
     }
@@ -93,12 +88,17 @@
         color: #4F4F4F;
         padding-right: 20px;
     }
-    
-    .svg-container {
+
+    .card-container {
         display: flex;
-        gap: 0.5rem;
-        align-items: center;
+        width: 100%;
+        gap: 3rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 2rem;
+        margin-bottom: 3rem;
     }
+
 </style>
 
 <body>
@@ -109,15 +109,16 @@
         </div>
         <div class="content">
             <div class="dashboard-content px-3 pt-4">
+                <!-- Header -->
                 <div th:replace="~{fragments/fragment :: header}"></div>
-                <div class="container" th:object="${kelas}">
+
+                <div class="container">
                     <div>
-                        <!-- Bread Crumb -->
+                        <!-- Breadcrumb -->
                         <div style="margin: 1rem 0 1rem 0; text-align: left;">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/kelas/siswa-view">Kelas</a></li>
-                                    <li class="breadcrumb-item active kelas-matpel" th:text="${kelas.nama}" aria-current="page">Kelas 10 A</li>
+                                    <li class="breadcrumb-item"><a href="#">Mata Pelajaran</a></li>
                                 </ol>
                             </nav>
                         </div>
@@ -130,34 +131,34 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
 
-                        <!-- Title Page -->
+                        <!-- Title -->
                         <div style="margin-bottom: 1rem; text-align: center;">
-                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins', sans-serif; font-size: 22px; color: #106EE8;" th:text="${kelas.nama}">Kelas 10 A</h2>
-                            <p class="kelas-siswa" style="font-family: 'Poppins', sans-serif; font-size: 16px; color: #828282;" th:object="${semester}" th:text="${semester.tahunAjaran}">Tahun Ajaran 2022/2023</p>
+                            <h2 class="kelas-siswa" style="font-weight: bold; margin-bottom: 0.5rem; font-family: 'Poppins'; font-size: 22px; color: #106EE8;">Mata Pelajaran</h2>
                             <br>
                         </div>
                     </div>
 
                     <!-- Content -->
-                    <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
-                        <a href="#" class="card">
-                            <div class="top">
-                                <p class="nama-matpel" th:text="${m.nama}">Matematika</p>
-                            </div>
-                            <div class="bottom">
-                                <div>
-                                    <div class="detail1">
-                                        <img th:src="@{/profile-head.svg}" alt="Wali Kelas Logo">
-                                        <!-- <i class="bi bi-person-fill dark-icon" style="padding-right: 20px;"></i> -->
-                                        <span class="guru-matpel" th:text="${m.guru.nama}">
-                                            Budi
-                                        </span>
+                    <div class="card-container">
+                        <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
+                            <a href="#" class="card">
+                                <div class="top">
+                                    <p class="nama-matpel" th:text="${m.nama}"></p>
+                                </div>
+                                <div class="bottom">
+                                    <div>
+                                        <div class="detail">
+                                            <i class="bi bi-easel dark-icon" style="padding-right: 20px;"></i>
+                                            <span th:text="${m.kelas.nama}"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
+                
                 </div>
+
             </div>
         </div>
     </div>

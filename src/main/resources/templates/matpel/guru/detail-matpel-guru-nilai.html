@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail Kelas - Siswa</title>
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
+    <!-- Style -->
+    <style>
+      .title {
+        text-align: center;
+        font-weight: bold;
+        font-family: "Poppins", sans-serif;
+        font-size: 22px;
+        color: #106ee8;
+        margin-bottom: 5px;
+      }
+
+      .subtitle {
+        text-align: center;
+        margin-bottom: 0;
+        opacity: 60%;
+      }
+
+      .navbar-detail-kelas {
+        display: flex;
+        width: 100%;
+        border-bottom: 2px solid #106ee8;
+        margin-top: 1rem;
+        gap: 0.75rem;
+      }
+
+      .navbar-item {
+        flex-grow: 2;
+      }
+
+      .navbar-item:hover {
+        font-weight: bold;
+      }
+
+      .navbar-item p {
+        color: #106ee8;
+        padding: 0;
+        margin: 0;
+      }
+
+      .navbar-active {
+        font-weight: bold;
+        border-bottom: 3px solid #106ee8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container d-flex">
+      <div th:replace="~{fragments/fragment :: sidebar}"></div>
+      <div class="d-flex">
+        <div class="vr"></div>
+      </div>
+      <div class="content">
+        <div class="dashboard-content px-3 pt-4">
+          <div th:replace="~{fragments/fragment :: header}"></div>
+          <div class="container">
+            <div style="margin-top: 1rem; text-align: left">
+              <!-- Breadcrumb -->
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb" style="margin-bottom: 0px">
+                  <li class="breadcrumb-item">
+                    <a href="/matpel">Mata Pelajaran</a>
+                  </li>
+                  <li class="breadcrumb-item" aria-current="page">
+                    <span th:text="${matpel.nama}"></span>
+                  </li>
+                </ol>
+              </nav>
+            </div>
+            <!-- Title -->
+            <h2 class="title" th:text="${matpel.nama}"></h2>
+            <!-- Navbar Materi Tugas dan Nilai -->
+            <div class="navbar-detail-kelas">
+              <div class="navbar-item">
+                <p>
+                  <a
+                    th:href="@{/matpel/{id}/materi(id=${matpel.id})}"
+                    style="text-decoration: none"
+                    >Materi & Tugas</a
+                  >
+                </p>
+              </div>
+              <div class="navbar-item navbar-active">
+                <p>Nilai</p>
+              </div>
+            </div>
+            <!-- Content under Navbar -->
+            <!-- IF: Kelas has no students -->
+            <div
+              class="d-flex flex-column align-items-center"
+              style="margin-top: 5rem"
+              th:if="${error}"
+            >
+              <p th:text="${error}"></p>
+              <a href="/matpel">Kaitkan mata pelajaran dengan kelas disini.</a>
+            </div>
+            <!-- IF: Kelas has students -->
+            <div
+              class="d-flex flex-column justify-content-center align-items-center"
+              style="margin: 2rem"
+            >
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Mata Pelajaran</th>
+                    <th scope="col">Guru</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="matpel, iStat : ${kelas.mataPelajarans}">
+                    <td th:text="${iStat.index + 1}"></td>
+                    <td th:text="${matpel.nama}"></td>
+                    <td th:text="${matpel.guru.nama}"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <a href="/matpel">Kaitkan mata pelajaran dengan kelas disini.</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
