@@ -185,7 +185,7 @@ public class ProperlyApplication {
 					for (int j = 0; j < 5; j++) {
 						var materi = new Materi();
 						materi.setJudul(faker.educator().course());
-						materi.setDeskripsi(faker.lorem().paragraph());
+						materi.setDeskripsi(faker.lorem().sentence());
 						materi.setFile(faker.internet().url());
 						materi.setTanggalUpload(LocalDate.now());
 						materi.setMataPelajaran(mataPelajaranList.get(i));
@@ -198,7 +198,7 @@ public class ProperlyApplication {
 					for (int j = 0; j < 5; j++) {
 						var pengumumanTugas = new PengumumanTugas();
 						pengumumanTugas.setJudul(faker.educator().course());
-						pengumumanTugas.setDeskripsi(faker.lorem().paragraph());
+						pengumumanTugas.setDeskripsi(faker.lorem().sentence());
 						pengumumanTugas.setFile(faker.internet().url());
 						pengumumanTugas.setTanggalUpload(LocalDate.now());
 						pengumumanTugas.setDeadline(LocalDate.now().plusDays(7));

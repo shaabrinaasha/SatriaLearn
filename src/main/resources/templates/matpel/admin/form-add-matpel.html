@@ -28,8 +28,8 @@
         <script th:src="@{/bootstrap.min.js}"></script>
     </head>
 
-    <!-- <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
-    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <!-- <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
 </head>
 
 <style>
@@ -60,6 +60,7 @@
     
 </style>
 <body>
+    <!-- Alert -->
     <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
         <div th:text="${error}"></div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -69,6 +70,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     
+    <!-- Content -->
     <div class="container container-form">
         <div style="margin-top: 2rem; margin-bottom: 1rem; text-align: center;">
             <h2 style="font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 24px; color: #106EE8;" >Tambah Mata Pelajaran</h2>
@@ -76,16 +78,19 @@
         </div>
 
         <div>
-            <form th:action="@{/matpel/add}" th:object="${matpel}" method="POST" >
+            <form th:action="@{/matpel-admin/add}" th:object="${matpel}" method="POST" >
                 <div class="form-group" style="margin-bottom: 1rem;">
                   <label for="inputMataPelajaran">Mata Pelajaran</label>
                   <input type="mataPelajaran" class="form-control" name="namaMatpel" aria-describedby="matpelHelp" id="inputMataPelajaran"  placeholder="Matematika">
                   <small id="matpelHelp" class="form-text text-muted">Mata Pelajaran dibuat untuk satu kelas.</small>
                 </div>
+                
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label for="inputKelas">Kelas</label>
                     <select id="inputKelas" class="form-control" name="kelasMatpel">
-                        <option th:each="kelas : ${listKelas}" th:value="${kelas.id}" th:text="${kelas.nama}"></option>
+                        <div th:each="kelas : ${listKelas}">
+                            <option th:each="semester, iStat : ${kelas.semesters}" th:value="${kelas.id}" th:if="${iStat.index == 0}" th:text="${kelas.nama} + ' ' + ${semester.tahunAjaran}"></option>
+                        </div>
                     </select>
                 </div>
                 
@@ -98,7 +103,7 @@
                 
                 <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
                     <button type="submit" class="btn btn-outline-success" name="save">Simpan</button>
-                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel">Kembali</a>
+                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel-admin">Kembali</a>
                 </div>
               </form>
         </div>

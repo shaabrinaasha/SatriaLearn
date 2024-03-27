@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,5 +54,6 @@ public class PengumumanTugas implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "matpel_id", nullable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private MataPelajaran mataPelajaran;
 }

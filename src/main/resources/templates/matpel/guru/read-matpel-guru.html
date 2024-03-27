@@ -79,8 +79,7 @@
         color: #4F4F4F;
     }
     
-    .detail1,
-    .detail2 {
+    .detail {
         display: flex;
         align-items: center;
     }
@@ -89,6 +88,17 @@
         color: #4F4F4F;
         padding-right: 20px;
     }
+
+    .card-container {
+        display: flex;
+        width: 100%;
+        gap: 3rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 2rem;
+        margin-bottom: 3rem;
+    }
+
 </style>
 
 <body>
@@ -129,20 +139,24 @@
                     </div>
 
                     <!-- Content -->
-                    <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
-                        <a href="#" class="card">
-                            <div class="top">
-                                <p class="nama-matpel" th:text="${m.nama}">Matematika</p>
-                            </div>
-                            <div class="bottom">
-                                <div>
-                                    <div class="detail1">
-                                        <span class="kelas-matpel" th:text="${m.kelas.nama}"><i class="bi bi-easel dark-icon" style="padding-right: 20px;"></i>Kelas 10A</span>
+                    <div class="card-container">
+                        <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
+                            <a th:href="@{/matpel-guru/{id}/materi(id=${m.id})}" class="card">
+                                <div class="top">
+                                    <p class="nama-matpel" th:text="${m.nama}"></p>
+                                </div>
+                                <div class="bottom">
+                                    <div>
+                                        <div class="detail">
+                                            <i class="bi bi-easel dark-icon" style="padding-right: 20px;"></i>
+                                            <span th:text="${m.kelas.nama}"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
+                
                 </div>
 
             </div>

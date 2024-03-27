@@ -27,8 +27,8 @@
         <script th:src="@{/bootstrap.min.js}"></script>
     </head>
 
-    <!-- <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
-    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <!-- <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
 </head>
 <style>
     body{
@@ -72,7 +72,7 @@
         </div>
 
         <div>
-            <form th:action="@{/matpel/update}" th:object="${matpel}" method="POST">
+            <form th:action="@{/matpel-admin/update/}" th:object="${matpel}" method="POST">
                 <input type="hidden" th:field="*{id}" />
                 <div class="form-group" style="margin-bottom: 1rem;">
                   <label for="inputMataPelajaran">Mata Pelajaran</label>
@@ -82,7 +82,9 @@
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label for="inputKelas">Kelas</label>
                     <select id="inputKelas" class="form-control" name="kelasMatpel" th:field="*{kelas}">
-                        <option th:each="kelas : ${listKelas}" th:value="${kelas.id}" th:text="${kelas.nama}" th:selected="${kelas.id == matpel.kelas.id}"></option>
+                        <div th:each="kelas : ${listKelas}">
+                            <option th:each="semester, iStat : ${kelas.semesters}" th:if="${iStat.index == 0}"  th:value="${kelas.id}" th:text="${kelas.nama} + ' ' + ${semester.tahunAjaran}" th:selected="${kelas.id == matpel.kelas.id}"></option>
+                        </div>
                     </select>
                 </div>
                 <div class="form-group" style="margin-bottom: 1rem;">
@@ -94,7 +96,7 @@
                 
                 <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
                     <button type="submit" class="btn btn-outline-success" name="save">Simpan</button>
-                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel">Kembali</a>
+                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel-admin">Kembali</a>
                 </div>
               </form>
         </div>

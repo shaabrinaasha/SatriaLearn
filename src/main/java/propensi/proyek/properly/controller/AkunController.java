@@ -2,12 +2,7 @@ package propensi.proyek.properly.controller;
 
 import java.security.Principal;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.Collection;
-import java.util.List;
 import java.util.*;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import propensi.proyek.properly.Dto.akuns.NewUserRequestDto;
 import propensi.proyek.properly.Dto.akuns.UserDto;
 import propensi.proyek.properly.model.*;
-import propensi.proyek.properly.model.Siswa;
-import propensi.proyek.properly.model.Guru;
-import propensi.proyek.properly.model.Kelas;
-import propensi.proyek.properly.model.MataPelajaran;
-import propensi.proyek.properly.model.OrangTua;
-import propensi.proyek.properly.model.Siswa;
-import propensi.proyek.properly.model.User;
 import propensi.proyek.properly.service.guru.GuruService;
 import propensi.proyek.properly.service.orangtua.OrangTuaService;
 import propensi.proyek.properly.service.siswa.SiswaService;
@@ -63,7 +51,7 @@ public class AkunController {
         var users = new ArrayList<UserDto>();
 
         for (User user : usersInDb) {
-            if (user.getIsActive() && !Objects.equals(user.getDecriminatorValue(), "admin")){
+            if (user.getIsActive() && !Objects.equals(user.getDecriminatorValue(), "admin")) {
                 users.add(UserDto.fromUser(user));
             }
         }
@@ -252,21 +240,17 @@ public class AkunController {
     public String updateAkunFormPage(@PathVariable UUID id, Principal principal, Model model,
             RedirectAttributes redirectAttrs) {
         User oldUser = userService.getUserById(id);
-        // var oldUserDto = UserDto.fromUser(oldUser);
         String userRole = oldUser.getDecriminatorValue();
         var akun = new NewUserRequestDto();
+
         akun.setNama(oldUser.getNama());
         akun.setPeran(userRole);
         akun.setId(id);
-        System.out.println("FORM UPDATE");
-        System.out.println(oldUser.getNama());
-        System.out.println(userRole);
 
         if (userRole.contains("siswa")) {
             Siswa oldSiswa = (Siswa) oldUser;
             akun.setNipd(oldSiswa.getNipd());
             akun.setNisn(oldSiswa.getNisn());
-            // model.addAttribute("akunParent", newSiswa);
             model.addAttribute("akun", akun);
             model.addAttribute("peran", "Siswa");
             return "akuns/update-akun-siswa";
@@ -284,7 +268,7 @@ public class AkunController {
         } else if (userRole.contains("orang tua") || userRole.contains("Orang Tua")) {
             OrangTua oldOrtu = (OrangTua) oldUser;
             akun.setNama(oldOrtu.getNama());
-    
+
             List<UUID> anak = new ArrayList<>();
             for (Siswa siswa : oldOrtu.getSiswas()) {
                 anak.add(siswa.getId());
@@ -296,14 +280,11 @@ public class AkunController {
             }
 
             akun.setOrangTuaOf(anak);
-            System.out.println("JUMLAH ANAK");
-            System.out.println(oldOrtu.getSiswas().size());
             model.addAttribute("akun", akun);
             model.addAttribute("peran", "Orang Tua");
             model.addAttribute("siswas", siswa);
             return "akuns/update-akun-ortu";
         }
-
         redirectAttrs.addFlashAttribute("error", "Akun tidak ditemukan");
         return "redirect:/akuns";
     }
@@ -313,46 +294,31 @@ public class AkunController {
             RedirectAttributes redirectAttrs) {
         User user = userService.getUserById(akun.getId());
         String userRole = user.getDecriminatorValue();
-        System.out.println("SUBMIT UPDATE");
-        System.out.println(akun.getNama());
-        System.out.println(user.getDecriminatorValue());
-        System.out.println(akun.getId());
+
         if (userRole.contains("siswa")) {
             Siswa oldSiswa = siswaService.getSiswaById(akun.getId());
-            String oldNama = oldSiswa.getNama();
-            String oldNISN = oldSiswa.getNisn();
-            String oldNIPD = oldSiswa.getNipd();
 
             String newNama = akun.getNama();
             String newNISN = akun.getNisn();
             String newNIPD = akun.getNipd();
 
-            if (!oldNama.equals(newNama)) {
-                if (newNama.isEmpty()) {
-                    redirectAttrs.addFlashAttribute("error", "Akun Siswa tidak dapat diubah karena field nama kosong");
-                    return "redirect:/akuns/update/" + oldSiswa.getId();
-                }
-
-                oldSiswa.setNama(newNama);
-
+            if (newNama.length() > 255) {
+                redirectAttrs.addFlashAttribute("error", "Nama terlalu panjang");
+                return "redirect:/akuns/update/" + oldSiswa.getId();
             }
-            if (!oldNISN.equals(newNISN)) {
-                if (newNISN.isEmpty()) {
-                    redirectAttrs.addFlashAttribute("error", "Akun Siswa tidak dapat diubah karena field NISN kosong");
-                    return "redirect:/akuns/update/" + oldSiswa.getId();
-                }
-
-                oldSiswa.setNisn(newNISN);
-
+            if (newNIPD.length() != 9) {
+                redirectAttrs.addFlashAttribute("error", "NIPD harus merupakan 9 digit");
+                return "redirect:/akuns/update/" + oldSiswa.getId();
             }
-            if (!oldNIPD.equals(newNIPD)) {
-                if (newNIPD.isEmpty()) {
-                    redirectAttrs.addFlashAttribute("error", "Akun Siswa tidak dapat diubah karena field NIPD kosong");
-                    return "redirect:/akuns/update/" + oldSiswa.getId();
-                }
-
-                oldSiswa.setNipd(newNIPD);
+    
+            if (newNISN.length() != 10) {
+                redirectAttrs.addFlashAttribute("error", "NISN harus merupakan 10 digit");
+                return "redirect:/akuns/update/" + oldSiswa.getId();
             }
+
+            oldSiswa.setNama(newNama);
+            oldSiswa.setNisn(newNISN);
+            oldSiswa.setNipd(newNIPD);
 
             siswaService.updateSiswa(oldSiswa);
             redirectAttrs.addFlashAttribute("success", "Akun Siswa berhasil diubah");
@@ -360,29 +326,21 @@ public class AkunController {
 
         } else if (userRole.contains("guru")) {
             Guru oldGuru = guruService.getGuruById(akun.getId());
-            String oldNama = oldGuru.getNama();
-            String oldNUPTK = oldGuru.getNuptk();
 
             String newNama = akun.getNama();
             String newNUPTK = akun.getNuptk();
 
-            if (!oldNama.equals(newNama)) {
-                if (newNama.isEmpty()) {
-                    redirectAttrs.addFlashAttribute("error", "Akun Guru tidak dapat diubah karena field nama kosong");
-                    return "redirect:/akuns/update/" + oldGuru.getId();
-                }
-
-                oldGuru.setNama(newNama);
-
+            if (newNama.length() > 255) {
+                redirectAttrs.addFlashAttribute("error", "Nama terlalu panjang");
+                return "redirect:/akuns/update/" + oldGuru.getId();
             }
-            if (!oldNUPTK.equals(newNUPTK)) {
-                if (newNUPTK.isEmpty()) {
-                    redirectAttrs.addFlashAttribute("error", "Akun Guru tidak dapat diubah karena field NUPTK kosong");
-                    return "redirect:/akuns/update/" + oldGuru.getId();
-                }
-
-                oldGuru.setNuptk(newNUPTK);
+            if (newNUPTK.length() != 16) {
+                redirectAttrs.addFlashAttribute("error", "NUPTK harus merupakan 16 digit");
+                return "redirect:/akuns/update/" + oldGuru.getId();
             }
+
+            oldGuru.setNama(newNama);
+            oldGuru.setNuptk(newNUPTK);
 
             guruService.updateGuru(oldGuru);
             redirectAttrs.addFlashAttribute("success", "Akun Guru berhasil diubah");
@@ -390,23 +348,17 @@ public class AkunController {
 
         } else if (userRole.contains("orang tua")) {
             OrangTua oldOrtu = orangTuaService.getOrangTuaById(akun.getId());
-            String oldNama = oldOrtu.getNama();
             List<Siswa> oldAnak = oldOrtu.getSiswas();
+            String newNama = akun.getNama();
 
-            String newNama = akun.getNama();        
+            if (newNama.length() > 255) {
+                redirectAttrs.addFlashAttribute("error", "Nama terlalu panjang");
+                return "redirect:/akuns/update/" + oldOrtu.getId();
+            }
 
-            if (!oldNama.equals(newNama)) {
-                if (newNama.isEmpty()) {
-                    redirectAttrs.addFlashAttribute("error",
-                            "Akun Orang Tua tidak dapat diubah karena field nama kosong");
-                    return "redirect:/akuns/update/" + oldOrtu.getId();
-                }
+            oldOrtu.setNama(newNama);
 
-                oldOrtu.setNama(newNama);
-            } 
-            
-            List<UUID> newAnak = akun.getOrangTuaOf(); 
-
+            List<UUID> newAnak = akun.getOrangTuaOf();
             for (UUID id : newAnak) {
                 try {
                     var siswa = siswaService.getSiswaById(id);
@@ -423,27 +375,26 @@ public class AkunController {
                     return "redirect:/akuns/update/" + oldOrtu.getId();
                 }
             }
-            
-            for (Siswa siswa: oldOrtu.getSiswas()) {
+
+            for (Siswa siswa : oldOrtu.getSiswas()) {
                 siswa.setOrangTua(null);
                 siswaService.updateSiswa(siswa);
             }
 
-            if (oldAnak.size() == 0 && newAnak.size() > 0){
+            if (oldAnak.size() == 0 && newAnak.size() > 0) {
                 var newSiswa = new ArrayList<Siswa>();
                 for (UUID id : newAnak) {
                     newSiswa.add(siswaService.getSiswaById(id));
                 }
-        
-                oldOrtu.setSiswas(newSiswa);
-                System.out.println(oldOrtu.getSiswas().size());
-                System.out.println("dari tidak ada menjadi ada anak");
 
-            } else if (oldAnak.size() > 0 && newAnak.size() == 0 ){
-                redirectAttrs.addFlashAttribute("error", "Akun Orang Tua tidak dapat diubah karena field anak harus diisi");
+                oldOrtu.setSiswas(newSiswa);
+
+            } else if (oldAnak.size() > 0 && newAnak.size() == 0) {
+                redirectAttrs.addFlashAttribute("error",
+                        "Akun Orang Tua tidak dapat diubah karena field anak harus diisi");
                 return "redirect:/akuns/update/" + oldOrtu.getId();
 
-            } else if (oldAnak.size() > 0 && newAnak.size() > 0){
+            } else if (oldAnak.size() > 0 && newAnak.size() > 0) {
 
                 if (!(oldAnak.containsAll(newAnak) && newAnak.containsAll(oldAnak))) {
                     var newSiswa = new ArrayList<Siswa>();
@@ -451,16 +402,10 @@ public class AkunController {
                         newSiswa.add(siswaService.getSiswaById(id));
                     }
                     oldOrtu.setSiswas(newSiswa);
-                    System.out.println(oldOrtu.getSiswas().size());
-                    System.out.println("dari ada menjadi ada anak");
                 }
             }
-            
-            System.out.println("FINAL ANAK");
 
             orangTuaService.updateOrangTua(oldOrtu);
-            System.out.println(oldOrtu.getSiswas().size());
-            System.out.println(oldOrtu);
             redirectAttrs.addFlashAttribute("success", "Akun Orang Tua berhasil diubah");
             return "redirect:/akuns";
         }
@@ -513,7 +458,8 @@ public class AkunController {
     }
 
     @GetMapping("/akuns/{id}/details")
-    public String detailAkun(@PathVariable UUID id, Authentication auth, Principal principal, Model model, RedirectAttributes redirectAttrs) {
+    public String detailAkun(@PathVariable UUID id, Authentication auth, Principal principal, Model model,
+            RedirectAttributes redirectAttrs) {
         var username = principal.getName();
         var authorities = auth.getAuthorities();
         userService.addCurrentUserToModel(username, authorities, model);
@@ -578,7 +524,8 @@ public class AkunController {
     }
 
     @PostMapping("/akun-saya/update-password")
-    public String updatePasswordSubmitPage(@Validated @ModelAttribute UpdatePassword updatePassword, BindingResult bindingResult, Principal principal, Model model, RedirectAttributes redirectAttrs) {
+    public String updatePasswordSubmitPage(@Validated @ModelAttribute UpdatePassword updatePassword,
+            BindingResult bindingResult, Principal principal, Model model, RedirectAttributes redirectAttrs) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         User user = userService.getUserByUsername(principal.getName());
 
@@ -593,7 +540,8 @@ public class AkunController {
         // Checking if new password and confirmation new password match
         boolean checkConfirmation = newPassword.equals(confirmationPass);
 
-        // Checking if password is valid (min. 8 chars with upper case, lower case, and digit)
+        // Checking if password is valid (min. 8 chars with upper case, lower case, and
+        // digit)
         boolean checkValidation = false;
 
         int passwordLength = newPassword.length();
@@ -629,7 +577,8 @@ public class AkunController {
             redirectAttrs.addFlashAttribute("error", "Password baru dan konfirmasi password baru tidak sesuai.");
             return "redirect:/akun-saya/update-password";
         } else if (!checkValidation) {
-            redirectAttrs.addFlashAttribute("error", "Password tidak valid. Password minimal 8 karakter yang terdiri dari karakter kecil, besar, dan numerik.");
+            redirectAttrs.addFlashAttribute("error",
+                    "Password tidak valid. Password minimal 8 karakter yang terdiri dari karakter kecil, besar, dan numerik.");
             return "redirect:/akun-saya/update-password";
         } else {
             return "redirect:/akun-saya/update-password";
@@ -653,18 +602,8 @@ public class AkunController {
         }
     }
 
-    @PostMapping(value = "/akuns/update", params = {"add=add"})
+    @PostMapping(value = "/akuns/update", params = { "add=add" })
     public ModelAndView addAnakUpdate(@ModelAttribute NewUserRequestDto user, Model model) {
-        // model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
-        // model.addAttribute("selected", "orang tua");
-
-        // List<Siswa> orangTuaOfs = akun.getOrangTuaSiswaOf();
-        // orangTuaOfs.add(null);
-        // akun.setOrangTuaSiswaOf(orangTuaOfs);
-        // System.out.println("JUMLAH ANAK AFTER ADD");
-        // System.out.println(akun.getOrangTuaSiswaOf().size());
-        // model.addAttribute("akun", akun);
-
         var orangTuaOfs = user.getOrangTuaOf();
         orangTuaOfs.add(null);
 
@@ -682,19 +621,10 @@ public class AkunController {
         return new ModelAndView("akuns/update-akun-ortu", model.asMap());
     }
 
-    @PostMapping(value = "/akuns/update", params = {"remove"})
-    public ModelAndView removeAnakUpdate(@RequestParam(value = "remove", defaultValue = "-1") Integer remove, @ModelAttribute NewUserRequestDto user, Model model) {
-        // model.addAttribute("siswas", siswaService.getAllSiswaWithUndocumentedParent());
-        // model.addAttribute("selected", "orang tua");
-
-        // var orangTuaOfs = akun.getOrangTuaSiswaOf();
-        // Siswa removed = orangTuaOfs.remove(remove.intValue());
-        // akun.setOrangTuaSiswaOf(orangTuaOfs);
-        // model.addAttribute("akun", akun);
-
+    @PostMapping(value = "/akuns/update", params = { "remove" })
+    public ModelAndView removeAnakUpdate(@RequestParam(value = "remove", defaultValue = "-1") Integer remove,
+            @ModelAttribute NewUserRequestDto user, Model model) {
         var orangTuaOfs = user.getOrangTuaOf();
-        UUID removed = orangTuaOfs.remove(remove.intValue());
-
         var siswa = siswaService.getAllSiswaWithUndocumentedParent();
         var oldOrtu = orangTuaService.getOrangTuaById(user.getId());
         for (Siswa s : oldOrtu.getSiswas()) {
@@ -706,9 +636,7 @@ public class AkunController {
         model.addAttribute("siswas", siswa);
         model.addAttribute("selected", "orang tua");
 
-
         return new ModelAndView("akuns/update-akun-ortu", model.asMap());
     }
-
 
 }
