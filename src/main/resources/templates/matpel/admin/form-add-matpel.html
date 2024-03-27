@@ -28,8 +28,8 @@
         <script th:src="@{/bootstrap.min.js}"></script>
     </head>
 
-    <!-- <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
-    <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
+    <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
+    <!-- <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object> -->
 </head>
 
 <style>
@@ -78,7 +78,7 @@
         </div>
 
         <div>
-            <form th:action="@{/matpel/add}" th:object="${matpel}" method="POST" >
+            <form th:action="@{/matpel-admin/add}" th:object="${matpel}" method="POST" >
                 <div class="form-group" style="margin-bottom: 1rem;">
                   <label for="inputMataPelajaran">Mata Pelajaran</label>
                   <input type="mataPelajaran" class="form-control" name="namaMatpel" aria-describedby="matpelHelp" id="inputMataPelajaran"  placeholder="Matematika">
@@ -103,7 +103,7 @@
                 
                 <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
                     <button type="submit" class="btn btn-outline-success" name="save">Simpan</button>
-                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel">Kembali</a>
+                    <a type="button" class="btn btn-outline-danger" style="margin-left: 15px;" href="/matpel-admin">Kembali</a>
                 </div>
               </form>
         </div>

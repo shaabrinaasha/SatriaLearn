@@ -3,11 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detail Kelas - Siswa</title>
+    <title>Detail Matpel - guru</title>
     <object th:insert="~{fragments/fragment :: css}" th:remove="tag"></object>
     <object th:insert="~{fragments/fragment :: js}" th:remove="tag"></object>
     <!-- Style -->
     <style>
+        body {
+            font-family: 'Poppins';
+            line-height: 1.5;
+            min-height: 100vh;
+            background-color: #fbfbfb;
+        }
+
       .title {
         text-align: center;
         font-weight: bold;
@@ -49,6 +56,25 @@
         font-weight: bold;
         border-bottom: 3px solid #106ee8;
       }
+
+        .container {
+            display: flex;
+            justify-content: space-between; 
+            width: auto;
+            height: fit-content; 
+            color: #DDEDFF;
+        }
+
+        .left {
+            text-align: left; 
+            flex: 1; 
+        }
+
+        .right {
+            text-align: right;
+            flex: 1; 
+        }
+
     </style>
   </head>
   <body>
@@ -59,10 +85,12 @@
       </div>
       <div class="content">
         <div class="dashboard-content px-3 pt-4">
+          <!-- Header -->
           <div th:replace="~{fragments/fragment :: header}"></div>
+          <!-- Content -->
           <div class="container">
+            <!-- Breadcrumb -->
             <div style="margin-top: 1rem; text-align: left">
-              <!-- Breadcrumb -->
               <nav aria-label="breadcrumb">
                 <ol class="breadcrumb" style="margin-bottom: 0px">
                   <li class="breadcrumb-item">
@@ -74,16 +102,37 @@
                 </ol>
               </nav>
             </div>
+
+            <!-- Alert -->
+            <div class="alert alert-danger alert-dismissible" role="alert" th:if="${error}">
+              <div th:text="${error}"></div>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${success}">
+                <div th:text="${success}"></div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
             <!-- Title -->
             <h2 class="title" th:text="${matpel.nama}"></h2>
-            <!-- Navbar Materi Tugas dan Nilai -->
+
+            <!-- Navbar Tab -->
             <div class="navbar-detail-kelas">
               <div class="navbar-item">
                 <p>
                   <a
-                    th:href="@{/matpel/{id}/materi(id=${matpel.id})}"
+                    th:href="@{/matpel-guru/{id}/materi(id=${matpel.id})}"
                     style="text-decoration: none"
-                    >Materi & Tugas</a
+                    >Materi</a
+                  >
+                </p>
+              </div>
+              <div class="navbar-item">
+                <p>
+                  <a
+                    th:href="@{/matpel-guru/{id}/tugas(id=${matpel.id})}"
+                    style="text-decoration: none"
+                    >Pengumuman Tugas</a
                   >
                 </p>
               </div>
@@ -92,38 +141,24 @@
               </div>
             </div>
             <!-- Content under Navbar -->
-            <!-- IF: Kelas has no students -->
-            <div
-              class="d-flex flex-column align-items-center"
-              style="margin-top: 5rem"
-              th:if="${error}"
-            >
-              <p th:text="${error}"></p>
-              <a href="/matpel">Kaitkan mata pelajaran dengan kelas disini.</a>
+            <div class="materi">
+                <div class="container">
+                    <div class="left">Nilai</div>
+                    <div class="right">
+                        <a type="submit" href="/matpel-guru/materi/add"><i class="bi bi-plus-square-fill"></i></a>
+                    </div>
+                </div>
             </div>
-            <!-- IF: Kelas has students -->
-            <div
-              class="d-flex flex-column justify-content-center align-items-center"
-              style="margin: 2rem"
-            >
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Mata Pelajaran</th>
-                    <th scope="col">Guru</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr th:each="matpel, iStat : ${kelas.mataPelajarans}">
-                    <td th:text="${iStat.index + 1}"></td>
-                    <td th:text="${matpel.nama}"></td>
-                    <td th:text="${matpel.guru.nama}"></td>
-                  </tr>
-                </tbody>
-              </table>
-              <a href="/matpel">Kaitkan mata pelajaran dengan kelas disini.</a>
-            </div>
+
+            <!-- <div class="tugas">
+                <div class="container">
+                    <div class="left">Tugas</div>
+                    <div class="right">
+                        <a type="submit" href="/matpel/tugas/add"><i class="bi bi-plus-square-fill"></i></a>
+                    </div>
+                </div>
+            </div> -->
+    
           </div>
         </div>
       </div>

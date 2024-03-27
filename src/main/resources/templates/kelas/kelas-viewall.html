@@ -119,7 +119,7 @@
                                     </td>
                                     <td class="align-content-center">
                                         <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/detail/} + ${kelas.id}">Detail</a>
-                                        <a class="btn btn-sm btn-outline-primary align-content-center" th:href="@{/kelas/ubah/} + ${kelas.id}">Ubah</a>
+                                        <a class="btn btn-sm btn-outline-success align-content-center" th:href="@{/kelas/ubah/} + ${kelas.id}">Ubah</a>
                                         <button th:id="${kelas.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
                                         <!-- Modal -->
                                         <div class="modal fade" th:id="'modal-hapus-' + ${kelas.id}" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">

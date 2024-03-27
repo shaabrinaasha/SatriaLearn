@@ -92,6 +92,7 @@
             <table id="tableSemester" style="width: 100%" class="table table-striped">
               <thead>
                 <tr>
+                  <th scope="col" style="text-align: left;">No</th>
                   <th scope="col">Nama Semester</th>
                   <th scope="col">Tanggal Awal</th>
                   <th scope="col">Tanggal Akhir</th>
@@ -100,7 +101,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr th:each="semester : ${semesters}">
+                <tr th:each="semester, iterationStatus : ${semesters}">
+                  <td style="text-align: left;" th:text="${iterationStatus.index + 1}"></td>
                   <td
                     th:text="${semester.isGanjil ? 'Semester Ganjil ' + semester.tahunAjaran : 'Semester Genap ' + semester.tahunAjaran}">
                   </td>
@@ -108,7 +110,7 @@
                   <td th:text="${semester.tanggalAkhir}"></td>
                   <td th:text="${semester.tahunAjaran}"></td>
                   <td class="align-content-center">
-                    <a class="btn btn-sm btn-outline-primary align-content-center"
+                    <a class="btn btn-sm btn-outline-success align-content-center"
                       th:href="@{/semester/{id}/update(id=${semester.id})}">Ubah</a>
                     <button th:id="${semester.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
 

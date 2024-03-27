@@ -118,17 +118,17 @@
 
             <!-- Navbar Tab -->
             <div class="navbar-detail-kelas">
-              <div class="navbar-item navbar-active">
-                <p>Materi</p>
-              </div>
               <div class="navbar-item">
                 <p>
                   <a
-                    th:href="@{/matpel-guru/{id}/tugas(id=${matpel.id})}"
+                    th:href="@{/matpel-guru/{id}/materi(id=${matpel.id})}"
                     style="text-decoration: none"
-                    >Pengumuman Tugas</a
+                    >Materi</a
                   >
                 </p>
+              </div>
+              <div class="navbar-item navbar-active">
+                <p>Pengumuman Tugas</p>
               </div>
               <div class="navbar-item">
                 <p>
@@ -143,7 +143,7 @@
             <!-- Content under Navbar -->
             <div class="materi">
                 <div class="container">
-                    <div class="left">Materi</div>
+                    <div class="left">Pengumuman Tugas</div>
                     <div class="right">
                         <a type="submit" href="/matpel-guru/materi/add"><i class="bi bi-plus-square-fill"></i></a>
                     </div>

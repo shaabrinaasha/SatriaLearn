@@ -60,7 +60,7 @@
                             <br>
                         </div>
                         <div style="float: right;">
-                            <a class="btn btn-primary" type="submit" style="background-color: #106EE8;" href="/matpel/add">Tambah Mata Pelajaran</a>
+                            <a class="btn btn-primary" type="submit" style="background-color: #106EE8;" href="/matpel-admin/add">Tambah Mata Pelajaran</a>
                         </div>
                         <table id="matpel-table" style="width:100%;" class="table table-striped">
                             <thead>
@@ -81,7 +81,7 @@
                                     <td th:each="semester, iStat : ${matpel.kelas.semesters}" th:if="${iStat.index == 0}" th:text="${semester.tahunAjaran}"></td>
                                     <td th:text="${matpel.guru.nama}"></td>
                                     <td class="align-content-left">
-                                        <a class="btn btn-sm btn-outline-primary" th:href="@{/matpel/update/} + ${matpel.id}">Ubah</a>
+                                        <a class="btn btn-sm btn-outline-success" th:href="@{/matpel-admin/update/} + ${matpel.id}">Ubah</a>
                                         <button th:id="${matpel.id}" class="btn btn-sm btn-outline-danger delete-button">Hapus</button>
 
                                         <!-- Modal -->
@@ -100,7 +100,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/matpel/delete/} + ${matpel.id}">Hapus</a>
+                                                        <a type="button" class="btn btn-danger" id="hapusButton" th:href="@{/matpel-admin/delete/} + ${matpel.id}">Hapus</a>
                                                     </div>
                                                 </div>
                                             </div>

@@ -141,7 +141,7 @@
                     <!-- Content -->
                     <div class="card-container">
                         <div class="cards" th:object="${listMatpel}" th:each="m : ${listMatpel}">
-                            <a href="#" class="card">
+                            <a th:href="@{/matpel-guru/{id}/materi(id=${m.id})}" class="card">
                                 <div class="top">
                                     <p class="nama-matpel" th:text="${m.nama}"></p>
                                 </div>
