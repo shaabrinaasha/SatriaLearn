@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### Macbook files ###
-.DS_Store
+**/.DS_Store
