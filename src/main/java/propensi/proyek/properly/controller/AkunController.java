@@ -229,7 +229,7 @@ public class AkunController {
                 if (user.getOrangTuaOf().size() == 1) {
                     model.addAttribute("error", "Setiap Orang Tua harus memiliki 1 atau lebih anak");
                 }
-                model.addAttribute("error", "ID yang diberikan tidak valid");
+                model.addAttribute("error", "Satu atau lebih anak yang dipilih tidak valid");
                 return true;
             }
         }
