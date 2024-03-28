@@ -61,7 +61,7 @@
             font-weight: bold;
             margin-bottom: 0.75rem;
             font-family: 'Poppins', sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             color: #106ee8;
           ">
                                 Manajemen Akun
@@ -135,9 +135,21 @@
             $("#akun-table").DataTable({
                 columnDefs: [{
                     target: 4,
-                    visible: false
-                }]
+                    visible: false,
+                }],
+                order: [
+                    []
+                ],
+                orderable: false,
+                language: {searchPlaceholder: "Nama, Kelas, Nomor..."}
             });
+
+            // Get the input element of the DataTables search bar
+            var searchInput = $('#dt-search-0');
+
+            // Set the width of the search input to a longer amount that scales
+            searchInput.css('width', '240px');
+            
 
             // Add click event listener to all buttons with class "delete-button"
             $('#akun-table').on('click', '.delete-button', function() {
