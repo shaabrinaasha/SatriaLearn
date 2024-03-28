@@ -165,7 +165,7 @@ public class ProperlyApplication {
 									: LocalDate.of(2020 + (int) (Math.floor(i / 2)), 7, 1));
 					semester.setClasses(new HashSet<>(kelasList));
 					// set tanggal akhir to 6 months after tanggal awal
-					semester.setTanggalAkhir(semester.getTanggalAwal().plusMonths(6));
+					semester.setTanggalAkhir(semester.getTanggalAwal().plusMonths(6).minusDays(1));
 					semesterService.save(semester);
 					semesterList.add(semester);
 				}
@@ -185,7 +185,7 @@ public class ProperlyApplication {
 					for (int j = 0; j < 5; j++) {
 						var materi = new Materi();
 						materi.setJudul(faker.educator().course());
-						materi.setDeskripsi(faker.lorem().sentence());
+						materi.setDeskripsi(faker.lorem().sentence(2));
 						materi.setFile(faker.internet().url());
 						materi.setTanggalUpload(LocalDate.now());
 						materi.setMataPelajaran(mataPelajaranList.get(i));
@@ -198,7 +198,7 @@ public class ProperlyApplication {
 					for (int j = 0; j < 5; j++) {
 						var pengumumanTugas = new PengumumanTugas();
 						pengumumanTugas.setJudul(faker.educator().course());
-						pengumumanTugas.setDeskripsi(faker.lorem().sentence());
+						pengumumanTugas.setDeskripsi(faker.lorem().sentence(2));
 						pengumumanTugas.setFile(faker.internet().url());
 						pengumumanTugas.setTanggalUpload(LocalDate.now());
 						pengumumanTugas.setDeadline(LocalDate.now().plusDays(7));
@@ -240,7 +240,8 @@ public class ProperlyApplication {
 						var komponenPenilaian = new KomponenPenilaian();
 						komponenPenilaian.setNama(faker.educator().course());
 						// 50% to be Pengetahuan, 50% to be Keterampilan
-						komponenPenilaian.setKlasifikasi(faker.number().numberBetween(0, 2) == 0 ? "Pengetahuan" : "Keterampilan");
+						komponenPenilaian.setKlasifikasi(
+								faker.number().numberBetween(0, 2) == 0 ? "Pengetahuan" : "Keterampilan");
 						// 33% to be Ulangan Harian, 33% to be Tugas, 33% to be Ujian
 						komponenPenilaian.setTipe(faker.number().numberBetween(0, 3) == 0 ? "Ulangan Harian"
 								: faker.number().numberBetween(0, 3) == 1 ? "Tugas" : "Ujian");

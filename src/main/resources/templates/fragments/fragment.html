@@ -92,7 +92,7 @@
                 $(".sidebar ul li").each(function() {
                     var navItem = $(this);
                     var href = navItem.find("a").attr("href");
-                    if (location.pathname === href) {
+                    if ((location.pathname).includes(href)) {
                         $(".sidebar ul li").removeClass("active"); // Remove active class from all other items
                         navItem.addClass("active"); // Add active class to the matching item
                         return false; // Exit the loop once a match is found

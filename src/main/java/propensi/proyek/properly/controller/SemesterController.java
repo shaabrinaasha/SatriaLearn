@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/semester")
+@RequestMapping("/kelas-semester/semester")
 public class SemesterController {
     @Autowired
     private SemesterMapper semesterMapper;
@@ -67,19 +67,19 @@ public class SemesterController {
         if (compareTanggal >= 0) {
             redirectAttrs.addFlashAttribute("error",
                     "Tanggal awal harus sebelum tanggal akhir. Silahkan ubah tanggal awal dan tanggal akhir.");
-            return "redirect:/semester/create";
+            return "redirect:/kelas-semester/semester/create";
         } else if (isOverlap > 0) {
             redirectAttrs.addFlashAttribute("error",
                     "Tanggal awal dan akhir semester tumpang tindih dengan semester lain di basis data. Silahkan ubah tanggal semester.");
-            return "redirect:/semester/create";
+            return "redirect:/kelas-semester/semester/create";
         } else if (sameTahunAjaran >= 2) {
             redirectAttrs.addFlashAttribute("error",
                     "Sudah ada dua semester yang memiliki tahun ajaran yang sama. Silahkan ubah tahun ajaran.");
-            return "redirect:/semester/create";
+            return "redirect:/kelas-semester/semester/create";
         } else if (countTypeTahunAjaran >= 1) {
             redirectAttrs.addFlashAttribute("error",
                     "Sudah ada nama semester yang sama pada tahun ajaran yang sama. Silahkan ubah nama semester.");
-            return "redirect:/semester/create";
+            return "redirect:/kelas-semester/semester/create";
         }
 
         // map semesterDTO to semester
@@ -90,7 +90,7 @@ public class SemesterController {
         var semesterName = semesterService.semesterNameGenerator(semester.getIsGanjil(), semester.getTahunAjaran());
 
         redirectAttrs.addFlashAttribute("success", semesterName + " berhasil ditambahkan.");
-        return "redirect:/semester/view-all";
+        return "redirect:/kelas-semester/semester/view-all";
     }
 
     // View all semester in table form
@@ -140,22 +140,22 @@ public class SemesterController {
         if (changedFields.contains("tanggal") && compareTanggal >= 0) {
             redirectAttrs.addFlashAttribute("error",
                     "Tanggal awal harus sebelum tanggal akhir. Silahkan ubah tanggal awal dan tanggal akhir.");
-            return String.format("redirect:/semester/%s/update", semesterDTO.getId().toString());
+            return String.format("redirect:/kelas-semester/semester/%s/update", semesterDTO.getId().toString());
 
-        } else if (changedFields.contains("tanggal") && isOverlap >= 1) {
+        } else if (changedFields.contains("tanggal") && isOverlap > 1) {
             redirectAttrs.addFlashAttribute("error",
                     "Tanggal awal dan akhir semester tumpang tindih dengan semester lain di basis data. Silahkan ubah tanggal semester.");
-            return String.format("redirect:/semester/%s/update", semesterDTO.getId().toString());
+            return String.format("redirect:/kelas-semester/semester/%s/update", semesterDTO.getId().toString());
 
         } else if (changedFields.contains("tahunAjaran") && sameTahunAjaran >= 2) {
             redirectAttrs.addFlashAttribute("error",
                     "Sudah ada dua semester yang memiliki tahun ajaran yang sama. Silahkan ubah tahun ajaran.");
-            return String.format("redirect:/semester/%s/update", semesterDTO.getId().toString());
+            return String.format("redirect:/kelas-semester/semester/%s/update", semesterDTO.getId().toString());
 
         } else if (changedFields.contains("isGanjil") && countTypeTahunAjaran >= 1) {
             redirectAttrs.addFlashAttribute("error",
                     "Sudah ada nama semester yang sama pada tahun ajaran yang sama. Silahkan ubah nama semester.");
-            return String.format("redirect:/semester/%s/update", semesterDTO.getId().toString());
+            return String.format("redirect:/kelas-semester/semester/%s/update", semesterDTO.getId().toString());
         }
         // map DTO to object
         var semesterFromDTO = semesterMapper.updateSemesterDTOToSemester(semesterDTO);
@@ -163,7 +163,7 @@ public class SemesterController {
         // redirect to view-all
         var semesterName = semesterService.semesterNameGenerator(semester.getIsGanjil(), semester.getTahunAjaran());
         redirectAttrs.addFlashAttribute("success", semesterName + " berhasil diubah .");
-        return "redirect:/semester/view-all";
+        return "redirect:/kelas-semester/semester/view-all";
     }
 
     // Process delete semester
@@ -182,9 +182,9 @@ public class SemesterController {
         } else {
             redirectAttrs.addFlashAttribute("error",
                     semesterName + " tidak bisa dihapus karena masih memiliki relasi dengan kelas lain.");
-            return "redirect:/semester/view-all";
+            return "redirect:/kelas-semester/semester/view-all";
         }
-        return "redirect:/semester/view-all";
+        return "redirect:/kelas-semester/semester/view-all";
     }
 
 }

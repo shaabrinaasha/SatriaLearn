@@ -227,7 +227,7 @@ public class KelasController {
         return "redirect:/kelas/detail/" + id;
     }
 
-    @GetMapping("/kelas/siswa-view")
+    @GetMapping("/kelas-semester/kelas/siswa-view")
     public String viewKelasSiswa(Authentication auth, Principal principal, Model model,
             RedirectAttributes redirectAttrs) {
         var username = principal.getName();
@@ -250,7 +250,7 @@ public class KelasController {
         return "kelas/read-kelas-siswa";
     }
 
-    @GetMapping("/kelas/detail/{id}")
+    @GetMapping("/kelas-semester/kelas/detail/{id}")
     public String detailKelasSeeSiswa(@PathVariable("id") UUID id, Authentication auth, Principal principal,
             Model model) {
         var username = principal.getName();
@@ -272,7 +272,7 @@ public class KelasController {
         return "kelas/detail-kelas-siswa.html";
     }
 
-    @GetMapping("/kelas/detail/{id}/view-matpel")
+    @GetMapping("/kelas-semester/kelas/detail/{id}/view-matpel")
     public String detailKelasSeeMatpel(@PathVariable("id") UUID id, Authentication auth, Principal principal,
             Model model) {
         var username = principal.getName();
@@ -285,6 +285,8 @@ public class KelasController {
         // if kelas has no matpel sends redirect error
         if (kelas.getMataPelajarans() == null || kelas.getMataPelajarans().isEmpty()) {
             model.addAttribute("error", "Belum ada mata pelajaran yang didaftarkan.");
+        } else {
+            model.addAttribute("success", "");
         }
 
         // necessities for header sidebar fragments
