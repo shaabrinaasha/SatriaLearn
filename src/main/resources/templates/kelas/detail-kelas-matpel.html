@@ -12,7 +12,7 @@
         text-align: center;
         font-weight: bold;
         font-family: "Poppins", sans-serif;
-        font-size: 22px;
+        font-size: 18px;
         color: #106ee8;
         margin-bottom: 5px;
       }
@@ -49,6 +49,13 @@
         font-weight: bold;
         border-bottom: 3px solid #106ee8;
       }
+
+      table {
+        font-size: 14px;
+      }
+
+      table a {
+      }
     </style>
   </head>
   <body>
@@ -78,7 +85,7 @@
               </nav>
             </div>
             <!-- Title -->
-            <h2 class="title">Kelas <span th:text="${kelas.nama}"></span></h2>
+            <h2 class="title"><span th:text="${kelas.nama}"></span></h2>
             <p class="subtitle">
               Walas: <span th:text="${kelas.wali.nama}"></span>
             </p>
@@ -94,7 +101,7 @@
               <div class="navbar-item">
                 <p>
                   <a
-                    th:href="@{/kelas/detail/{id}(id=${kelas.id})}"
+                    th:href="@{/kelas-semester/kelas/detail/{id}(id=${kelas.id})}"
                     style="text-decoration: none"
                     >Daftar Siswa</a
                   >
@@ -116,6 +123,7 @@
             </div>
             <!-- IF: Kelas has students -->
             <div
+              th:if="${success}"
               class="d-flex flex-column justify-content-center align-items-center"
               style="margin: 2rem"
             >
